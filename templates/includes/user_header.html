@@ -1,0 +1,46 @@
+{% load static %}
+<header class="header-area transparent">
+    <div class="container">
+      <div class="row no-gutter align-items-center position-relative">
+        <div class="col-12">
+          <div class="header-align">
+            <div class="header-align-start">
+              <div class="header-logo-area">
+                <a href="{% url "index" %}">
+                  <img class="logo-main" src="{% static './assets/img/logo-light.png' %}" alt="Logo" />
+                  <img class="logo-light" src="{% static './assets/img/logo-light.png' %}" alt="Logo" />
+                </a>
+              </div>
+            </div>
+            <div class="header-align-center">
+              <div class="header-navigation-area position-relative">
+                <ul class="main-menu nav">
+                  <li><a href="{% url "index" %}"><span>Home</span></a></li>
+                  <li><a href="{% url "jobs" %}"><span>Find Jobs</span></a></li>
+                  <li><a href="employers-details.html"><span>Employers Details</span></a></li>
+                  <li><a href="{% url "blog" %}"><span>Blogs</span></a></li>
+                  <li><a href="{% url "about" %}"><span>About Us</span></a></li>
+                  <li><a href="{% url "contact" %}"><span>Contact</span></a></li>
+                  <li class="has-submenu"><a href="#/"><span>Candidates</span></a>
+                    <ul class="submenu-nav">
+                      <li><a href="candidate.html"><span>Candidates</span></a></li>
+                      <li><a href="candidate-details.html"><span>Candidate Details</span></a></li>
+                    </ul>
+                  </li>
+                
+                </ul>
+              </div>
+            </div>
+            <div class="header-align-end">
+              <div class="header-action-area">
+                <a class="btn-registration" href="{% url "registration" %}"><span>+</span> Registration</a>
+                <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
+                  <i class="icofont-navigation-menu"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
