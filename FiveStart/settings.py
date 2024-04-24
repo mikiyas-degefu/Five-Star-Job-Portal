@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'JobPortal',
     'froala_editor',
     'phonenumber_field',
+    'UserAdmin'
 ]
 
 MIDDLEWARE = [
