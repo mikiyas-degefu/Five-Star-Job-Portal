@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 def index(request):
-    return render(request , 'user/index.html')
+    context = {
+        "sectors" : Sector.objects.all()[:12]
+    }
+    return render(request , 'user/index.html' , context)
 
 def jobs(request):
     return render(request , 'user/jobs.html')  
