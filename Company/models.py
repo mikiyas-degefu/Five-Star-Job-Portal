@@ -10,6 +10,8 @@ class CompanyCatagory(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
+    logo = models.ImageField(upload_to="company/logo")
+    slogan = models.CharField(max_length=50, null=True, blank=True)
     about = FroalaField()
     email = models.EmailField( max_length=254)
     address = models.CharField(max_length=100)
