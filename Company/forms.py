@@ -1,5 +1,6 @@
 from django import forms
 from  .models import Comment, Contact_Message, Company
+from froala_editor.widgets import FroalaEditor
 
 class CompanyForm(forms.ModelForm):
     class Meta:
@@ -8,36 +9,42 @@ class CompanyForm(forms.ModelForm):
 
         widgets = {
             'name' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
             'logo' : forms.ClearableFileInput(attrs={
                 'class' : 'form-control',
-                'required' : 'false'
+                'placeholder' : '*Required'
             }),
              'slogan' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
-             'about' : forms.Textarea(attrs={
-                'class' : 'form-control'
-            }),
+            'about' : FroalaEditor,
             'email' : forms.EmailInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
             'address' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
             'phone' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
             'since' : forms.DateInput(attrs={
                 'class' : 'form-control',
-                'type' : 'date'
+                'type' : 'date',
+                'placeholder' : '*Required'
             }),
             'location' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             }),
             'website' : forms.TextInput(attrs={
-                'class' : 'form-control'
+                'class' : 'form-control',
+                'placeholder' : '*Required'
             })
         }
 
