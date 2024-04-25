@@ -317,7 +317,7 @@
                   <div class="side-bar mt-5 mt-lg-0">
                     <div class="accordion" id="accordionExample">
 
-                      <div class="accordion-item mt-4">
+                      <div class="accordion-item mt-4 border">
                         <h2 class="accordion-header" id="experienceOne">
                           <button
                             class="accordion-button"
@@ -336,9 +336,9 @@
                           aria-labelledby="experienceOne"
                         >
                           <div class="accordion-body">
-                            <div class="side-title ">
+                            <div class="side-title" style="overflow-y: scroll; max-height: 300px; width: 240px;">
                               {% for i in sector %}
-                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.slug%}" >{{i.name}} ({{i.count_job_post}})</a></div>
+                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.slug%}">{{i.name}} ({{i.count_job_post}})</a></div>
                               {% endfor %}
                             </div>
                           </div>

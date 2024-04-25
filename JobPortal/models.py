@@ -160,6 +160,15 @@ job_type = [
     ('remote', 'Remote'),
 ]
 
+compensation_types = [
+    ('monthly','Monthly'),
+    ('yearly','Yearly'),
+    ('hourly','Hourly'),
+    ('commission','Commission'),
+    ('bonus','Bonus'),
+    ('benefits','Benefits')
+]
+
 
 class Job_Posting(models.Model):
     company = models.ForeignKey(Company , on_delete=models.CASCADE , null=True , blank=True)
@@ -173,6 +182,7 @@ class Job_Posting(models.Model):
     salary_range_start = models.FloatField()
     salary_range_final = models.FloatField()
     type = models.CharField( choices=job_type, max_length=30)
+    compensation_type = models.CharField( choices=compensation_types, max_length=30 , blank=True , null=True)
     job_status = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
     date_closed = models.DateField()
