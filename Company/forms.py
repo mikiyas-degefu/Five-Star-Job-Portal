@@ -1,5 +1,45 @@
 from django import forms
-from  .models import Comment, Contact_Message
+from  .models import Comment, Contact_Message, Company
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name','logo', 'slogan', 'about', 'email', 'address', 'phone', 'since', 'location', 'website']
+
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'logo' : forms.ClearableFileInput(attrs={
+                'class' : 'form-control',
+                'required' : 'false'
+            }),
+             'slogan' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+             'about' : forms.Textarea(attrs={
+                'class' : 'form-control'
+            }),
+            'email' : forms.EmailInput(attrs={
+                'class' : 'form-control'
+            }),
+            'address' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'phone' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'since' : forms.DateInput(attrs={
+                'class' : 'form-control',
+                'type' : 'date'
+            }),
+            'location' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'website' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            })
+        }
 
 class CommentForm(forms.ModelForm):
     name = forms.CharField(max_length=40, error_messages={'required' : 'Can not be empty'})

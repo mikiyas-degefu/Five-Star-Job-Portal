@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.http import JsonResponse
 from Company.models import Company
+from Company.forms import (CompanyForm)
 # Create your views here.
 def index(request):
     return render(request, 'UserAdmin/index.html')
 
 def company(request):
     if request.method == "GET":
+        form = CompanyForm(request.POST or None, request.FILES or None)
+
         companies = Company.objects.all()
         count = 30
         paginator = Paginator(companies, 30) 
@@ -26,8 +29,14 @@ def company(request):
             page = paginator.page(paginator.num_pages)
             count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
         
-        print(page)
         context = {
-            'companies' : page
+            'companies' : page,
+            'count' : count,
+            'form' : form
         }
         return render(request, 'UserAdmin/company.html', context=context)
+    
+    if request.method  == 'POST':
+        response = {'success' : True}
+        print(request.POST)
+        return JsonResponse(response)

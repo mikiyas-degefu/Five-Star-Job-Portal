@@ -31,15 +31,15 @@
         <div class="page-content">
             <div class="container-fluid">
                 <div class="table-responsive">
-                    <table class="table table-hover caption-top ">
+                    <table class="table table-sm table-hover caption-top ">
                         <caption>Companies</caption>
                         <thead  class="table-light">
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Logo</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Slogan</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Since</th>
                             <th scope="col">Phone</th>
                             <th scope="col">Views</th>
                             <th scope="col">Total Jobs</th>
@@ -49,19 +49,113 @@
                         <tbody>
                             {% for company in companies %}
                           <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                            <th scope="row">{{count | add:forloop.counter}}</th>
+                            <td><img src="/media/{{company.logo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
+                            <td>{{company.name}}</td>
+                            <td>{{company.email}}</td>
+                            <td>{{company.phone}}</td>
+                            <td>{{company.since}}</td>
+                            <td>{{company.views}}</td>
+                            <td>{{company.total_jobs}}</td>
+                            <td>
+                               
+                            <button 
+                            type="button" 
+                            class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#detailCompanies"
+                            data-bs-whatever="@mdo"
+                            data-logo="{{company.logo}}"
+                            data-name="{{company.name}}"
+                            data-slogan="{{company.slogan}}"
+                            data-about="{{company.about}}"
+                            data-email="{{company.email}}"
+                            data-address="{{company.address}}"
+                            data-phone="{{company.phone}}"
+                            data-since="{{company.since}}"
+                            data-views="{{company.views}}"
+                            data-total_jobs="{{company.total_jobs}}"
+                            data-location="{{company.location}}"
+                            data-website="{{company.website}}"
+                            >
+                            <i class="fa fa-eye"></i> 
+                            <button 
+                            type="button" 
+                            class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit "
+                            data-bs-toggle="modal"
+                            data-bs-target="#EditCompanies"
+                            data-bs-whatever="@mdo"
+                            data-id="{{company.id}}"
+                            data-logo="{{company.logo}}"
+                            data-name="{{company.name}}"
+                            data-slogan="{{company.slogan}}"
+                            data-about="{{company.about}}"
+                            data-email="{{company.email}}"
+                            data-address="{{company.address}}"
+                            data-phone="{{company.phone}}"
+                            data-since="{{company.since | date:'Y-m-d' }}"
+                            data-views="{{company.views}}"
+                            data-total_jobs="{{company.total_jobs}}"
+                            data-location="{{company.location}}"
+                            data-website="{{company.website}}"
+                            >
+                            <i class="fa fa-pen"></i> 
+                        </button>
+                        </button>
+                              <button class="btn btn-outline-danger mt-2 btn-sm btn-delete"  data-bs-toggle="modal" data-bs-target="#deleteYearModal"
+                              data-bs-whatever="@mdo"><i class="fa fa-trash"></i> 
+                            </button>
+                        </td>
                           </tr>
                           {% endfor %}
                         </tbody>
                       </table>
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+                {% if companies.has_previous %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ companies.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                  </li>
+                {% endif %}
+            
+                {% if companies.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% for i in companies.paginator.page_range %}
+                  {% if companies.number == i %}
+                    <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  {% elif i > companies.number|add:'-5' and i < companies.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            
+                {% if companies.paginator.num_pages > companies.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% if companies.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ companies.next_page_number }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                  </li>
+                {% endif %}
+                </ul>
+              </nav>
                 </div>
             </div>
             <!-- container-fluid -->
@@ -70,6 +164,59 @@
         {% include 'UserAdmin/include/footer.html' %}
     </div>
     <!-- end main content-->
+
+        <!--Edit Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditCompanies" tabindex="-1" aria-labelledby="EditCompaniesLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditCompaniesLabel">Edit Company Information </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="updateCompanyForm">
+        <div class="modal-body">
+          <input type="hidden" id="id_company_hidden" name="">
+          <div class="row justify-content-center">
+            <div class="col" id="id_company_logo_preview">
+            </div>
+        </div>
+          {{form.as_p}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button  id="saveYear" type="submit" class="btn btn-primary">Save changes</button>
+          <button style="display: none;" id="btnLoadding" class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+
+<!--Detail Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="detailCompanies" tabindex="-1" aria-labelledby="detailCompaniesLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailCompaniesLabel">Company Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <div id="detailModalBody" class="modal-body">
+        </div>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+
 
 </div>
 <!-- END layout-wrapper -->
@@ -81,6 +228,123 @@
 <script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
 <script src="{% static 'UserAdmin/libs/node-waves/waves.min.js' %}"></script>
 <script src="{% static 'UserAdmin/js/app.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+
+    // Start Detail Data
+
+    //Event handler that handle button on Click
+    $(".btn-detail").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+         handleDetailModalCompany(
+            buttonData.name, 
+            buttonData.logo, 
+            buttonData.slogan,
+            buttonData.about,
+            buttonData.email,
+            buttonData.address,
+            buttonData.phone,
+            buttonData.since,
+            buttonData.views,
+            buttonData.total_jobs,
+            buttonData.location,
+            buttonData.website,
+            )
+    });
+
+
+    handleDetailModalCompany = (name, logo, slogan, about, email, address, phone, since, views, total_jobs, location, website )=>{
+        let htmlBody = `
+            <div class="row justify-content-center">
+                <div class="col">
+                    
+                </div>
+            </div>
+            <div class="mt-3">
+                <p class="fw-bold" >Name: <span class="fw-normal">${name}</span></p> 
+                <p class="fw-bold" >slogan: <span class="fw-normal" >${slogan}</span></p>
+                <p class="fw-bold" >Email: <span class="fw-normal" >${email}</span></p>
+                <p class="fw-bold" >Address: <span class="fw-normal" >${address}</span></p>
+                <p class="fw-bold" >Phone: <span class="fw-normal" >${phone}</span></p>
+                <p class="fw-bold" >Since: <span class="fw-normal" >${since}</span></p>
+                <p class="fw-bold" >Views: <span class="fw-normal" >${views}</span></p>
+                <p class="fw-bold" >Total Jobs: <span class="fw-normal" >${total_jobs}</span></p>
+                <p class="fw-bold" >Location: <span class="fw-normal" >${location}</span></p>
+                <p class="fw-bold" >Website: <span class="fw-normal" >${website}</span></p>
+                <p class="fw-bold" >About: <span class="fw-normal" >${about}</span></p>
+            </div>
+        `
+        $('#detailModalBody').html(htmlBody)
+
+    }
+
+
+    // End Data Detail
+    //Event handler that handle button on Click
+    $(".btn-edit").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+          handleEditModalCompany(
+            buttonData.id,
+            buttonData.name, 
+            buttonData.logo, 
+            buttonData.slogan,
+            buttonData.about,
+            buttonData.email,
+            buttonData.address,
+            buttonData.phone,
+            buttonData.since,
+            buttonData.views,
+            buttonData.total_jobs,
+            buttonData.location,
+            buttonData.website,
+            )
+    });
+
+    let handleEditModalCompany=(id ,name, logo, slogan, about, email, address, phone, since, views, total_jobs, location, website )=>{
+        $('#id_company_hidden').val(id != "None" ? id : '')
+        $('#id_company_logo_preview').html(`<img class="img-fluid"   src="/media/${logo}"  alt="company logo">`)
+        $('#id_name').val(name != "None" ? name : '')
+        $('#id_slogan').val(slogan != "None" ? slogan : '')
+        $('#id_about').val(about != "None" ? about : '')
+        $('#id_email').val(email != "None" ? email : '')
+        $('#id_address').val(address != "None" ? address : '')
+        $('#id_phone').val(phone != "None" ? phone : '')
+        $('#id_since').val(since);
+        $('#id_location').val(location != "None" ? location : '')
+        $('#id_website').val(website != "None" ? website : '')
+    }
+
+
+$("#updateCompanyForm").on('submit', function(e){
+          e.preventDefault()
+         let id = $("#id_company_hidden").val()
+         let name = $("#id_name").val()
+         let slogan = $("#id_slogan").val()
+         let about = $("#id_about").val()
+         let email = $("#id_email").val()
+         let address = $("#id_address").val()
+         let phone = $("#id_phone").val()
+         let since = $("#id_since").val()
+         let location = $("#id_location").val()
+         let website = $("#id_website").val()
+
+
+         console.log(id, name, slogan, about, email, address, phone, since, location, website)
+
+        })
+
+    
+
+
+    
+         // Edit Data Detail 
+
+    })
+
+</script>
 
 </body>
 </html>
