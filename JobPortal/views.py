@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews
+from Company.models import Company
 from django.contrib import messages
 import csv
 from django.shortcuts import render, redirect
@@ -102,20 +103,21 @@ def index(request):
     except: count_skill = 0
     print(count_skill)
     sector = Sector.objects.all()
-    sector_popular = Sector.objects.all()[0:5]
-    job = Job_Posting.objects.filter(job_status = True)
-    paginator = Paginator(job,5)
-    page_number = request.GET.get('page')
-    page = paginator.get_page(page_number)
-
+    sector_popular = Sector.objects.all()[0:12]
+    job = Job_Posting.objects.filter(job_status = True)[0:5]
+    job_number = Job_Posting.objects.filter(job_status = True)
+    company = Company.objects.all()
+    
     context = {
         'social_medias' : social_medias,
-        'job_list' : page,
+        'job_list' : job,
+        "job_number" : job_number,
         'bookmark' : bookmark,
         'candidate' : candidate,
         'application' : application,
         'sector' : sector,
-        'sector_popular' : sector_popular
+        'sector_popular' : sector_popular,
+        "company" : company
     }
     return render(request, 'RMS/index.html', context)
 

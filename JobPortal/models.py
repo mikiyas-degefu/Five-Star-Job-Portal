@@ -4,6 +4,7 @@ from froala_editor.fields import FroalaField
 from UserManagement.models import CustomUser
 from django.utils.text import slugify
 from unidecode import unidecode
+from Company.models import Company
 import datetime
 #Candidate
 gender_list = [
@@ -161,6 +162,7 @@ job_type = [
 
 
 class Job_Posting(models.Model):
+    company = models.ForeignKey(Company , on_delete=models.CASCADE , null=True , blank=True)
     title = models.CharField(max_length=50)
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, null=True)  # Related With Sector
     description = FroalaField()
@@ -179,7 +181,7 @@ class Job_Posting(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             now = datetime.datetime.now()
-            self.slug = slugify(unidecode(self.title)) + '-' + now.strftime("%Y-%m-%d")
+            self.slug = slugify(unidecode(self.title)) + slugify(unidecode(self.company.name)) + '-' + now.strftime("%Y-%m-%d")
         super().save(*args, **kwargs)
   
     class Meta:

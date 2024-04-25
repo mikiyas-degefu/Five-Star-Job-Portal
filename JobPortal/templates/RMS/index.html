@@ -34,7 +34,7 @@
                       class="logo-dark img-fluid"
                     />
                     <h1 class="text-muted mb-3">
-                      2000 Job available
+                      {{job.count}} Job available
                     </h1>
                     <h1 class="text-muted mb-3">
                       You can choose your dream job
@@ -141,67 +141,22 @@
               <div class="row">
 
 
-                <div class="col-lg-3 col-md-">
-                  <div class="bg-light popu-category-box rounded text-center">
-                    <div class="popu-category-content mt-4">
-                      <a
-                        href="job-categories.html"
-                        class="text-dark stretched-link"
-                      >
-                        <h5 class="fs-18">IT & Software</h5>
+
+                {% for i in sector_popular %}
+
+                <div class="col-lg-3 col-md- mt-5">
+                  <div class="bg-light popu-category-box rounded text-center h-100 mb-5">
+                    <div class="popu-category-content mt-4 mb-4">
+                      <a href="job-categories.html" class="text-dark stretched-link">
+                        <h5 class="fs-18">{{i.name}}</h5>
                       </a>
-                      <p class="text-muted mb-0">2024 Jobs</p>
+                      <p class="text-muted mb-0 mt-5">2024 Jobs</p>
                     </div>
                   </div>
                   <!--end popu-category-box-->
                 </div>
 
-                <div class="col-lg-3 col-md-">
-                  <div class="bg-light popu-category-box rounded text-center">
-                    <div class="popu-category-content mt-4">
-                      <a
-                        href="job-categories.html"
-                        class="text-dark stretched-link"
-                      >
-                        <h5 class="fs-18">IT & Software</h5>
-                      </a>
-                      <p class="text-muted mb-0">2024 Jobs</p>
-                    </div>
-                  </div>
-                  <!--end popu-category-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                  <div class="bg-light popu-category-box rounded text-center">
-                    <div class="popu-category-content mt-4">
-                      <a
-                        href="job-categories.html"
-                        class="text-dark stretched-link"
-                      >
-                        <h5 class="fs-18">IT & Software</h5>
-                      </a>
-                      <p class="text-muted mb-0">2024 Jobs</p>
-                    </div>
-                  </div>
-                  <!--end popu-category-box-->
-                </div>
-
-
-                <div class="col-lg-3 col-md-6">
-                  <div class="bg-light popu-category-box rounded text-center">
-                    <div class="popu-category-content mt-4">
-                      <a
-                        href="job-categories.html"
-                        class="text-dark stretched-link"
-                      >
-                        <h5 class="fs-18">IT & Software</h5>
-                      </a>
-                      <p class="text-muted mb-0">2024 Jobs</p>
-                    </div>
-                  </div>
-                  <!--end popu-category-box-->
-                </div>
-
+                {% endfor %}
 
 
               </div>
@@ -254,6 +209,7 @@
                  
                        <div class="col">
                       {% if job_list%}
+
                          {% for job in job_list%}
                         
                       <div class="job-box shadow
@@ -366,60 +322,7 @@
                     </div>
                   </div>
 
-                    <!--pagination-->
-                    <div class="row d-flex justify">
-                      <div class="col-lg-12 mt-5">
-                          <nav aria-label="Page navigation example">
-                              <ul class="pagination job-pagination mb-0 justify-content-center">
-                                {% if not job_list.has_previous %}
-                                <li class="page-item ">
-                                  <a class="page-link disabled" href="">
-                                      <i class="mdi mdi-chevron-double-left fs-15"></i>
-                                  </a>
-                              </li>
-                              {% endif %}
-                                {% if job_list.has_previous %}
-                                <li class="page-item ">
-                                  <a class="page-link" href="?page={{ job_list.previous_page_number }}">
-                                      <i class="mdi mdi-chevron-double-left fs-15"></i>
-                                  </a>
-                              </li>
-                                {% endif %}
-      
-                                {% if job_list.has_previous %}
-                                      <li class="page-item "><a class="page-link" href="?page={{ job_list.previous_page_number }}">{{ job_list.previous_page_number }}</a></li>
-                                {% endif %}
-      
-                                <span class="current-page">
-                                  <li class="page-item active"><a class="page-link" href="#">{{ job_list.number }}</a></li>
-                                </span>
-                                 
-                                {% if job_list.has_next %}
-                                <li class="page-item"><a  class="page-link"  href="?page={{ job_list.next_page_number }}">{{ job_list.next_page_number }}</a></li>
-                               {% endif %}
-      
-                               {% if job_list.has_next %}
-                               <li class="page-item">
-                                <a class="page-link" href="?page={{ job_list.next_page_number }}">
-                                    <i class="mdi mdi-chevron-double-right fs-15"></i>
-                                </a>
-                                </li>
-                              {% endif %}
-      
-                              {% if  not job_list.has_next %}
-                              <li class="page-item">
-                               <a class="page-link disabled " href="">
-                                   <i class="mdi mdi-chevron-double-right fs-15"></i>
-                               </a>
-                               </li>
-                             {% endif %}
-                                      <!-- End blog pagination -->
-                                  
-                              </ul>
-                          </nav>
-                      </div><!--end col-->
-                  </div><!-- end row -->
-                    
+                  
                   </div>
                 </div>
                 <!--end col-->
@@ -588,7 +491,7 @@
                   <div class="text-center">
                     <h2 class="text-primary mb-4">
                       Browse Our
-                      <span class="text-warning fw-bold">5,000+</span> Latest
+                      <span class="text-warning fw-bold">{{job_number.count}}+</span> 
                       Jobs
                     </h2>
                     <p class="text-muted">
@@ -599,7 +502,7 @@
                       <a
                         href="javascript:void(0)"
                         class="btn btn-primary btn-hover"
-                        >Started Now
+                        >Start Now
                         <i class="uil uil-rocket align-middle ms-1"></i
                       ></a>
                     </div>
@@ -906,6 +809,12 @@
           <div class="py-4">
             <div class="container">
               <div class="row">
+
+                <h2> Top Companies </h2>
+
+                
+                {% for i in company  %}
+
                 <div class="col-lg-2">
                   <div class="text-center p-3">
                     <a
@@ -916,102 +825,18 @@
                       data-bs-original-title="Woocommerce"
                     >
                       <img
-                        src="{% static  'assets/images/logo/logo-01.png' %}"
+                        src="/media/{{i.logo}}"
                         alt=""
                         class="img-fluid"
                       />
                     </a>
+                    
                   </div>
+                  <p class="text-center"> {{i.name}} </p> 
                 </div>
-                <!--end col-->
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Envato"
-                    >
-                      <img
-                        src="{% static  'assets/images/logo/logo-02.png' %}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <!--end col-->
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Magento"
-                    >
-                      <img
-                        src="{% static  'assets/images/logo/logo-03.png' %}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <!--end col-->
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Wordpress"
-                    >
-                      <img
-                        src="{% static  'assets/images/logo/logo-04.png' %}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <!--end col-->
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Generic"
-                    >
-                      <img
-                        src="{% static  'assets/images/logo/logo-05.png' %}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Reveal"
-                    >
-                      <img
-                        src="{% static  'assets/images/logo/logo-06.png' %}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                  </div>
-                </div>
+
+                
+                {% endfor %}
               </div>
               <!--end row-->
             </div>
