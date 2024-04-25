@@ -1,5 +1,6 @@
 {% load static %}
 {% load fontawesome_5 %}
+{% load JobPortal.custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -144,16 +145,18 @@
 
                 {% for i in sector_popular %}
 
-                <div class="col-lg-3 col-md- mt-5">
-                  <div class="bg-light popu-category-box rounded text-center h-100 mb-5">
-                    <div class="popu-category-content mt-4 mb-4">
-                      <a href="job-categories.html" class="text-dark stretched-link">
-                        <h5 class="fs-18">{{i.name}}</h5>
-                      </a>
-                      <p class="text-muted mb-0 mt-5">2024 Jobs</p>
+                <div class="col-lg-4 col-md-6 mt-4 pt-2">
+                  <div
+                    class="about-feature p-3 d-flex align-items-center rounded-3"
+                  >
+                    <div class="featrue-icon flex-shrink-0">
+                      <i class="uim uim-trash"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h6 class="fs-18 mb-0">{{i.name}}</h6>
                     </div>
                   </div>
-                  <!--end popu-category-box-->
+                  <!--about-feature-->
                 </div>
 
                 {% endfor %}
@@ -812,31 +815,36 @@
 
                 <h2> Top Companies </h2>
 
-                
-                {% for i in company  %}
-
-                <div class="col-lg-2">
-                  <div class="text-center p-3">
-                    <a
-                      href="javascript:void(0)"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title=""
-                      data-bs-original-title="Woocommerce"
-                    >
-                      <img
-                        src="/media/{{i.logo}}"
-                        alt=""
-                        class="img-fluid"
-                      />
-                    </a>
-                    
+                <div id="companyCarousel" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    {% for i in company %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                      <div class="row">
+                        {% for index in forloop.counter0 %}
+                        {% with item=company|cycle_list:index %}
+                        <div class="col-lg-2">
+                          <div class="text-center p-3">
+                            <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Woocommerce">
+                              <img src="/media/{{item.logo}}" alt="" class="img-fluid" style="width: 70px; height: 70px;" />
+                            </a>
+                          </div>
+                          <p class="text-center">{{item.name}}</p>
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% endfor %}
                   </div>
-                  <p class="text-center"> {{i.name}} </p> 
+                  <button class="carousel-control-prev" type="button" data-bs-target="#companyCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#companyCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
                 </div>
-
-                
-                {% endfor %}
               </div>
               <!--end row-->
             </div>

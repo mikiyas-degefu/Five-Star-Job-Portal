@@ -23,7 +23,7 @@ class Company(models.Model):
     about = FroalaField()
     email = models.EmailField( max_length=254)
     address = models.CharField(max_length=100)
-    phone = models.TextField()
+    phone = PhoneNumberField()
     since = models.DateField(auto_now=False, auto_now_add=False , null=True , blank=True)
     views = models.IntegerField(default=0)
     total_jobs = models.IntegerField(default=0)
