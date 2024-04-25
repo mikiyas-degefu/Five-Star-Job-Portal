@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JOB-Lists | ACT - American College Of Technology </title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+    <div id="main-wrapper">
+      <div class="dashboard-wrap bg-light">
+		 <!--Left Navbar-->
+		{% include 'RMS/interviewer/include/navbar.html'%}
+        <div class="dashboard-content">
+          <div class="dashboard-tlbar d-block mb-5">
+            <div class="row">
+              <div class="colxl-12 col-lg-12 col-md-12">
+                <h1 class="ft-medium">JOB Lists</h1>
+              </div>
+            </div>
+
+            {% include 'RMS/messages.html'%}
+          
+          </div>
+
+          <div class="dashboard-widg-bar d-block mb-5">
+            <div class="row">
+
+              <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="mb-4 tbl-lg rounded overflow-hidden">
+                  <div class="table-responsive bg-white">
+                    <table class="table">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Full Name</th>
+                          <th scope="col">Job Title</th>
+                          <th scope="col">Applied Date</th>
+                          <th scope="col">Interviews Status</th>
+                          <th scope="col">Job Status</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <table id="example" class="display " style="width:100%">
+                          <thead>
+                              <tr>
+                                  <th>Full Name</th>
+                                  <th>Job Title</th>
+                                  <th>Applied Date</th>
+                                  <th>Interviews Status</th>
+                                  <th>Job Status</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody class="bg-white">
+                            {% for interview in interviews %}
+                            <tr class="bg-white">
+                              <td class="bg-white">
+                                <div class="cats-box rounded d-flex align-items-center">
+                                  <div class="text-center">
+                                    
+                                  </div>
+                                  <div class="cats-box-caption px-2">
+                                    <h4 class="fs-md mb-0 ft-medium">
+                                      {{interview.application.user.candidate.first_name}} {{interview.application.user.candidate.last_name}}
+                                    </h4>
+                                    <div class="d-block mb-2 position-relative">
+                                      <span class="muted medium ms-2 theme-cl"><i class="lni lni-briefcase me-1"></i>{{job.job.get_type_display}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span>{{interview.application.job.title}}</span>
+                              </td>
+                              <td>
+                                <span>{{ interview.application.date_applied | date }}</span>
+                              </td>
+                              <td>
+                                <span>{{ interview.get_status_display }}</span> 
+                              </td>
+                              <td>
+                                <span>{{ interview.application.get_status_display}}</span>
+                              </td>
+                              <td>
+                                <div class="dash-action">
+                                  <a
+                                    href="{% url 'interview_detail' interview.slug %}"
+                                    class="p-2 circle text-info bg-light-info d-inline-flex align-items-center justify-content-center me-1"
+                                    ><i class="lni lni-eye"></i
+                                  ></a>
+                                </div>
+                              </td>
+                              
+                            </tr>
+                            {% endfor %}
+                             
+                          </tbody>
+                      </table>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+      <!-- ======================= dashboard Detail End ======================== -->
+
+      <a id="back2Top" class="top-scroll" title="Back to top" href="#"
+        ><i class="ti-arrow-up"></i
+      ></a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+      new DataTable('#example');
+    </script>
+    {% include 'include/footerjs.html' %} 
+  </body>
+</html>

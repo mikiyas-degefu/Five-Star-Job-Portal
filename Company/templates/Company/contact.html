@@ -1,0 +1,250 @@
+{% load static %} {% load fontawesome_5 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Contact | ACT - American College Of Technology </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content=" " />
+    <meta name="keywords" content="" />
+    <meta content="Themesdesign" name="author" />
+    {% include 'include/head.html'%}
+  </head>
+
+  <body>
+    <!-- Begin page -->
+    <div>
+      {%include 'include/navbar.html' %}
+      <div class="main-content">
+        <div class="page-content">
+          <!-- Start home -->
+          <section class="page-title-box">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-md-6">
+                  <div class="text-center text-white">
+                    <h3 class="mb-4">Contact</h3>
+                    <div class="page-next">
+                      <nav
+                        class="d-inline-block"
+                        aria-label="breadcrumb text-center"
+                      >
+                        <ol class="breadcrumb justify-content-center">
+                          <li class="breadcrumb-item">
+                            <a href="{% url 'index' %}">Home</a>
+                          </li>
+                          <li class="breadcrumb-item">
+                            <a href="javascript:void(0)">Contact</a>
+                          </li>
+                          <li
+                            class="breadcrumb-item active"
+                            aria-current="page"
+                          >
+                            Contact
+                          </li>
+                        </ol>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- end home -->
+
+          <!-- START SHAPE -->
+          <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                <path
+                  fill=""
+                  fill-opacity="1"
+                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <!-- END SHAPE -->
+
+          <!-- START CONTACT-PAGE -->
+          <section class="section">
+            <div class="container">
+              <div class="row align-items-center mt-5">
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                       {{message}}
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+
+                
+
+                <div class="col-lg-6">
+                  <div class="section-title mt-4 mt-lg-0">
+                    <h3 class="title">Get in touch</h3>
+                    <p class="text-muted">
+                      Start working with Jobcy that can provide everything you
+                      need to generate awareness, drive traffic, connect.
+                    </p>
+                    <form method="post" class="contact-form mt-4">
+                      {% csrf_token %}
+                      
+                      <span id="error-msg"></span>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="mb-3">
+                            <label for="nameInput" class="form-label"
+                              >Name {% for err in form.name.errors %}   <small class="text-danger">{{err}}</small>  {% endfor %} </label
+                            >
+                            <input
+                              type="text"
+                              name="name"
+                              id="id_name"
+                              class="form-control {% if form.name.errors %} is-invalid  {% endif %} "
+                              placeholder="Enter your name"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label for="emailInput" class="form-label"
+                              >Email {% for err in form.email.errors %}   <small class="text-danger">{{err}}</small>  {% endfor %}</label
+                            >
+                            <input
+                              type="email"
+                              class="form-control  {% if form.email.errors %} is-invalid  {% endif %}"
+                              id="id_email"
+                              name="email"
+                              placeholder="Enter your email"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label for="subjectInput" class="form-label"
+                              >Subject {% for err in form.subject.errors %}   <small class="text-danger">{{err}}</small>  {% endfor %}</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control  {% if form.subject.errors %} is-invalid  {% endif %}"
+                              id="subjectInput"
+                              name="subject"
+                              id="id_subject"
+                              placeholder="Enter your subject"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                          <div class="mb-3">
+                            <label for="meassageInput" class="form-label"
+                              >Your Message {% for err in form.message.errors %}   <small class="text-danger">{{err}}</small>  {% endfor %}</label
+                            >
+                            <textarea
+                              class="form-control  {% if form.message.errors %} is-invalid  {% endif %}"
+                              id="meassageInput"
+                              placeholder="Enter your message"
+                              name="message"
+                              id="id_message"
+                              rows="3"
+                              required
+                            ></textarea>
+                          </div>
+                        </div>
+                        <!--end col-->
+                      </div>
+                      <!--end row-->
+                      <div class="text-end">
+                        <button
+                          type="submit"
+                          id="submit"
+                          name="submit"
+                          class="btn btn-primary"
+                        >
+                          Send Message <i class="uil uil-message ms-1"></i>
+                        </button>
+                      </div>
+                    </form>
+                    <!--end form-->
+                  </div>
+                </div>
+                <!--end col-->
+                <div class="col-lg-5 ms-auto order-first order-lg-last">
+                  <div class="text-center">
+                    <img
+                      src="{% static 'assets/images/contact.png' %}"
+                      alt=""
+                      class="img-fluid"
+                    />
+                  </div>
+                  <div class="mt-4 pt-3">
+                    <div class="d-flex text-muted align-items-center mt-2">
+                      <div class="flex-shrink-0 fs-22 text-primary">
+                        <i class="uil uil-map-marker"></i>
+                      </div>
+                      <div class="flex-grow-1 ms-2">
+                        <p class="mb-0">{{contact.location}}</p>
+                      </div>
+                    </div>
+
+                    <div class="d-flex text-muted align-items-center mt-2">
+                      <div class="flex-shrink-0 fs-22 text-primary">
+                        <i class="uil uil-envelope"></i>
+                      </div>
+                      <div class="flex-grow-1 ms-2">
+                        <p class="mb-0">{{contact.email}}</p>
+                      </div>
+                    </div>
+
+                    <div class="d-flex text-muted align-items-center mt-2">
+                      <div class="flex-shrink-0 fs-22 text-primary">
+                        <i class="uil uil-phone-alt"></i>
+                      </div>
+                      <div class="flex-grow-1 ms-2">
+                        <p class="mb-0">{{contact.phone}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- START CONTACT-PAGE -->
+
+          <div class="map">
+            <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.356360776719!2d38.75922877384892!3d9.031219888956608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85f0f9a06d85%3A0x4331551f2e0d81cb!2zQUNUIEFtZXJpY2FuIENvbGxlZ2Ugb2YgVGVjaG5vbG9neSB8IDQgS2lsbyB8IOGKoOGKreGJtSDhiqDhiJzhiKrhiqvhipUg4Ym04Yqt4YqW4YiO4YyCIOGKruGIjOGMhSB8IDQg4Yqq4YiO!5e0!3m2!1sen!2set!4v1688731587813!5m2!1sen!2set"height="350"
+            style="border: 0; width: 100%"
+            allowfullscreen=""
+            loading="lazy"
+            ></iframe>
+            
+          </div>
+        </div>
+        <!-- End Page-content -->
+        {% include 'include/footer.html' %}
+      </div>
+      <!-- end main content-->
+    </div>
+    <!-- END layout-wrapper -->
+    {% include 'include/footerjs.html'%}
+  </body>
+
+  <!-- Mirrored from themesdesign.in/jobcy/layout/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Jun 2023 16:56:30 GMT -->
+</html>

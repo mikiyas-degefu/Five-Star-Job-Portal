@@ -1,0 +1,388 @@
+{% load static %}
+{% load fontawesome_5 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Blog Details | ACT - American College Of Technology </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content=" " />
+    <meta name="keywords" content="" />
+    <meta content="Themesdesign" name="author" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+    <!-- Begin page -->
+    <div>
+      {% include 'include/navbar.html' %}
+      <div class="main-content">
+        <div class="page-content">
+          <!-- Start home -->
+          <section class="page-title-box">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-md-6">
+                  <div class="text-center text-white">
+                    <h3 class="mb-4">Blog Details</h3>
+                    <div class="page-next">
+                      <nav
+                        class="d-inline-block"
+                        aria-label="breadcrumb text-center"
+                      >
+                        <ol class="breadcrumb justify-content-center">
+                          <li class="breadcrumb-item">
+                            <a href="{% url 'index' %}">Home</a>
+                          </li>
+                          <li class="breadcrumb-item">
+                            <a href="{% url 'blog' %}">Blog</a>
+                          </li>
+                          <li
+                            class="breadcrumb-item active"
+                            aria-current="page"
+                          >
+                            Blog Details
+                          </li>
+                        </ol>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- end home -->
+
+          <!-- START SHAPE -->
+          <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                <path
+                  fill=""
+                  fill-opacity="1"
+                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <!-- END SHAPE -->
+
+          <!-- START BLOG-DETAILS -->
+
+
+          <section class="section">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-7">
+                      
+             
+          {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <div class="alert alert-success alert-dismissible">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                 {{message}}
+              </div>
+              {% endfor %}
+          </ul>
+          {% endif %}
+   
+
+         
+                  <div class="text-center mb-5">
+                    <p class="text-danger fw-semibold mb-0">
+                      {% for cate in blog.type.all%} {{cate}} {% endfor %}
+                    </p>
+                    <h3>{{blog.title}}</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="blog-post">
+                    <div class="swiper blogdetailSlider">
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <img
+                            src="/media/{{blog.image}} "
+                            alt=""
+                            class="img-fluid rounded-3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <ul class="list-inline mb-0 mt-3 text-muted">
+                      <li class="list-inline-item">
+                        <div class="d-flex align-items-center">
+                          <div class="flex-shrink-0">
+                            <i class="uil uil-calendar-alt"></i>
+                          </div>
+                          <div class="ms-2">
+                            <p class="mb-0">
+                              {{blog.created_at|date:"F j, Y"}}
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-inline-item">
+                        <div class="d-flex align-items-center">
+                          <div class="flex-shrink-0">
+                            <i class="uil uil-comments-alt"></i>
+                          </div>
+                          <div class="ms-2 flex-grow-1">
+                            <p class="mb-0">{{blog.count_comment}} Comments </p>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <div class="mt-4 ">
+                      <h5>{{blog.title}}</h5>
+
+                      {{blog.content | safe }}
+                      
+
+              
+                    </div>
+                    <!-- comment start -->
+                    <h5 class="border-bottom pb-3 mt-5">Comments</h5>
+                    
+                    {% for comment in comments%}
+                    <div class="mt-5">
+                      <div class="d-sm-flex align-items-top">
+                        <div class="flex-shrink-0">
+                          <img
+                            class="rounded-circle avatar-md img-thumbnail img-fluid"
+                            src="{% static 'assets/images/user/user.png' %} "
+                            alt="img"
+                          />
+                        </div>
+                        <div class="flex-grow-1 ms-sm-3">
+                          <small class="float-end fs-12 text-muted"
+                            ><i class="uil uil-clock"></i> {{comment.created_at | timesince}} ago</small
+                          >
+                          <a href="javascript:(0)" class="primary-link"
+                            ><h6 class="fs-16 mt-sm-0 mt-3 mb-0">
+                              {{comment.name}}
+                            </h6></a
+                          >
+                          <p class="text-muted fs-14 mb-0">{{comment.created_at | date }}</p>
+                          {% comment %} <div class="my-3 badge bg-light">
+                            <a href="javascript: void(0);" class="text-primary"
+                              ><i class="mdi mdi-reply"></i> Reply</a
+                            >
+                          </div> {% endcomment %}
+                          <p class="text-muted fst-italic mb-0">
+                          {{comment.comment}}
+                          </p>
+                          {% comment %}
+                          <div class="d-sm-flex align-items-top mt-5">
+                            <div class="flex-shrink-0">
+                              <img
+                                class="rounded-circle avatar-md img-thumbnail"
+                                src="{% static 'assets/images/user/user.png' %} "
+                                alt="img"
+                              />
+                            </div>
+                            <div class="flex-grow-1 ms-sm-3">
+                              <small class="float-end fs-12 text-muted"
+                                ><i class="uil uil-clock"></i> 2 hrs Ago</small
+                              >
+                              <a href="javascript:(0)" class="primary-link"
+                                ><h6 class="fs-16 mt-sm-0 mt-3 mb-0">
+                                  Kiera Finch
+                                </h6></a
+                              >
+                              <p class="text-muted fs-14 mb-0">Aug 10, 2021</p>
+                              <div class="my-3 badge bg-light">
+                                <a
+                                  href="javascript: void(0);"
+                                  class="text-primary"
+                                  ><i class="mdi mdi-reply"></i> Reply</a
+                                >
+                              </div>
+                              <p class="text-muted fst-italic mb-0">
+                                " This response is important for our ability to
+                                learn from mistakes, but it alsogives rise to
+                                self-criticism, because it is part of the
+                                threat-protection system. "
+                              </p>
+                            </div>
+                          </div>
+                          {% endcomment %}
+                        </div>
+                      </div>
+                    </div>
+
+                    {% endfor %}
+                    <!-- end comment -->
+
+                    <form action="" class="contact-form mt-5" method="POST">
+                      {% csrf_token %}
+
+                      <h5 class="border-bottom pb-3">Leave a Message</h5>
+                      <div class="row mt-4">
+
+                        {% if  user.is_authenticated%}
+                        <div class="col-lg-6 d-none">
+                          <div class="position-relative mb-3">
+                            <label for="name" class="form-label"
+                              >Name{% for err in form.name.errors %}
+                              :<small class="text-danger"> {{err}}</small>
+                              {% endfor %}</label
+                            >
+                            <input
+                              name="name"
+                              id="id_name"
+                              value= "{{ user.candidate.first_name }} {{user.candidate.last_name}}"
+                              type="text"
+                              class="form-control   {% if form.name.errors %} is-invalid {% endif %}   "
+                              placeholder="Enter your name*"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6 d-none">
+                          <div class="position-relative mb-3">
+                            <label for="email" class="form-label"
+                              >Email address{% for err in form.email.errors %}: <small class="text-danger"> {{err}}</small>{% endfor %} </label
+                            >
+                            <input
+                              name="email"
+                              id="id_email"
+                              value="{{ user.email }}"
+                              type="email"
+                              class="form-control {%if form.email.errors%} is-invalid {% endif %} "
+                              placeholder="Enter your email*"
+                            />
+                          </div>
+                        </div>
+                        {% else %}
+                        <div class="col-lg-6">
+                          <div class="position-relative mb-3">
+                            <label for="name" class="form-label"
+                              >Name{% for err in form.name.errors %}
+                              :<small class="text-danger"> {{err}}</small>
+                              {% endfor %}</label
+                            >
+                            <input
+                              name="name"
+                              id="id_name"
+                              type="text"
+                              class="form-control   {% if form.name.errors %} is-invalid {% endif %}   "
+                              placeholder="Enter your name*"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="position-relative mb-3">
+                            <label for="email" class="form-label"
+                              >Email address{% for err in form.email.errors %}: <small class="text-danger"> {{err}}</small>{% endfor %} </label
+                            >
+                            <input
+                              name="email"
+                              id="id_email"
+                              type="email"
+                              class="form-control {%if form.email.errors%} is-invalid {% endif %} "
+                              placeholder="Enter your email*"
+                            />
+                          </div>
+                        </div>
+                       {% endif %}
+                        
+                        <div class="col-lg-12">
+                          <div class="position-relative mb-3">
+                            <label for="comment" class="form-label"
+                              >Meassage{% for err in form.comment.errors %}: <small class="text-danger"> {{err}}</small>{% endfor %} </label
+                            >
+                            <textarea
+                              name="comment"
+                              id="id_comment"
+                              rows="4"
+                              class="form-control {% if form.comment.errors %} is-invalid {% endif %}" 
+                              placeholder="Enter your message"
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12 text-end">
+                          <button
+                            name="submit"
+                            type="submit"
+                            id="submit"
+                            class="btn btn-primary btn-hover"
+                          >
+                            Send Meassage <i class="uil uil-message ms-1"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <!--end form-->
+                  </div>
+                </div>
+                <!--end col-->
+                <div class="col-lg-4 col-md-5">
+                  <div class="sidebar ms-lg-4 ps-lg-4 mt-5 mt-lg-0">
+                    <div class="mt-4 pt-2">
+                      <div class="sd-title">
+                        <h6 class="fs-16 mb-3">Latest Post</h6>
+                      </div>
+                      <ul class="widget-popular-post list-unstyled my-4">
+                        {% for latest_blog in latest_posts%}
+                        <li
+                          class="d-flex mb-3 align-items-center pb-3 border-bottom"
+                        >
+                          <img
+                            src="/media/{{latest_blog.image}}"
+                            alt=""
+                            class="widget-popular-post-img rounded"
+                          />
+                          <div class="flex-grow-1 text-truncate ms-3">
+                            <a
+                              href="{% url 'single_blog' latest_blog.slug %}"
+                              class="text-dark"
+                              >{{latest_blog.title}}</a
+                            >
+                            <span class="d-block text-muted fs-14"
+                              >{{latest_blog.created_at | date:'F d, Y'}}</span
+                            >
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="mt-4 pt-2">
+                      <div class="sd-title">
+                        <h6 class="fs-16 mb-3">Follow & Connect</h6>
+                      </div>
+                      <ul class="widget-social-menu list-inline mb-0 mt-3">
+                        {% for social in social_medias %}
+                        <li class="list-inline-item">
+                          <a href="{{social.link}}"><i class="fab fa-{{social.icon.name}} fa-lg "></i></a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                  <!--end sidebar-->
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- START BLOG-DETAILS -->
+        </div>
+        <!-- End Page-content -->
+      </div>
+      <!-- end main content-->
+    </div>
+    {% include 'include/footer.html'%}
+     {% include 'include/footerjs.html' %}
+  </body>
+</html>

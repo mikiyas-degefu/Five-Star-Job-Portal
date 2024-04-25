@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JOB-Lists | ACT - American College Of Technology </title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    {% include 'include/head.html' %}
+
+  </head>
+
+  <body>
+    <div id="main-wrapper">
+      <div class="dashboard-wrap bg-light">
+		 <!--Left Navbar-->
+		{% include 'RMS/interviewer/include/navbar.html'%}
+        <div class="dashboard-content">
+          <div class="dashboard-tlbar d-block mb-5">
+            <div class="row">
+              <div class="colxl-12 col-lg-12 col-md-12">
+                <h1 class="ft-medium">Candidate lists</h1>
+              </div>
+            </div>
+
+            {% include 'RMS/messages.html'%}
+          
+          </div>
+
+          <div class="container">
+            <div class="page-title-container">
+              <div class="row">
+                <div class="col-auto mb-3 mb-md-0 me-auto">
+                  <div class="w-auto sw-md-30">
+                    <h1 class="mb-0 pb-0  fs-5 display-4" id="title">Filiter Applicant</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-xl-3 d-none d-xl-block mb-5">
+                <div class="card">
+                  <div class="card-body d-flex flex-column justify-content-between" id="menuColumn">
+    
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+    
+                      {% for sector in sectors %}
+                      {% if sector.count_interview_completed > 0 %}
+                      <div class="accordion-item ">
+                        <h2 class="fs-6 accordion-header p-0" id="flush-heading{{forloop.counter}}">
+                          <button class="accordion-button collapsed p-2 mt-1" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapse{{forloop.counter}}" aria-expanded="false"
+                            aria-controls="flush-collapse{{forloop.counter}}">
+                            {{sector.name}}
+                          </button>
+                        </h2>
+                        <div id="flush-collapse{{forloop.counter}}" class="accordion-collapse collapse"
+                          aria-labelledby="flush-heading{{forloop.counter}}" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">
+    
+                            {% for job in job_list%}
+                            {% if job.sector.id is sector.id %}
+                            <div><a href="{% url 'interview_applicant_category' job.slug %}">{{job.title}}
+                                ({{job.count_interview_completed}})</a></div>
+                            {% endif %}
+                            {% endfor %}
+    
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-9 mb-5">
+                <!--Candidates Lists-->
+                <div class="row">
+                  <div class="col-12 col-lg order-1 order-lg-0">
+                    <h2 class="fs-6">Applicants </h2>
+                    <div class="mb-5">
+    
+                      {% if applicants %}
+                      {% for applicant in applicants %}
+                      <a href="{% url 'interview_detail' applicant.slug  %}" class="card mb-2"> 
+                        <div class="row g-0 sh-18 sh-md-14">
+                          <div class="col position-relative ">
+                            <div class="card-body">
+                              <div class="row ">
+    
+                                <div class="col-12 col-md-3  mb-2 mb-md-0 d-flex align-items-center">
+                                  <div class="pt-0 pb-0 pe-2">
+                                    <div class="h5 mb-0 clamp-line" data-line="1">
+                                      {{applicant.application.user.candidate.first_name}} {{applicant.application.user.candidate.last_name}}
+                                    </div>
+                                    <div class="text-muted text-small">
+                                      {{applicant.application.job.sector.name}}
+                                    </div>
+                                    <div class="mb-0 sw-19">{{applicant.application.job.title}}</div>
+                                  </div>
+                                </div>
+    
+                                <div class="col-6 col-md-3 pe-0 text-center">
+                                  <div class="input-group spinner sw-11" data-trigger="spinner">
+                                    {{applicant.application.user.candidate.phone1}}
+                                  </div>
+                                </div>
+    
+    
+                                <div class="col-6 col-md-3 pe-0 text-center">
+                                  <div class="input-group spinner sw-11 fw-bold text-dark" data-trigger="spinner">
+                                    Status: {{applicant.application.get_status_display}} 
+                                  </div>
+                                </div>
+    
+                                <div class="col-6 col-md-2 pe-2">
+                                  <div class="input-group spinner sw-11" data-trigger="spinner">
+                                    {{applicant.application.user.candidate.email}}
+                                  </div>
+                                </div>
+    
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                      {% endfor %}
+                      
+                      {% endif %}
+                    </div>
+                  </div>
+
+
+                  <!--pagination-->
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+      new DataTable('#example');
+    </script>
+    {% include 'include/footerjs.html' %} 
+  </body>
+</html>

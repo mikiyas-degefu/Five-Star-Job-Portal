@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="author" content="Themezhub" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Workplex - Creative Job Board HTML Template</title>
+	<link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+	{% include 'include/head.html' %}
+</head>
+
+<body>
+	<div id="main-wrapper">
+		<div class="dashboard-wrap bg-light">
+					 <!--Left Navbar-->
+		  {% include 'RMS/interviewer/include/navbar.html'%}
+			<div class="dashboard-content">
+				<div class="dashboard-tlbar d-block mb-5">
+					<div class="row">
+						<div class="colxl-12 col-lg-12 col-md-12">
+							<h1 class="ft-medium">Hello, {{user.first_name|capfirst}} {{user.last_name|capfirst}}</h1>
+							<nav aria-label="breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item text-muted"><a href="#">Home</a></li>
+									<li class="breadcrumb-item"><a href="#" class="theme-cl">Dashboard</a></li>
+								</ol>
+							</nav>
+						</div>
+					</div>
+				</div>
+
+				<div class="dashboard-widg-bar d-block">
+					<div class="row">
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+							<div class="dash-widgets py-5 px-4 bg-success rounded">
+								<h2 class="ft-medium mb-1 fs-xl text-light">{{total_jobs}}</h2>
+								<p class="p-0 m-0 text-light fs-md">Total Jobs</p>
+								<i class="lni lni-empty-file"></i>
+							</div>
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+							<div class="dash-widgets py-5 px-4 bg-purple rounded">
+								<h2 class="ft-medium mb-1 fs-xl text-light">{{total_application}}</h2>
+								<p class="p-0 m-0 text-light fs-md">Total Applications</p>
+								<i class="lni lni-users"></i>
+							</div>
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+							<div class="dash-widgets py-5 px-4 bg-danger rounded">
+								<h2 class="ft-medium mb-1 fs-xl text-light">{{total_interview}}</h2>
+								<p class="p-0 m-0 text-light fs-md">Total Interviews</p>
+								<i class="lni lni-bar-chart"></i>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-12">
+							<div class="dashboard-gravity-list with-icons">
+								<h4 class="mb-0 ft-medium">Today Interviews</h4>
+								<ul>
+									{% for interview in today_interviews%}
+									<li>
+										<i class="dash-icon-box ti-layers text-purple bg-light-purple"></i>
+										 {{interview.application.user.first_name}} {{interview.application.user.last_name}}
+										 scheduled for
+										<strong class="ft-medium text-dark"><a href="#"> {{interview.application.job.title}}</a></strong> 
+										at {{interview.time_schedule | time | upper}}
+										<a href="#" class="close-list-item"><i class="fas fa-times"></i></a>
+									</li>
+
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-12">
+							<div class="dashboard-gravity-list invoices with-icons">
+								<h4 class="mb-0 ft-medium">Recent Applicant Status</h4>
+								<ul>
+
+									{% for applicant in applicant_status%}
+									<li><i class="fa-regular fa-user text-warning bg-light-warning ps-0"></i>
+										<strong class="ft-medium text-dark">{{applicant.application.user.candidate.first_name | capfirst}}  {{applicant.application.user.candidate.last_name | capfirst}}</strong>
+										<ul>
+											<li class="unpaid">Interview: {{applicant.get_status_display}}</li>
+											<li>Job Status: {{applicant.application.get_status_display}}</li>
+											<li>Applied Date: {{applicant.application.date_applied}}</li>
+										</ul>
+									</li>
+									{% endfor %}
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- footer -->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="py-3">© 2023 Workplex. Designd By ThemezHub.</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!-- ======================= dashboard Detail End ======================== -->
+
+		<a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+
+
+	</div>
+	<!-- ============================================================== -->
+	<!-- End Wrapper -->
+	<!-- ============================================================== -->
+
+	<!-- ============================================================== -->
+	<!-- All Jquery -->
+	<!-- ============================================================== -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/popper.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/slick.js"></script>
+	<script src="assets/js/slider-bg.js"></script>
+	<script src="assets/js/smoothproducts.js"></script>
+	<script src="assets/js/snackbar.min.js"></script>
+	<script src="assets/js/jQuery.style.switcher.js"></script>
+	<script src="assets/js/custom.js"></script>
+	<!-- ============================================================== -->
+	<!-- This page plugins -->
+	<!-- ============================================================== -->
+
+</body>
+
+<!-- Mirrored from themezhub.net/workplex-demo/workplex/employer-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 08 Jul 2023 02:13:52 GMT -->
+
+</html>

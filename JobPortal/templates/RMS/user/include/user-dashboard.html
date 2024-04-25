@@ -1,0 +1,70 @@
+	  
+      		<a class="mobNavigation" data-bs-toggle="collapse" href="#MobNav" role="button" aria-expanded="false" aria-controls="MobNav">
+            <i class="fas fa-bars me-2"></i>Dashboard Navigation
+          </a>
+      <div class="collapse " id="MobNav">
+        <div class="dashboard-nav">
+          <div class="dashboard-inner">
+            <ul data-submenu-title="Main Navigation">
+              <li class="{% if request.path == '/user-dashboard/' %}active{% endif %}">
+                <a href="{% url 'user-dashboard' %}"
+                  ><i class="lni lni-dashboard me-2 "></i>Dashboard</a
+                >
+              </li>
+              <li class="{% if request.path == '/user-add-resume/'%}active{% endif %}
+              {% if request.path == '/user-add-education/'%}active{% endif %}
+              {% if request.path == '/user-add-experience/'%}active{% endif %} " >
+                <div class="dropdown d-grid text-left">
+                  <button class="btn dropdown-toggle text-start border-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class=""><i class="lni lni-add-files me-2"></i>Resume</span> 
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="{% url 'user-resume' %}">Personal Info</a></li>
+                    <li><a class="dropdown-item" href="{% url 'user-add-education' %}">Education</a></li>
+                    <li><a class="dropdown-item" href="{% url 'user-add-experience' %}">Experience</a></li>
+                  </ul>
+                </div>
+               </li>
+
+
+    
+
+
+
+
+              <li class="{% if request.path == '/user-applied-job/' %}active{% endif %}">
+                <a href="{% url 'user-applied-job' %}"
+                  ><i class="lni lni-briefcase me-2"></i>Applied jobs</a
+                >
+              </li>
+              <li class="{% if request.path == '/user-bookmark/' %}active{% endif %}">
+                <a href="{% url 'user-bookmark'%}"
+                  ><i class="lni lni-bookmark me-2"></i>Bookmark Jobs</a
+                >
+              </li>
+            </ul>
+            <ul data-submenu-title="My Accounts">
+              <li class="{% if request.path == '/user-profile/' %}active{% endif %}">
+                <a href="{% url 'user-profile' %}"
+                  ><i class="lni lni-user me-2"></i>My Profile
+                </a>
+              </li>
+              <li class="{% if request.path == '/user-change-password/' %}active{% endif %}">
+                <a href="{% url 'user-change-password'%}"
+                  ><i class="lni lni-lock-alt me-2"></i>Change Password</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0);"
+                  ><i class="lni lni-trash-can me-2"></i>Delete Account</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'logout' %}"
+                  ><i class="lni lni-trash-can me-2"></i>Log Out</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>

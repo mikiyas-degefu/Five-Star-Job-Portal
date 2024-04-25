@@ -1,0 +1,384 @@
+{% load static %}
+{% load fontawesome_5 %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Job List | ACT - American College Of Technology </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content=" " />
+    <meta name="keywords" content="" />
+    <meta content="Themesdesign" name="author" />
+    {% include 'include/head.html'%}
+  </head>
+
+  <body>
+
+    <!--Modal-->
+    <div id="modal_apply_job">
+    </div>
+    <!-- Begin page -->
+    <div>
+    {% include 'include/navbar.html'%}
+
+      <div class="main-content">
+        <div class="page-content">
+          <!-- Start home -->
+          <section class="page-title-box">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-md-6">
+                  <div class="text-center text-white">
+                    <h3 class="mb-4">Job List</h3>
+                    <div class="page-next">
+                      <nav
+                        class="d-inline-block"
+                        aria-label="breadcrumb text-center"
+                      >
+                        <ol class="breadcrumb justify-content-center">
+                          <li class="breadcrumb-item">
+                            <a href="{% url 'index' %}">Home</a>
+                          </li>
+                          <li class="breadcrumb-item">
+                            <a href="javascript:void(0)">Jobs</a>
+                          </li>
+                          <li
+                            class="breadcrumb-item active"
+                            aria-current="page"
+                          >
+                            Job List
+                          </li>
+                        </ol>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- end home -->
+
+          <!-- START SHAPE -->
+          <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                <path
+                  fill=""
+                  fill-opacity="1"
+                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <!-- END SHAPE -->
+
+          <!--Messages-->
+          <div class="row d-flex  justify-content-center">
+            <div class="col-8">
+              
+               {% if messages %}
+               <ul class="messages">
+                   {% for message in messages %}
+                   <div class="alert {% if message.tags == 'success' %} alert-success {% else %} alert-danger {% endif %}  alert-dismissible">
+                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      {{message}}
+                   </div>
+                   {% endfor %}
+               </ul>
+               {% endif %}
+            </div>
+          </div>
+          <!--End Message-->
+
+          <!-- START JOB-LIST -->
+          <section class="section">
+            <div class="container">
+              <div class="row d-flex">
+                <div class="col-lg-9">
+                  <div class="me-lg-5">
+                    <div class="job-list-header">
+                      <form action="#">
+                        <div class="row g-2">
+                          <div class="col-lg-4 col-md-6" >
+                            <div class="filler-job-form">
+                              
+                              <a class="btn btn-primary" href="">Click for Related Job's</a>
+                            </div>
+                          </div>
+                          <!--end col-->
+                          
+                          <!--end col-->
+                        </div>
+                        <!--end row-->
+                      </form>
+                    </div>
+                    <!--end job-list-header-->
+                    <div class="wedget-popular-title mt-4">
+                      <h6>Popular</h6>
+                      <ul class="list-inline">
+                        
+                        {% for popular in sector_popular%}
+                        <li class="list-inline-item">
+                          <div class="popular-box d-flex align-items-center">
+                            <div class="number flex-shrink-0 me-2">{{popular.count_job_post}}</div>
+                            <a
+                              href="{% url 'job_sector_categories' popular.slug%}"
+                              class="primary-link stretched-link"
+                            >
+                              <h6 class="fs-14 mb-0">{{popular.name}}</h6>
+                            </a>
+                          </div>
+                        </li>
+                        {% endfor %}
+
+                      </ul>
+                    </div>
+                    <!--end wedget-popular-title-->
+                    <!-- Job-list -->
+                    <div class="row d-flex justify-content-center">
+                 
+                       <div class="col">
+                      {% if job_list%}
+                         {% for job in job_list%}
+                        
+                      <div class="job-box
+
+                        {% if user.is_authenticated and job.id in bookmark %}
+                               bookmark-post
+                        {% endif %}
+                        card mt-5">
+
+                        {% if user.is_authenticated %}
+                         <div class="bookmark-label text-center">
+                          <a
+                            href="{% url 'user-add-bookmark' job.slug %}"
+                            class="align-middle text-white" type="submit"
+                            ><i class="mdi mdi-star "></i
+                          ></a>
+                         </div>
+                        {% endif %}
+
+
+                        <div class="p-4">
+                          <div class="row align-items-center">
+                            <div class="col-md-3 ms-5">
+                              <div class="mb-2 mb-md-0">
+                                <h5 class="fs-18 mb-0">
+                                  <a href="{% url 'Job-detail' job.slug %}" class="text-dark"
+                                    >{{job.title}}</a
+                                  >
+                                </h5>
+                                <p class="text-muted fs-14 mb-0">
+                                  
+                                </p>
+                              </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-md-4">
+                              <div class="d-flex mb-2">
+                                <div class="flex-shrink-0">
+                                  <i
+                                    class="mdi mdi-map-marker text-primary me-1"
+                                  ></i>
+                                </div>
+                                <p class="text-muted">{{job.location}}</p>
+                              </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-md-2">
+                              <div class="d-flex mb-0">
+                                <div class="flex-shrink-0">
+                                  <i
+                                    class="uil uil-clock-three text-primary me-1"
+                                  ></i>
+                                </div>
+                                <small class="text-muted  mb-0">{{job.date_posted | timesince}} ago</small>
+                              </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-md-2">
+                              <div>
+                                <span
+                                  class="badge bg-success-subtle text-success fs-13 mt-1"
+                                  >{{job.get_type_display}}</span
+                                >
+                              </div>
+                            </div>
+                            <!--end col-->
+                          </div>
+                          <!--end row-->
+                        </div>
+                        <div class="p-3 bg-light">
+                          <div class="row justify-content-between">
+                            <div class="col-md-6">
+                              <div>
+                                <p class="text-muted mb-0">
+                                  <span class="text-dark">Experience :</span> {{job.experience}} <br>
+                                </p>
+                              </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-2 col-md-3">
+                              <span class="text-dark">Vacancies  :</span> {{job.vacancies}}
+                              <!--Apply JOB-->
+                              <!-- <div class="text-start text-md-end">
+                                
+                                {% if user.is_authenticated and job.id in application %}
+                                   <a
+                                   href="{% url 'user-cancel-job' job.id %}"
+                                   class="text-danger border-0 bg-light" type="submit">
+                                   Cancel<i class="mdi mdi-chevron-double-right"></i>
+                                 </a>
+                                {% else %}
+                                <a
+                                   href="{% url 'user-apply-job' job.id %}"
+                                   class="primary-link border-0 bg-light" type="submit">
+                                   Apply Now<i class="mdi mdi-chevron-double-right"></i>
+                                   </a>
+                                {% endif %}
+                              </div> -->
+                            </div>
+                            <!--end col-->
+                          </div>
+                          <!--end row-->
+                        </div>
+                      </div>
+                      <!--end job-box-->
+                         {% endfor %}
+                      {% endif %}
+                      
+
+                    </div>
+                  </div>
+
+                    <!--pagination-->
+                    <div class="row d-flex justify">
+                      <div class="col-lg-12 mt-5">
+                          <nav aria-label="Page navigation example">
+                              <ul class="pagination job-pagination mb-0 justify-content-center">
+                                {% if not job_list.has_previous %}
+                                <li class="page-item ">
+                                  <a class="page-link disabled" href="">
+                                      <i class="mdi mdi-chevron-double-left fs-15"></i>
+                                  </a>
+                              </li>
+                              {% endif %}
+                                {% if job_list.has_previous %}
+                                <li class="page-item ">
+                                  <a class="page-link" href="?page={{ job_list.previous_page_number }}">
+                                      <i class="mdi mdi-chevron-double-left fs-15"></i>
+                                  </a>
+                              </li>
+                                {% endif %}
+      
+                                {% if job_list.has_previous %}
+                                      <li class="page-item "><a class="page-link" href="?page={{ job_list.previous_page_number }}">{{ job_list.previous_page_number }}</a></li>
+                                {% endif %}
+      
+                                <span class="current-page">
+                                  <li class="page-item active"><a class="page-link" href="#">{{ job_list.number }}</a></li>
+                                </span>
+                                 
+                                {% if job_list.has_next %}
+                                <li class="page-item"><a  class="page-link"  href="?page={{ job_list.next_page_number }}">{{ job_list.next_page_number }}</a></li>
+                               {% endif %}
+      
+                               {% if job_list.has_next %}
+                               <li class="page-item">
+                                <a class="page-link" href="?page={{ job_list.next_page_number }}">
+                                    <i class="mdi mdi-chevron-double-right fs-15"></i>
+                                </a>
+                                </li>
+                              {% endif %}
+      
+                              {% if  not job_list.has_next %}
+                              <li class="page-item">
+                               <a class="page-link disabled " href="">
+                                   <i class="mdi mdi-chevron-double-right fs-15"></i>
+                               </a>
+                               </li>
+                             {% endif %}
+                                      <!-- End blog pagination -->
+                                  
+                              </ul>
+                          </nav>
+                      </div><!--end col-->
+                  </div><!-- end row -->
+                    
+                  </div>
+                </div>
+                <!--end col-->
+
+                 <!-- START SIDE-BAR -->
+                <div class="col-lg-3">
+                  <div class="side-bar mt-5 mt-lg-0">
+                    <div class="accordion" id="accordionExample">
+
+                      <div class="accordion-item mt-4">
+                        <h2 class="accordion-header" id="experienceOne">
+                          <button
+                            class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#experience"
+                            aria-expanded="true"
+                            aria-controls="experience"
+                          >
+                           Sectors
+                          </button>
+                        </h2>
+                        <div
+                          id="experience"
+                          class="accordion-collapse collapse show"
+                          aria-labelledby="experienceOne"
+                        >
+                          <div class="accordion-body">
+                            <div class="side-title ">
+                              {% for i in sector %}
+                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.slug%}" >{{i.name}} ({{i.count_job_post}})</a></div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end accordion-item -->
+                    </div>
+                    <!--end accordion-->
+                  </div>
+                  <!--end side-bar-->
+                </div>
+                <!--end col--> 
+                <!-- END SIDE-BAR -->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- END JOB-LIST -->
+
+        </div>
+        <!-- End Page-content -->
+
+
+
+      {% include 'include/footer.html'%}
+    
+
+        <!--start back-to-top-->
+      
+        <!--end back-to-top-->
+      </div>
+      <!-- end main content-->
+    </div>
+    <!-- END layout-wrapper -->
+
+  {% include 'include/footerjs.html'%}
+
+
+  </body>
+
+  <!-- Mirrored from themesdesign.in/jobcy/layout/job-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Jun 2023 16:55:14 GMT -->
+</html>

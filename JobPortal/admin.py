@@ -1,14 +1,20 @@
 from django.contrib import admin
-from .models import *
-
+from . import models
 # Register your models here.
 
-admin.site.register(Candidate)
-admin.site.register(Education)
-admin.site.register(Experience)
-admin.site.register(Skill)
-admin.site.register(Bookmarks)
-admin.site.register(Sector)
-admin.site.register(Job_Posting)
-admin.site.register(Application)
-admin.site.register(Interviews)
+
+
+
+
+class MyModelAdmin(admin.ModelAdmin):
+    search_fields = ['title']
+
+admin.site.register(models.Candidate)
+admin.site.register(models.Education)
+admin.site.register(models.Experience)
+admin.site.register(models.Skill, MyModelAdmin)
+admin.site.register(models.Bookmarks)
+admin.site.register(models.Sector)
+admin.site.register(models.Job_Posting)
+admin.site.register(models.Application)
+admin.site.register(models.Interviews)

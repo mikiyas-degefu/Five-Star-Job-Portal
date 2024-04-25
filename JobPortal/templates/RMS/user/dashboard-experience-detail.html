@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Resume | ACT - American College Of Technology</title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+  <!-- Modal -->
+  <div class="modal mt-5 pt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are You Sure You want to delete?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{experience.company_name}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <a href="{% url 'user-delete-experience' experience.slug %}" type="button" class="btn btn-danger">Yes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="mt-5">{% include 'include/navbar.html'%}</div>
+    <!-- ======================= dashboard Detail ======================== -->
+    <div class="dashboard-wrap bg-light mt-5">
+      <!--Left Navbar-->
+      {% include 'RMS/user/include/user-dashboard.html'%}
+
+      <div class="dashboard-content">
+        <div class="dashboard-tlbar d-block mb-5">
+          <div class="row">
+            <div class="colxl-12 col-lg-12 col-md-12">
+              <!-- Start home -->
+              <section class="page-title-box" style="height: 0px">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      <div class="text-center text-white">
+                        <h3 class="mb-4">Resume</h3>
+                        <div class="page-next">
+                          <nav
+                            class="d-inline-block"
+                            aria-label="breadcrumb text-center"
+                          >
+                            <ol class="breadcrumb justify-content-center">
+                              <li class="breadcrumb-item">
+                                <a href="{% url 'index' %}">Home</a>
+                              </li>
+                              <li class="breadcrumb-item">
+                                <a href="javascript:void(0)">Dashboard</a>
+                              </li>
+                              <li
+                                class="breadcrumb-item active"
+                                aria-current="page"
+                              >
+                                Edit Resume
+                              </li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </div>
+                <!--end container-->
+              </section>
+              <!-- end home -->
+            </div>
+          </div>
+        </div>
+        <div class="_dashboard_content_body py-3 px-3">
+            <!-- From -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                   {{message}}
+                </div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+
+
+          <!-- Add Experience -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="_dashboard_content bg-white rounded mb-4">
+                <div class="_dashboard_content_header br-bottom py-3 px-3">
+                  <div class="_dashboard__header_flex">
+                    <h4 class="mb-0 ft-medium fs-md">
+                      <i class="fas fa-graduation-cap me-1 theme-cl fs-sm"></i
+                      > {{form.institution_name.value}} Experience Details
+                    </h4>
+                  </div>
+                </div>
+
+                <div class="_dashboard_content_body py-3 px-3">
+                
+                    <form action="" method="post">{% csrf_token %}                    
+                        <div class="col-xl-12 col-lg-12">
+                          <div class="gray rounded p-3 mb-3 position-relative">
+                            <div class="d-flex justify-content-end">
+                              <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                  <i class="fas fa-times"></i>
+                            </button>
+                             </div>
+    
+                            <!--Company Name-->
+                            <div class="form-group">
+                              <label class="text-dark ft-medium">Company Name:  {% for err in form.company_name.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.company_name}}
+                            </div>
+    
+                            <!--Date-->
+                          <div class="row">
+                            <!--Date Start-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">Start Date:  {% for err in form.work_time_line_start.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.work_time_line_start}}
+                            </div>
+    
+                            <!--Date End-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">End Date:  {% for err in form.work_time_line_end.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.work_time_line_end}}
+                            </div>  
+                          </div>  
+    
+                            
+                          <div class="row">
+                            <!--Job Title-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">Job Title: {% for err in form.job_title.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.job_title}}
+                            </div>
+    
+                            <!--Referece Phone-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">Reference Name:  {% for err in form.reference_name.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.reference_name}}
+                            </div>  
+                          </div> 
+    
+    
+                          <div class="row">
+                            <!--Referece Name-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">Reference Phone: {% for err in form.reference_phone.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.reference_phone}}
+                            </div>
+    
+                            <!--Referece Email-->
+                            <div class="col-md-6 form-group">
+                              <label class="text-dark ft-medium">Reference Email:  {% for err in form.reference_email.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.reference_email}}
+                            </div>  
+                          </div> 
+                          
+                            <!--Referece Job TItle-->
+                            <div class="form-group">
+                              <label class="text-dark ft-medium">Reference Title:  {% for err in form.reference_job_title.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.reference_job_title}}
+                            </div>                      
+    
+                            <!--Responsibility-->
+                            <div class="form-group">
+                              <label class="text-dark ft-medium">Your Responsibility:  {% for err in form.responsibility.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                              {{form.responsibility}}
+                            </div>     
+                        
+                          </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12">
+                          <div class="form-group">
+                            <a
+                            type="button"
+                            class="btn gray ft-medium apply-btn fs-sm rounded"
+                            href="{% url 'user-add-experience'%}"
+                          >
+                            <i class="fas fa-plus me-1"></i>Add Experience
+                          </a>
+                          </div>
+                        </div>
+                       <!-- Save -->
+                       <div class="row mb-5">
+                        <div class="col-lg-12 col-md-12">
+                          <button
+                            type="submit"
+                            class="btn btn-md ft-medium text-light rounded theme-bg"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      {% if user_experience%}
+                      <div class="h3">Experience history's</div>
+                      <hr> 
+                      {% for experience in user_experience %}
+                          <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-experience' experience.slug  %}">{{experience.company_name}}</a>
+                      {% endfor %}
+                      {% endif %}
+    
+    
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% include 'include/footer.html' %}
+    {% include 'include/footerjs.html' %}
+  </body>
+</html>

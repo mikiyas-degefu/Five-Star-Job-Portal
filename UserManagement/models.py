@@ -1,10 +1,11 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
-from Company.models import Company
-
+from django.contrib.auth.models import AbstractUser
+from Company.models import Company 
 # Create your models here.
-
 class CustomUser(AbstractUser):
+    is_candidate = models.BooleanField(default=False)
+    is_interviewer = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     gender_list = [
     ('male', 'Male'),
     ('female', 'Female'),
@@ -21,7 +22,3 @@ class CustomUser(AbstractUser):
     city = models.CharField( max_length=50)
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['first_name','username','last_name']
-
-
-
-    

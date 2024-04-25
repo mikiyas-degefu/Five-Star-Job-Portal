@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Resume | ACT - American College Of Technology</title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+    
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+    <div class="mt-5">{% include 'include/navbar.html'%}</div>
+    <!-- ======================= dashboard Detail ======================== -->
+    <div class="dashboard-wrap bg-light mt-5">
+      <!--Left Navbar-->
+      {% include 'RMS/user/include/user-dashboard.html'%}
+
+      <div class="dashboard-content">
+        <div class="dashboard-tlbar d-block mb-5">
+          <div class="row">
+            <div class="colxl-12 col-lg-12 col-md-12">
+              <!-- Start home -->
+              <section class="page-title-box" style="height: 0px">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      <div class="text-center text-white">
+                        <h3 class="mb-4">Resume</h3>
+                        <div class="page-next">
+                          <nav
+                            class="d-inline-block"
+                            aria-label="breadcrumb text-center"
+                          >
+                            <ol class="breadcrumb justify-content-center">
+                              <li class="breadcrumb-item">
+                                <a href="{% url 'index' %}">Home</a>
+                              </li>
+                              <li class="breadcrumb-item">
+                                <a href="javascript:void(0)">Dashboard</a>
+                              </li>
+                              <li
+                                class="breadcrumb-item active"
+                                aria-current="page"
+                              >
+                                Edit Resume
+                              </li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </div>
+                <!--end container-->
+              </section>
+              <!-- end home -->
+            </div>
+          </div>
+        </div>
+        <div class="_dashboard_content_body py-3 px-3">
+            <!-- From -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %} alert-success {% else %} alert-danger {% endif %}  alert-dismissible">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                   {{message}}
+                </div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+
+          <!-- Add Education -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="_dashboard_content bg-white rounded mb-4">
+                <div class="_dashboard_content_header br-bottom py-3 px-3">
+                  <div class="_dashboard__header_flex">
+                    <h4 class="mb-0 ft-medium fs-md">
+                      <i class="fas fa-graduation-cap me-1 theme-cl fs-sm"></i
+                      >Add Education Details
+                    </h4>
+                  </div>
+                </div>
+
+                <div class="_dashboard_content_body py-3 px-3">
+                  <form action="" method="post">{% csrf_token %}                    
+                    </p>
+                    <div class="col-xl-12 col-lg-12">
+                      <div class="gray rounded p-3 mb-3 position-relative">
+
+                        <!--Institution Name-->
+                        <div class="form-group">
+                          <label class="text-dark ft-medium">Institution Name:  {% for err in form.institution_name.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                          {{form.institution_name}}
+                        </div>
+                      
+                         <!--Education Status-->
+                        <div class="form-group">
+                          <label class="text-dark ft-medium"
+                            >Education Status:  {% for err in form.education_status.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                            {{form.education_status}}
+                        <!--Field of Study-->
+                        <div class="form-group mt-3">
+                          <label class="text-dark ft-medium">Field of Study: {% for err in form.field_of_study.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label>
+                          {{form.field_of_study}}
+                        </div>
+                        </div>
+
+                        <!--Date-->
+                        <div class="form-row row">
+                          <!--Date Start-->
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label class="text-dark ft-medium"
+                                >Start Date:  {% for err in form.education_period_start.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label
+                              >
+                              {{form.education_period_start}}
+                            </div>
+                          </div>
+
+                          <!--Date End-->
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label class="text-dark ft-medium"
+                                >End Date:  {% for err in form.education_period_end.errors %} <small class="text-danger"> {{err}}  </small> {% endfor%}</label
+                              >
+                              {{form.education_period_end}}
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                   <!-- Save -->
+                   <div class="row mb-5">
+                    <div class="col-lg-12 col-md-12">
+                      <button
+                        type="submit"
+                        class="btn btn-md ft-medium text-light rounded theme-bg"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  </form>
+                  
+                  {% if user_education%}
+                  <div class="h3">Education history's</div>
+                  <hr> 
+                  {% for education in user_education %}
+                      <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-education' education.slug  %}">{{education.institution_name}}</a>
+                  {% endfor %}
+                  {% endif %}
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% include 'include/footer.html' %}
+    {% include 'include/footerjs.html' %}
+  </body>
+</html>

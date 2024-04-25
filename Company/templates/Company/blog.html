@@ -1,0 +1,215 @@
+{% load static %}
+{% load fontawesome_5 %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Blog | ACT - American College Of Technology </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content=" " />
+  <meta name="keywords" content="" />
+  <meta content="Themesdesign" name="author" />
+  
+ 
+  {% include 'include/head.html' %}
+
+</head>
+
+<body>
+
+
+  <!-- Begin page -->
+  <div>
+
+    {% include 'include/navbar.html' %}
+    <div class="main-content">
+      <div class="page-content">
+        <!-- Start home -->
+        <section class="page-title-box">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-md-6">
+                <div class="text-center text-white">
+                  <h3 class="mb-4">Blog</h3>
+                  <div class="page-next">
+                    <nav class="d-inline-block" aria-label="breadcrumb text-center">
+                      <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                          <a href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                          Blog
+                        </li>
+                      </ol>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+          <!--end container-->
+        </section>
+        <!-- end home -->
+
+        <!-- START SHAPE -->
+        <div class="position-relative" style="z-index: 1">
+          <div class="shape">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+              <path fill="" fill-opacity="1"
+                d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+              </path>
+            </svg>
+          </div>
+        </div>
+        <!-- END SHAPE -->
+
+        <!-- START BLOG-PAGE -->
+        <section class="section">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-12">
+                <div class="mb-4">
+                  <h4>Latest & Trending Blog Post</h4>
+                </div>
+              </div>
+              <!--end col-->
+
+
+
+              <div class="col-lg-7">
+                <div class="post-preview overflow-hidden rounded-3 mb-3 mb-lg-0">
+                  <a href="{% url 'single_blog' latest_blog.slug%}"><img src="/media/{{latest_blog.image}}" alt="Blog"
+                      class="img-fluid blog-img" /></a>
+                </div>
+              </div>
+              <!--end col-->
+              <div class="col-lg-5">
+                <!-- Post-->
+                <article class="post position-relative">
+                  <div class="post ms-lg-4">
+                    <p class="text-muted mb-2">
+                     <b>
+                      {% if latest_blog %} 
+                      {% for types in latest_blog.type.all %}
+                      {{types}} {% endfor %}</b>- {{latest_blog.created_at|timesince }} ago 
+                      {% endif %}
+                    </p>
+                    <h5 class="mb-3">
+                      <a href="{% url 'single_blog' latest_blog.slug%}" class="primary-link">{{ latest_blog.title }}</a>
+                    </h5>
+                      <p class="text">{{latest_blog.description}}</p>
+                      <a class="read-more" href="{% url 'single_blog' latest_blog.slug%}">Read More</a>
+                    
+                    
+                  </div>
+                </article>
+                <!-- Post end-->
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+
+
+
+            <div class="row mt-5">
+              <div class="col-lg-12">
+                <div>
+                  <h4>All Blog Post</h4>
+                </div>
+              </div>
+
+
+              {% for blog in blogs %}
+              <div class="col-md-4 mt-2">
+                <article class="post position-relative mt-4">
+                  <div class="post-preview overflow-hidden mb-3 rounded-3">
+                    <a href="{% url 'single_blog' blog.slug%}"><img src="/media/{{blog.image}}" alt=""
+                        class="img-fluid blog-img" style="width: auto; height: 230px;" /></a>
+                  </div>
+                  <p class="text-muted mb-2">
+                   
+                    <b>  {% for type in blog.type.all %} {{type}} {% endfor %} </b> - {{blog.created_at|timesince }} ago
+                  </p>
+                  <h5 class="mb-3">
+                    <a href="{% url 'single_blog' blog.slug %}" class="primary-link">{{blog.title}}</a>
+                  </h5>
+                  <p class="text">{{blog.description}}</p>
+                  <a class="read-more" href="{% url 'single_blog' blog.slug%}">Read More</a>
+                </article>
+              </div>
+              <!--end col-->
+              {% endfor %}
+
+          
+              <div class="row">
+                <div class="col-lg-12 mt-5">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination job-pagination mb-0 justify-content-center">
+                          {% if not blogs.has_previous %}
+                          <li class="page-item ">
+                            <a class="page-link disabled" href="">
+                                <i class="mdi mdi-chevron-double-left fs-15"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                          {% if blogs.has_previous %}
+                          <li class="page-item ">
+                            <a class="page-link" href="?page={{ blogs.previous_page_number }}">
+                                <i class="mdi mdi-chevron-double-left fs-15"></i>
+                            </a>
+                        </li>
+                          {% endif %}
+
+                          {% if blogs.has_previous %}
+                                <li class="page-item "><a class="page-link" href="?page={{ blogs.previous_page_number }}">{{ blogs.previous_page_number }}</a></li>
+                          {% endif %}
+
+                          <span class="current-page">
+                            <li class="page-item active"><a class="page-link" href="#">{{ blogs.number }}</a></li>
+                          </span>
+                           
+                          {% if blogs.has_next %}
+                          <li class="page-item"><a  class="page-link"  href="?page={{ blogs.next_page_number }}">{{ blogs.next_page_number }}</a></li>
+                         {% endif %}
+
+                         {% if blogs.has_next %}
+                         <li class="page-item">
+                          <a class="page-link" href="?page={{ blogs.next_page_number }}">
+                              <i class="mdi mdi-chevron-double-right fs-15"></i>
+                          </a>
+                          </li>
+                        {% endif %}
+
+                        {% if  not blogs.has_next %}
+                        <li class="page-item">
+                         <a class="page-link disabled " href="">
+                             <i class="mdi mdi-chevron-double-right fs-15"></i>
+                         </a>
+                         </li>
+                       {% endif %}
+                                <!-- End blog pagination -->
+                            
+                        </ul>
+                    </nav>
+                </div><!--end col-->
+            </div><!-- end row -->
+              
+     
+
+
+            </div>
+
+          </div>
+          <!-- end container -->
+        </section>
+        <!-- END BLOG-PAGE -->
+      </div>
+      <!-- End Page-content -->
+
+      {% include 'include/footer.html'%}
+      {% include 'include/footerjs.html'%}
+</body>
+</html>

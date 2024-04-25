@@ -1,0 +1,502 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="author" content="Themezhub" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>interviewer Profile | ACT - American College Of Technology </title>
+  <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+  {% include 'include/head.html' %}
+</head>
+
+<body>
+            <!-- Modal -->
+  <div class="modal fade" id="makeInterview" tabindex="-1" aria-labelledby="makeInterviewLabel" aria-hidden="true">
+    
+    {% if interview_form.errors %}
+      <div class="alert alert-danger">
+        <strong>Error:</strong>
+        {% for field, errors in interview_form.errors.items %}
+          {{ field }}:
+          {% for error in errors %}
+            {{ error }}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  
+    <form action="" method="post">{% csrf_token %}
+    <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="makeInterviewLabel">Interview</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="mb-5">
+                <h2 class="small-title">Interview Info</h2>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label class="form-label">Date Schedule {% for err in interview_form.date_schedule.errors%} <small class="text-danger">{{err}}</small> {% endfor %} </label>
+                      {{interview_form.date_schedule}}
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Time Schedule {% for err in interview_form.time_schedule.errors%} <small class="text-danger">{{err}}</small> {% endfor %} </label>
+                      {{interview_form.time_schedule}}
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Interview Type {% for err in interview_form.type.errors%} <small class="text-danger">{{err}}</small> {% endfor %} </label>
+                      {{interview_form.type}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  </div>
+
+              <!-- Modal -->
+  <div class="modal fade" id="cancelInterview" tabindex="-1" aria-labelledby="cancelInterviewLabel" aria-hidden="true">
+    {% if interview_form.errors %}
+      <div class="alert alert-danger">
+        <strong>Error:</strong>
+        {% for field, errors in interview_form.errors.items %}
+          {{ field }}:
+          {% for error in errors %}
+            {{ error }}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  
+    <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelInterviewLabel">Interview</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="mb-5">
+                <h2 class="small-title">Are You sure you want to cancel</h2>
+                <div class="card">
+                  <div class="card-body">
+                    <p>{{interview.application.user.candidate.first_name | capfirst}}  {{interview.application.user.candidate.last_name | capfirst}} Applications? </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>
+          <a type="submit" href="{% url 'cancel-interview' interview.slug %}" class="btn btn-danger">Yes</a>
+        </div>
+      </div>
+  </div>
+  </div>
+
+  <div class="dashboard-wrap bg-light">
+    <!--Left Navbar-->
+    {% include 'RMS/interviewer/include/navbar.html'%}
+    <div class="dashboard-content">
+      <div class="dashboard-widg-bar d-block">
+
+        <div class="row">
+          <div class="main-content">
+
+                      <!-- END SHAPE -->
+          <div class="row d-flex  justify-content-center">
+            <div class="col-8">
+              {% include 'RMS/messages.html'%}
+            </div>
+          </div>
+
+          <div class="row gx-4 gy-5">
+            <div class="col-12 col-xl-4 col-xxl-3">
+              <h2 class="small-title">Info</h2>
+              <div class="card">
+                <div class="card-body mb-n5">
+                  <div class="d-flex align-items-center flex-column">
+                    <div class="mb-5 d-flex align-items-center flex-column">
+                      <div
+                        class="sw-6 sh-6 mb-3 d-inline-block bg-primary d-flex justify-content-center align-items-center rounded-xl">
+                        <div class="text-white bg-light">
+                          {% if interview.application.user.candidate.photo%}
+                          <img width="100px" class="img-fluid  rounded-pill" src="/media/{{interview.application.user.candidate.photo}}" alt="">
+                          {% else %}
+                          {{interview.application.user.candidate.first_name |first | capfirst}}{{interview.application.user.candidate.last_name | first | capfirst}}
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="h5 mb-1">{{interview.application.user.candidate.first_name}} {{interview.application.user.candidate.last_name}}</div>
+                      <div class="text-muted">
+                        <i data-acorn-icon="pin" class="text-muted"></i>
+                        <span class="align-middle">{{interview.application.user.candidate.address}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-5">
+                    <div>
+                      <p class="text-small text-muted mb-2">Candidate Information</p>
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-sharp fa-solid fa-user" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate align-middle">
+                          {{interview.application.user.candidate.first_name}} {{interview.application.user.candidate.last_name}}
+                        </div>
+                      </div>
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-sharp fa-solid fa-venus" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate align-middle">
+                          {{interview.application.user.candidate.gender | capfirst}}
+                        </div>
+                      </div>
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-sharp fa-solid fa-location-dot" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate">
+                          {{interview.application.user.candidate.address}}
+                        </div>
+                      </div>
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-sharp fa-solid fa-phone" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate">{{interview.application.user.candidate.phone1}}</div>
+                      </div>
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-sharp fa-solid fa-envelope" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate">
+                          {{interview.application.user.candidate.email}}
+                        </div>
+                      </div>
+                      {% if interview.application.user.candidate.resume%}
+                      <div class="row g-0 mb-2">
+                        <div class="col-auto">
+                          <div class="sw-3 me-1">
+                            <i class="fa-solid fa-file" style="color: #5bbe81;"></i>
+                          </div>
+                        </div>
+                        <div class="col text-alternate">
+                          <a href="/media/{{interview.application.user.candidate.resume}}">{{interview.application.user.candidate.resume}}</a>
+                          
+                        </div>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-5">
+                    <div>
+                      <p class="text-small text-muted mb-2">Skills</p>
+                      <div class="row g-0 mb-2">
+  
+                        {% for skill in interview.application.user.candidate.skill.all %}
+                        {{skill}} {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-8 col-xxl-9">
+              <div class="mb-5">
+                {% if educations %}
+                <h2 class="small-title">Education</h2>
+                <div class="card mb-5">
+                  <div class="card-body">
+                    {% for education in educations %}
+                    <div class="row g-0 mb-2">
+                      <hr>
+                      <div class="d-flex flex-column justify-content-start">
+                        <div class="d-flex flex-column">
+                          <a  class="heading stretched-link">{{education.institution_name}} [{{education.get_education_status_display}}]</a>
+                          <div class="text-alternate"> {{education.field_of_study}} </div>
+                          <div class="text-muted mt-1">
+                            {{education.education_period_start}} - {{education.education_period_end}}
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+  
+                {% if experiences %}
+                <h2 class="small-title">Experience</h2>
+                <div class="card mb-5">
+                  <div class="card-body">
+                    {% for experience in experiences %}
+                    <div class="row g-0">
+                      <div class="col mb-2">
+                        <hr>
+                        <div class="">
+                          <div class="d-flex flex-column justify-content-start">
+                            <div class="d-flex flex-column">
+                              <a  class="heading stretched-link">{{experience.company_name}}</a>
+                              <div class="text-alternate mb-3"> {{experience.job_title}} </div>
+                              <div class="text-muted mt-1">
+                                {{experience.work_time_line_start}} - {{experience.work_time_line_end}}
+                              </div>
+                              <div class="text-muted mt-1">
+                                <p class="mb-2"> Responsibility: {{experience.responsibility}}</p>
+                              </div>
+                              <div class="text-muted mt-1">
+                                <p class="mb-2"> Reference Name: {{experience.reference_name}}</p>
+                                <p class="mb-2">Reference Phone: {{experience.reference_phone}}</p>
+                                <p class="mb-2">Reference Email: {{experience.reference_email}}</p>
+                                <p class="mb-2">Reference Job Position: {{experience.reference_job_title}}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+                 
+                
+               <h2 class="small-title">About</h2>
+               <div class="card mb-5">
+                 <div class="card-body">
+                     <div class="mb-3">
+                       <label class="form-label"></label>
+                       {{interview.application.user.candidate.about}}
+                     </div>
+                 </div>
+               </div>
+               
+               {% if interview.status == 'scheduled' %}
+               <button type="button" data-bs-toggle="modal" data-bs-target="#makeInterview" class="btn btn-primary" >Re-Schedule Interview</button>
+               {% elif interview.status == 'pending'  %}
+               <button type="button" data-bs-toggle="modal" data-bs-target="#makeInterview" class="btn btn-primary" >Schedule Interview</button>
+               {% endif %}
+
+               {% if interview.status != 'completed'%}
+               <button type="button" data-bs-toggle="modal" data-bs-target="#cancelInterview" class="btn btn-danger" >Cancel Interview</button>
+              {% endif %}
+
+              </div>
+            </div>
+          </div>
+
+          {% if interview.status == 'completed'%}
+          <form action="" method="post"> {% csrf_token %}
+          <div class="row mt-3 d-flex justify-content-center"> 
+            <div class="col-8 p-0 m-0 bg-white">
+              {{job_status_form.status}}
+            </div>
+            <div class="col-8 p-0 m-0">
+              <button class="btn btn-primary mt-3" type="submit">Save changes</button>
+            </div>
+          </div>
+        </form>
+
+          {% endif %}
+
+
+          {% if interview.application.job %}
+          <h2 class="small-title mt-3">JOB Detail</h2>
+           <div class="card mb-2">
+             
+             {% if interview.application.job %}
+          <!-- START JOB-DEATILS -->
+          <section class="section">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="card job-detail overflow-hidden">
+                    <div class="card-body p-4">
+                      <div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h5 class="mb-1 h2">{{interview.application.job.title}}</h5>
+                            <ul class="list-inline text-muted mb-0">
+                              <li class="list-inline-item">
+                                <i class="mdi mdi-account"></i> {{interview.application.job.vacancies}} Vacancy
+                              </li>
+                            </ul>
+                          </div>
+                          <!--end col-->
+
+                        </div>
+                        <!--end row-->
+                      </div>
+
+                      <div class="mt-4">
+                        <div class="row g-2">
+                          <div class="col-lg-4">
+                            <div class="border rounded-start p-3">
+                              <p class="text-muted mb-0 fs-13">Experience</p>
+                              <p class="fw-medium fs-15 mb-0">{{interview.application.job.experience}}</p>
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="border p-3">
+                              <p class="text-muted fs-13 mb-0">Employee type</p>
+                              <p class="fw-medium mb-0">{{interview.application.job.get_type_display}}</p>
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="border rounded-end p-3">
+                              <p class="text-muted fs-13 mb-0">Salary Range</p>
+                              <p class="fw-medium mb-0">{{interview.application.job.salary_range_start}} - {{interview.application.job.salary_range_final}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--end Experience-->
+
+                      <div class="mt-4">
+                        {{interview.application.job.description | safe}}
+                      </div>
+
+                      <div class="mt-4">
+                        <h5 class="mb-3">Skills </h5>
+                        <div class="job-details-desc">
+                          <div class="mt-4">
+                            {% for skill in interview.application.job.skills.all %}
+                            <span class="badge bg-primary">{{skill}}</span>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <!--end card-body-->
+                  </div>
+                  <!--end job-detail-->
+                </div>
+                <!--end col-->
+
+                <div class="col-lg-4 mt-4 mt-lg-0">
+                  <!--start side-bar-->
+                  <div class="side-bar ms-lg-4">
+                    <div class="card job-overview">
+                      <div class="card-body p-4">
+                        <h6 class="fs-17">Job Overview</h6>
+                        <ul class="list-unstyled mt-4 mb-0">
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class="fa-solid mt-3 fa-briefcase fa-2xl"  style="color: #146ebe; "></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">{{interview.application.job.department}}</h6>
+                                <p class="text-muted mb-0">{{interview.application.job.title}}</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class="fa-solid mt-3 fa-hand-fist fa-2xl" style="color: #146ebe; "></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">Experience</h6>
+                                <p class="text-muted mb-0">{{interview.application.job.experience}}</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class=" mt-3 fa-solid fa-location-dot fa-2xl"  style="color: #146ebe; "></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">Location</h6>
+                                <p class="text-muted mb-0">{{interview.application.job.location}}</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class="mt-3 fa-solid fa-money-bill fa-2xl" style="color: #146ebe;" ></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">Salary Range</h6>
+                                <p class="text-muted mb-0">${{interview.application.job.salary_range_start}} - ${{interview.application.job.salary_range_final}}</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class="mt-3 fa-solid fa-building fa-2xl" style="color: #146ebe;" ></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">Sector</h6>
+                                <p class="text-muted mb-0">{{interview.application.job.sector}}</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="d-flex mt-4">
+                              <i class="mt-3 fa-solid fa-calendar-days fa-2xl" style="color: #146ebe;" ></i>
+                              <div class="ms-3">
+                                <h6 class="fs-14 mb-2">Date Posted</h6>
+                                <p class="text-muted mb-0">{{interview.application.job.date_posted | timesince}} ago</p>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="mt-3">
+                        </div>
+                      </div>
+                      <!--end card-body-->
+                    </div>
+                    <!--end job-overview-->
+
+                  </div>
+                  <!--end side-bar-->
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end container-->
+          </section>
+          <!-- END JOB-DEATILS -->
+             {% endif %}
+           </div>
+           {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+  </div>
+  {% include 'include/footerjs.html' %}
+</body>
+
+</html>

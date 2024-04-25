@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Resume | ACT - American College Of Technology</title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+    <div class="dashboard-wrap bg-light">
+      <!--Left Navbar-->
+      {% include 'RMS/Interviewer/include/navbar.html'%}
+
+      <div class="dashboard-content">
+        <div class="dashboard-tlbar d-block mb-5">
+          <div class="row">
+            <div class="colxl-12 col-lg-12 col-md-12">
+              <!-- Start home -->
+              <section class="page-title-box" style="height: 0px">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      <div class="text-center text-white">
+                        <h3 class="mb-4">Resume</h3>
+                        <div class="page-next">
+                          <nav
+                            class="d-inline-block"
+                            aria-label="breadcrumb text-center"
+                          >
+                            <ol class="breadcrumb justify-content-center">
+                              <li class="breadcrumb-item">
+                                <a href="{% url 'index' %}">Home</a>
+                              </li>
+                              <li class="breadcrumb-item">
+                                <a href="javascript:void(0)">Dashboard</a>
+                              </li>
+                              <li
+                                class="breadcrumb-item active"
+                                aria-current="page"
+                              >
+                                Edit Resume
+                              </li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </div>
+                <!--end container-->
+              </section>
+              <!-- end home -->
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-widg-bar d-block">
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+              <div class="_dashboard_content bg-white rounded mb-4">
+                <div class="_dashboard_content_header br-bottom py-3 px-3">
+                  <div class="_dashboard__header_flex">
+                    <h4 class="mb-0 ft-medium fs-md">
+                      <i class="fa fa-file me-1 theme-cl fs-sm"></i>Create
+                      Resume
+                    </h4>
+                  </div>
+                </div>
+
+                <div class="_dashboard_content_body py-3 px-3">
+                  {% include 'RMS/messages.html' %}
+                  <form class="row d-flex justify-content-center " method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-xl-10 col-lg-10col-md-12 col-sm-12 ">
+                     <div class="row ">
+                      <div class="col-xl-12 col-lg-12 mb-2">
+                        <label for="id_photo">Upload Profile Picture less than 1 MB {% for err in form.photo.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label>
+                        
+                      {% if user.photo%}
+                        <br>
+                        <img src="/media/{{user.photo}}" class="img-fluid mx-auto d-block avatar-lg img-thumbnail rounded-circle mb-4" style="width: 200px; height: 200px;" alt="">
+                        <br>
+                       {% endif %}
+                        {{form.photo}}
+                      </div>
+                     </div>
+                      <div class="row mt-2 ">
+                        <!--First Name-->
+                        <div class="col-xl-6 col-lg-6">
+                          <div class="form-group">
+                            <label
+                              class="text-dark ft-medium"
+                              for="id_first_name"
+                              >*First Name {% for err in form.first_name.errors %} <small class="text-danger"> {{err}} </small> {% endfor %} </label
+                            >
+                            {{form.first_name}}
+                          </div>
+                        </div>
+
+                        <!--Last Name-->
+                        <div class="col-xl-6 col-lg-6">
+                          <div class="form-group">
+                            <label
+                              class="text-dark ft-medium"
+                              for="id_last_name"
+                              >*Last Name {% for err in form.last_name.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label
+                            >
+                            {{form.last_name}}
+                          </div>
+                        </div>
+
+                        <!--Email-->
+                        <div class="col-xl-12 col-lg-12">
+                          <div class="form-group">
+                            <label class="text-dark ft-medium" for="id_email"
+                              >*Email {% for err in form.email.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label
+                            >
+                            {{form.email}}
+                          </div>
+                        </div>
+
+                                      <!-- Save -->
+                  <div class="row mb-5">
+                    <div class="col-lg-12 col-md-12">
+                      <button
+                        type="submit"
+                        class="btn btn-md ft-medium text-light rounded theme-bg"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

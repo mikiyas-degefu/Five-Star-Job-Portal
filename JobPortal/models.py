@@ -1,35 +1,38 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+from froala_editor.fields import FroalaField
 from UserManagement.models import CustomUser
 from django.utils.text import slugify
 from unidecode import unidecode
 import datetime
-from phonenumber_field.modelfields import PhoneNumberField
-from Company.models import Company
-from django.db import models
-from froala_editor.fields import FroalaField
-
-# Create your models here.'
-
-class Skill(models.Model):
-    title = models.CharField(unique=True, max_length=30)
-    slug = models.SlugField(unique=True, blank=True,  max_length=200)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(unidecode(self.title))
-        super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['title']
-   
-    def __str__(self) -> str:
-        return self.title
+#Candidate
+gender_list = [
+    ('male', 'Male'),
+    ('female', 'Female'),
+]
 
 class Candidate(models.Model):
-    user = models.OneToOneField(CustomUser ,on_delete=models.SET_NULL , null=True , blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    gender = models.CharField(max_length=10, choices=gender_list)
+    date_of_birth = models.DateField()
+    email = models.EmailField(max_length=40)
+    phone1 = PhoneNumberField()
+    phone2 = PhoneNumberField(blank = True)
+    address = models.CharField(max_length=100)
+    linked_in = models.URLField(blank=True, null=True)
+    git_hub = models.URLField(blank=True, null=True)
+    country = models.CharField(max_length=20)
+    city = models.CharField(max_length=20)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    photo = models.ImageField(upload_to='Candidate/photo', null=True, blank=True)
+    resume = models.FileField(upload_to='Candidate/Resume', null=True, blank=True)
     about = models.TextField()
-    skill = models.ManyToManyField(Skill)
+    skill = models.ManyToManyField("Skill", blank=False) 
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
+    date_created = models.DateField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.first_name + " " + self.last_name
@@ -43,7 +46,6 @@ class Candidate(models.Model):
         if not self.slug:
             self.slug = slugify(unidecode(self.user.username))
         super().save(*args, **kwargs)
-
 
 education_status_list = [
     ('highschool', 'High School'),
@@ -73,7 +75,6 @@ class Education(models.Model):
     def __str__(self) -> str:
         return self.institution_name
 
-
 class Experience(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     company_name = models.CharField(max_length=40)
@@ -96,7 +97,20 @@ class Experience(models.Model):
     def __str__(self) -> str:
         return self.company_name
 
+class Skill(models.Model):
+    title = models.CharField(unique=True, max_length=30)
+    slug = models.SlugField(unique=True, blank=True,  max_length=200)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(unidecode(self.title))
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['title']
+   
+    def __str__(self) -> str:
+        return self.title
     
 class Bookmarks(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -145,8 +159,8 @@ job_type = [
     ('remote', 'Remote'),
 ]
 
+
 class Job_Posting(models.Model):
-    company = models.ForeignKey(Company , on_delete=models.SET_NULL , null=True , blank=True)
     title = models.CharField(max_length=50)
     sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, null=True)  # Related With Sector
     description = FroalaField()
@@ -156,7 +170,7 @@ class Job_Posting(models.Model):
     location = models.CharField(max_length=200)
     salary_range_start = models.FloatField()
     salary_range_final = models.FloatField()
-    job_type = models.CharField( choices=job_type, max_length=30)
+    type = models.CharField( choices=job_type, max_length=30)
     job_status = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
     date_closed = models.DateField()
@@ -228,6 +242,7 @@ job_status_interview = [
 interview_type = [
     ('phone', 'Phone'),
     ('in-person', 'In-Person'),
+    ('video', 'Video')
 ]
 
 class Interviews(models.Model):
@@ -236,9 +251,9 @@ class Interviews(models.Model):
     date_schedule = models.DateField(null=True, blank=True)
     time_schedule = models.TimeField(null=True, blank=True)
     status = models.CharField(max_length=15, choices=interview_status, default='pending', null=True, blank=True)
-    interview_type = models.CharField(max_length=15, choices=interview_type, null=True, blank=True)
+    type = models.CharField(max_length=15, choices=interview_type, null=True, blank=True)
     note = FroalaField( null=True, blank=True)
-    slug = models.SlugField(unique=True, null=True, blank=True, max_length=600)\
+    slug = models.SlugField(unique=True, null=True, blank=True, max_length=600)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -250,4 +265,8 @@ class Interviews(models.Model):
     
     class Meta:
        ordering = ['date_schedule']
+
+
+
+    
 
