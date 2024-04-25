@@ -25,29 +25,15 @@
                         <span>Data</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#">Department</a></li>
-                        <li><a href="#">Batch</a></li>
-                        <li><a href="#">Course</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="mdi mdi-account-multiple-outline"></i>
-                        <span>Account</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#">Registrar</a></li>
-                        <li><a href="#">Department Head</a></li>
-                        <li><a href="#">Lecturer</a></li>
-                        <li><a href="#">Student</a></li>
+                        <li><a href="{% url 'user-admin-company'%}">Company</a></li>
                     </ul>
                 </li>
             </ul>
 
 
-            <div style="position: absolute; bottom: 0;"> 
-                <img class="img-fluid rounded mx-auto d-block mb-2" style="width: 60%;"   src="{% static  'assets/images/logo/colo-logo-no-background.png' %}"  alt="logo-sm-light">
-        </div>
+            {% comment %} <div style="position: absolute; bottom: 0;"> 
+                <img class="img-fluid rounded mx-auto d-block mb-2" style="width: 60%;"   src="{% static   %}"  alt="logo-sm-light">
+        </div> {% endcomment %}
                 
             </div>
         <!-- Sidebar -->
