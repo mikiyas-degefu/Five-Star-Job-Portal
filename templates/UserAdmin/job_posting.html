@@ -34,11 +34,11 @@
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
                       {% include 'UserAdmin/include/messages.html' %}                    
-                      <caption>Companies</caption>
+                      <caption>Jobs</caption>
                         <button class="btn btn-primary float-end" 
                         data-bs-toggle="modal"
-                        data-bs-target="#AddCompany"
-                        data-bs-whatever="@mdo">Add New Company</button>
+                        data-bs-target="#AddJob"
+                        data-bs-whatever="@mdo">Post Job</button>
                       <div class="row">
 
                         <form>
@@ -55,63 +55,61 @@
                         <thead  class="table-light">
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Logo</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Since</th>
-                            <th scope="col">Views</th>
-                            <th scope="col">Total Jobs</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Sector</th>
+                            <th scope="col">Salary Start</th>
+                            <th scope="col">Salary Finall</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {% if companies %}
-                            {% for company in companies %}
+                          {% if jobs %}
+                            {% for job in jobs %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
-                            <td><img src="/media/{{company.logo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
-                            <td>{{company.name}}</td>
-                            <td>{{company.email}}</td>
-                            <td>{{company.phone}}</td>
-                            <td>{{company.since}}</td>
-                            <td>{{company.views}}</td>
-                            <td>{{company.total_jobs}}</td>
+                            <td>{{job.company}}</td>
+                            <td>{{job.title}}</td>
+                            <td>{{job.sector}}</td>
+                            <td>{{job.salary_range_start}}</td>
+                            <td>{{job.salary_range_final}}</td>
                             <td>
                                
                             <button 
                             type="button" 
                             class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
                             data-bs-toggle="modal"
-                            data-bs-target="#detailCompanies"
+                            data-bs-target="#detailJobs"
                             data-bs-whatever="@mdo"
-                            data-logo="{{company.logo}}"
-                            data-name="{{company.name}}"
-                            data-slogan="{{company.slogan}}"
-                            data-about='{{company.about | safe }}'
-                            data-email="{{company.email}}"
-                            data-address="{{company.address}}"
-                            data-phone="{{company.phone}}"
-                            data-since="{{company.since}}"
-                            data-views="{{company.views}}"
-                            data-total_jobs="{{company.total_jobs}}"
-                            data-location="{{company.location}}"
-                            data-website="{{company.website}}"
+                            data-company="{{job.company}}"
+                            data-title="{{job.title}}"
+                            data-sector="{{job.sector}}"
+                            data-description='{{job.description}}'
+                            data-vacancies="{{job.vacancies}}"
+                            data-experience="{{job.experience}}"
+                            data-skills="{{job.skills}}"
+                            data-location="{{job.location}}"
+                            data-salary_range_start="{{job.salary_range_start}}"
+                            data-salary_range_final="{{job.salary_range_final}}"
+                            data-type="{{job.type}}"
+                            data-compensation_type="{{job.compensation_type}}"
+                            data-date_posted="{{job.date_posted}}"
+                            data-date_closed="{{job.date_closed}}"
                             >
                             <i class="fa fa-eye"></i> 
                             </button>
                             
-                            <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'user-admin-company-detail' company.id %}"><i class="fa fa-pen"></i></a>
-                            
+                         <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'user-admin-job-detail' job.id %}"><i class="fa fa-pen"></i></a>
+                             
                         </button>
                         </button>
                               <button 
                               class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
                               data-bs-toggle="modal" 
-                              data-bs-target="#deleteCompanyModal"
+                              data-bs-target="#deleteJobModal"
                               data-bs-whatever="@mdo"
-                              data-id = {{company.id}}
-                              data-name = {{company.name}}
+                              data-id = {{job.id}}
+                              data-name = {{job.title}}
                               >
                               <i class="fa fa-trash"></i> 
                             </button>
@@ -129,9 +127,9 @@
                       <!-- Pagination -->
              <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-circle pagination-outline justify-content-center" >
-                {% if companies.has_previous %}
+                {% if jobs.has_previous %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ companies.previous_page_number }}">Previous</a>
+                  <a class="page-link" href="?page={{ jobs.previous_page_number }}">Previous</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -139,30 +137,30 @@
                   </li>
                 {% endif %}
             
-                {% if companies.number|add:'-4' > 1 %}
-                  <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'-5' }}">&hellip;</a></li>
+                {% if jobs.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ jobs.number|add:'-5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% for i in companies.paginator.page_range %}
-                  {% if companies.number == i %}
+                {% for i in jobs.paginator.page_range %}
+                  {% if jobs.number == i %}
                     <li class="page-item active" aria-current="page">
                     <span class="page-link">
                     {{ i }}
                     <span class="sr-only">(current)</span>
                     </span>
                   </li>
-                  {% elif i > companies.number|add:'-5' and i < companies.number|add:'5' %}
+                  {% elif i > jobs.number|add:'-5' and i < jobs.number|add:'5' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                   {% endif %}
                 {% endfor %}
             
-                {% if companies.paginator.num_pages > companies.number|add:'4' %}
-                   <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'5' }}">&hellip;</a></li>
+                {% if jobs.paginator.num_pages > jobs.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ jobs.number|add:'5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% if companies.has_next %}
+                {% if jobs.has_next %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ companies.next_page_number }}">Next</a>
+                  <a class="page-link" href="?page={{ jobs.next_page_number }}">Next</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -184,12 +182,12 @@
 
 <!--Detail Company Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="detailCompanies" tabindex="-1" aria-labelledby="detailCompaniesLabel"
+  <div class="modal fade" id="detailJobs" tabindex="-1" aria-labelledby="detailJobsLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailCompaniesLabel">Company Information</h5>
+        <h5 class="modal-title" id="detailJobsLabel">Company Information</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <div id="detailModalBody" class="modal-body">
@@ -201,12 +199,12 @@
 
 <!--Add Company Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="AddCompany" tabindex="-1" aria-labelledby="AddCompanyLabel"
+  <div class="modal fade" id="AddJob" tabindex="-1" aria-labelledby="AddJobLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="AddCompanyLabel">Company Information</h5>
+        <h5 class="modal-title" id="AddJobLabel">Company Information</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <form  method="post" enctype="multipart/form-data">
@@ -228,21 +226,21 @@
 
 <!--Delete  Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="deleteCompanyModal" tabindex="-1" aria-labelledby="deleteCompanyModalLabel"
+  <div class="modal fade" id="deleteJobModal" tabindex="-1" aria-labelledby="deleteJobModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteCompanyModalLabel">Delete Company</h5>
+          <h5 class="modal-title" id="deleteJobModalLabel">Delete Responsible Ministry</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p class="h4 fw-normal" id="deleteMessageYear"></p>
+          <p class="h4 fw-normal" id="deleteJob"></p>
         </div> 
           
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <a href="#" id="deleteCompanyAnchor" type="submit" class="btn btn-danger">Delete</a>
+          <a href="#" id="deleteJobAnchor" type="submit" class="btn btn-danger">Delete</a>
         </div>
         
       </div>
@@ -255,6 +253,14 @@
 </div>
 <!-- END layout-wrapper -->
 
+<!-- JAVASCRIPT -->
+<script src="{% static 'UserAdmin/libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/metismenu/metisMenu.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/node-waves/waves.min.js' %}"></script>
+<script src="{% static 'UserAdmin/js/app.js' %}"></script>
+
 <script>
 $(document).ready(function(){
 
@@ -265,38 +271,43 @@ $(document).ready(function(){
           const buttonData = $(this).data()
           console.log(buttonData)
           //Open Modal
-         handleDetailModalCompany(
-            buttonData.name, 
-            buttonData.logo, 
-            buttonData.slogan,
-            buttonData.about,
-            buttonData.email,
-            buttonData.address,
-            buttonData.phone,
-            buttonData.since,
-            buttonData.views,
-            buttonData.total_jobs,
+         handleDetailModalJob(
+            buttonData.company, 
+            buttonData.title, 
+            buttonData.sector,
+            buttonData.description,
+            buttonData.vacancies,
+            buttonData.experience,
+            buttonData.skills,
             buttonData.location,
-            buttonData.website,
+            buttonData.salary_range_start,
+            buttonData.salary_range_final,
+            buttonData.type,
+            buttonData.compensation_type,
+            buttonData.date_posted,
+            buttonData.date_closed,
             )
     });
 
 
-    handleDetailModalCompany = (name, logo, slogan, about, email, address, phone, since, views, total_jobs, location, website )=>{
+    handleDetailModalJob = (company , title , sector , description , vacancies , experience, skills , location , salary_range_start , salary_range_final , type , compensation_type ,  job_status , date_posted , date_closed , )=>{
         let htmlBody = `
-            <div class="mt-3">
-                <p class="fw-bold" >Name: <span class="fw-normal">${name}</span></p> 
-                <p class="fw-bold" >slogan: <span class="fw-normal" >${slogan}</span></p>
-                <p class="fw-bold" >Email: <span class="fw-normal" >${email}</span></p>
-                <p class="fw-bold" >Address: <span class="fw-normal" >${address}</span></p>
-                <p class="fw-bold" >Phone: <span class="fw-normal" >${phone}</span></p>
-                <p class="fw-bold" >Since: <span class="fw-normal" >${since}</span></p>
-                <p class="fw-bold" >Views: <span class="fw-normal" >${views}</span></p>
-                <p class="fw-bold" >Total Jobs: <span class="fw-normal" >${total_jobs}</span></p>
-                <p class="fw-bold" >Location: <span class="fw-normal" >${location}</span></p>
-                <p class="fw-bold" >Website: <span class="fw-normal" >${website}</span></p>
-                <p class="fw-bold" >About: <span class="fw-normal" >${$(about).text().replace('Powered by Froala Editor', '')}</span></p>
-            </div>
+        <div class="mt-3">
+          <p class="fw-bold">Company: <span class="fw-normal">${company}</span></p>
+          <p class="fw-bold">Title: <span class="fw-normal">${title}</span></p>
+          <p class="fw-bold">Sector: <span class="fw-normal">${sector}</span></p>
+          <p class="fw-bold">Description: <span class="fw-normal">${description}</span></p>
+          <p class="fw-bold">Vacancies: <span class="fw-normal">${vacancies}</span></p>
+          <p class="fw-bold">Experience: <span class="fw-normal">${experience}</span></p>
+          <p class="fw-bold">Skills: <span class="fw-normal">${skills}</span></p>
+          <p class="fw-bold">Location: <span class="fw-normal">${location}</span></p>
+          <p class="fw-bold">Salary Range: <span class="fw-normal">${salary_range_start} </span></p>
+          <p class="fw-bold">Salary Range: <span class="fw-normal">${salary_range_final} </span></p>
+          <p class="fw-bold">Type: <span class="fw-normal">${type}</span></p>
+          <p class="fw-bold">Compensation Type: <span class="fw-normal">${compensation_type}</span></p>
+          <p class="fw-bold">Date Posted: <span class="fw-normal">${date_posted}</span></p>
+          <p class="fw-bold">Date Closed: <span class="fw-normal">${date_closed}</span></p>
+      </div>
         `
         $('#detailModalBody').html(htmlBody)
 
@@ -307,11 +318,12 @@ $(document).ready(function(){
      //Event handler that handle on Click to delete
      $(".btn-delete").on('click', function(){
           const buttonData = $(this).data()
-          $("#deleteCompanyAnchor").attr("href", `/user-admin/company-delete/${buttonData.id}`)
-          $("#deleteMessageYear").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+          $("#deleteJobAnchor").attr("href", `/user-admin/delete-job_posting/${buttonData.id}`)
+          $("#deleteJob").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
         })
 
 
+    
          // Edit Data Detail 
 
     })

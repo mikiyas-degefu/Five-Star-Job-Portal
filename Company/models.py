@@ -38,7 +38,7 @@ class Company(models.Model):
 #Blog 
 class Blog_Categories(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=200, unique=True,blank=True, editable=False)
+    slug = models.SlugField(max_length=200, unique=True,blank=True, editable=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

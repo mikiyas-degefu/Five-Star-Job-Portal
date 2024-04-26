@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <form method="post" enctype="multipart/form-data"enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row justify-content-center">
+                    <div class="col-8 card p-3">
+                        {% include 'UserAdmin/include/messages.html' %}
+                       <h2> Edit Job</h2>
+                       <hr>
+                        {{ form.as_p }}
+                       <div class="btn-group gap-2">
+                        <a href="{% url 'user-admin-job-posting' %}" class="btn btn-secondary"  type="submit">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                       </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+</div>
+<!-- END layout-wrapper -->
+
+<!-- JAVASCRIPT -->
+<script src="{% static 'UserAdmin/libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/metismenu/metisMenu.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/node-waves/waves.min.js' %}"></script>
+<script src="{% static 'UserAdmin/js/app.js' %}"></script>
+
+</body>
+</html>

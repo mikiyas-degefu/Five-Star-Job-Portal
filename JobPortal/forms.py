@@ -1,5 +1,6 @@
 from django import forms
 from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, application_status
+from Company.models import Company
 from datetime import date
 from django.forms import formset_factory
 from phonenumber_field.formfields import PhoneNumberField
@@ -220,7 +221,20 @@ class JobPostingForm(forms.ModelForm):
     ('contract', 'Contract'),
     ('remote', 'Remote'),
 ]
+
+    compensation_types = [
+    ('monthly','Monthly'),
+    ('yearly','Yearly'),
+    ('hourly','Hourly'),
+    ('commission','Commission'),
+    ('bonus','Bonus'),
+    ('benefits','Benefits')
+]
     
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), widget=forms.Select(attrs={
+        'class' : 'form-select ',
+        'onkeyup' : 'filterFunction()'
+    }))
     title = forms.CharField(widget=forms.TextInput(attrs={
         'class' : 'form-control '
     }))
@@ -232,8 +246,9 @@ class JobPostingForm(forms.ModelForm):
     experience = forms.CharField(widget=forms.TextInput(attrs={
         'class ' : 'form-control'
     }))
-
-    skills = forms.ModelMultipleChoiceField(required=True,queryset=Skill.objects.all())
+    compensation_type = forms.ChoiceField(choices=compensation_types, widget=forms.Select(attrs={
+        'class' : 'form-select'
+    }))
     location = forms.CharField(widget=forms.TextInput(attrs={
         'class' : 'form-control'
     }))
@@ -259,10 +274,14 @@ class JobPostingForm(forms.ModelForm):
     class Meta:
         model = Job_Posting
         fields = '__all__'
+        exclude = ['slug']
 
         widgets = {
             'vacancies' : forms.NumberInput(attrs={
                 'class' : 'form-control'
+            }),
+            'skills' : forms.SelectMultiple(attrs={
+                'class' : 'form-select' 
             })
         }
 
@@ -354,4 +373,16 @@ class InterviewerNoteForm(forms.ModelForm):
 
         widgets = {
             'note' : FroalaEditor()
+        }
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ('title', )
+
+        widgets = {
+            'title' : forms.TextInput(attrs={
+                'class' : ' form-control'
+            })
         }

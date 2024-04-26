@@ -185,7 +185,7 @@ class Job_Posting(models.Model):
     compensation_type = models.CharField( choices=compensation_types, max_length=30 , blank=True , null=True)
     job_status = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
-    date_closed = models.DateField()
+    date_closed = models.DateTimeField(auto_now=False , auto_now_add=False)
     slug = models.SlugField(unique=True,  max_length=200, blank=True)
 
     def save(self, *args, **kwargs):

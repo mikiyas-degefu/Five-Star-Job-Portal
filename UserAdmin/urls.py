@@ -12,4 +12,18 @@ urlpatterns = [
     path('sector-delete/<str:id>/', views.sector_delete, name='user-admin-sector-delete'),
 
 
+    path('skills/', views.skills, name='user-admin-skills'),
+    path('update-skill/', views.update_skill, name='user-admin-update-skills'),
+    path('skill-delete/<str:id>/', views.skill_delete, name='user-admin-skill-delete'),
+
+    path('job_posting/', views.job_posting, name='user-admin-job-posting'),
+    path('update-job_posting/<str:id>', views.job_detail, name='user-admin-job-detail'),
+    path('delete-job_posting/<str:id>/', views.job_delete, name='user-admin-delete-job-posting'),
+
+
+    path('blog_category/', views.blog_category, name='user-admin-blog-category'),
+    path('update-blog/', views.update_blog_category, name='user-admin-update-blog-category'),
+    path('delete-blog/<str:id>/', views.blog_category_delete, name='user-admin-delete-blog-category'),
+
+
    ]
