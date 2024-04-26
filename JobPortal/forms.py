@@ -374,3 +374,15 @@ class InterviewerNoteForm(forms.ModelForm):
         widgets = {
             'note' : FroalaEditor()
         }
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ('title', )
+
+        widgets = {
+            'title' : forms.TextInput(attrs={
+                'class' : ' form-control'
+            })
+        }
