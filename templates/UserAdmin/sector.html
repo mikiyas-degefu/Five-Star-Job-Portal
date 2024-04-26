@@ -1,0 +1,319 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'UserAdmin/include/messages.html' %}                    
+                      <caption>Companies</caption>
+                        <button class="btn btn-primary float-end" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#AddCompany"
+                        data-bs-whatever="@mdo">Add New Company</button>
+                      <div class="row">
+
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                          </div>        
+                        </form>            
+                      </div>
+
+                        <thead  class="table-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if sectors %}
+                            {% for sector in sectors %}
+                          <tr>
+                            <th scope="row">{{count | add:forloop.counter}}</th>
+                            <td id="sector{{ sector.id }}" >{{sector.name}}</td>
+                            <td>
+                               
+                            <button 
+                            type="button" 
+                            class="btn btn-edit btn-outline-warning mt-2 btn-sm me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#EditSector"
+                            data-bs-whatever="@mdo"
+                            data-name="{{sector.name}}"
+                            data-id="{{sector.id}}"
+                            >
+                            <i class="fa fa-pen"></i> 
+                            </button>
+                            
+                        
+                        </button>
+                        </button>
+                              <button 
+                              class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
+                              data-bs-toggle="modal" 
+                              data-bs-target="#deleteCompanyModal"
+                              data-bs-whatever="@mdo"
+                              data-id = {{sector.id}}
+                              data-name = {{sector.name}}
+                              >
+                              <i class="fa fa-trash"></i> 
+                            </button>
+                        </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+                {% if companies.has_previous %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ companies.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                  </li>
+                {% endif %}
+            
+                {% if companies.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% for i in companies.paginator.page_range %}
+                  {% if companies.number == i %}
+                    <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  {% elif i > companies.number|add:'-5' and i < companies.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            
+                {% if companies.paginator.num_pages > companies.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% if companies.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ companies.next_page_number }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                  </li>
+                {% endif %}
+                </ul>
+              </nav>
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+<!--Edit Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditSector" tabindex="-1" aria-labelledby="EditSectorLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditSectorLabel">Edit Sector</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  id="editSectorForm" method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            <input type="hidden" value="" id="id_id">
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+
+<!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddCompany" tabindex="-1" aria-labelledby="AddCompanyLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddCompanyLabel">Company Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteCompanyModal" tabindex="-1" aria-labelledby="deleteCompanyModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteCompanyModalLabel">Delete Responsible Ministry</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteMessageYear"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteCompanyAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+<!-- JAVASCRIPT -->
+<script src="{% static 'UserAdmin/libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/metismenu/metisMenu.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
+<script src="{% static 'UserAdmin/libs/node-waves/waves.min.js' %}"></script>
+<script src="{% static 'UserAdmin/js/app.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+
+    // Start Detail Data
+
+    //Event handler that handle button on Click
+    $(".btn-edit").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+          handleEditModalSector(buttonData.name, buttonData.id)
+    });
+
+
+    handleEditModalSector = (name, id)=>{
+      $('#id_name').val(name)
+      $('#id_id').val(id)
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteCompanyAnchor").attr("href", `/user-admin/company-delete/${buttonData.id}`)
+          $("#deleteMessageYear").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+        })
+
+
+    
+         // Edit Data Detail 
+
+
+      $('#editSectorForm').on('submit', function(e){
+        e.preventDefault()
+        let id = $('#id_id').val()
+        let name = $('#id_name').val()
+
+
+        $.ajax({
+          type: 'POST',
+          url : '{% url "user-admin-update-sector" %}',
+          data: {
+              'id' : id,
+              'name' : name,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+          success: function(response){
+            console.log(response)
+            if(response.success){
+              let htmlName = $('#sector'+id)
+              htmlName.text(name)
+            }else{
+
+            }
+          },
+          error: function(){
+
+          }
+        })
+      })
+
+    })
+
+</script>
+
+</body>
+</html>

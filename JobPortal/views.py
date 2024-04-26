@@ -17,7 +17,6 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 import os
 import telebot
 import requests
-from bs4 import BeautifulSoup
 
 
 def scrap_skill():
