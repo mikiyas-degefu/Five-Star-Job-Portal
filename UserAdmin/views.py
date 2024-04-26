@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from Company.models import (Company)
 from Company.forms import (CompanyForm)
+from django.db.models import Q
 # Create your views here.
 def index(request):
     return render(request, 'UserAdmin/index.html')
@@ -11,6 +12,11 @@ def company(request, id=None):
     form = CompanyForm(request.POST or None, request.FILES or None)
     companies = Company.objects.all()
     count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        companies = Company.objects.filter( Q(name__contains=q) | Q(phone__icontains=q) | Q(email__icontains=q) | Q(views__icontains=q) | Q(total_jobs__icontains=q))
+    
     paginator = Paginator(companies, 30) 
     page_number = request.GET.get('page')
 
@@ -33,6 +39,7 @@ def company(request, id=None):
             messages.success(request, '&#128515 Hello User, Successfully Updated')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
+    
 
     
     context = {

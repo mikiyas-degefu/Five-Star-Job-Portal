@@ -41,12 +41,14 @@
                         data-bs-whatever="@mdo">Add New Company</button>
                       <div class="row">
 
-                        <div class="col-8 col-md-4 m-1">
-                          <input type="text" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
-                        </div>
-                        <div class="col-3 col-md-1 m-1">
-                          <button class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
-                        </div>                    
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                          </div>        
+                        </form>            
                       </div>
 
                         <thead  class="table-light">
@@ -55,14 +57,15 @@
                             <th scope="col">Logo</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Since</th>
                             <th scope="col">Phone</th>
+                            <th scope="col">Since</th>
                             <th scope="col">Views</th>
                             <th scope="col">Total Jobs</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {% if companies %}
                             {% for company in companies %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
@@ -114,6 +117,11 @@
                         </td>
                           </tr>
                           {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                          </tr>
+                          {% endif %}
                         </tbody>
                       </table>
 
