@@ -4,8 +4,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from Company.models import (Company)
 from Company.forms import (CompanyForm)
-from  JobPortal.forms import (SectorForm)
-from JobPortal.models import (Sector)
+from  JobPortal.forms import (SectorForm, SkillForm)
+from JobPortal.models import (Sector, Skill)
 from django.db.models import Q
 # Create your views here.
 def index(request):
@@ -159,3 +159,75 @@ def sector_delete(request, id):
         messages.error(request, '&#128532 Hello User , An error occurred while Deleting Sector')
     
     return redirect('user-admin-sector')
+
+
+def skills(request):
+    form = SkillForm(request.POST or None)
+    skills = Skill.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        skills = Skill.objects.filter( Q(title__contains=q))
+    
+    paginator = Paginator(skills, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, '&#128515 Hello User, Successfully Added')
+                return redirect('user-admin-skills')
+            except:
+                messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill or Skill Exist')
+                return redirect('user-admin-skills')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill')
+    
+
+    
+    context = {
+        'skills' : page,
+        'count' : count,
+        'form' : form
+    }
+    return render(request, 'UserAdmin/skills.html', context=context)
+    
+
+def skill_delete(request, id):
+    try:
+        skill = Skill.objects.get(pk = id)
+        skill.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Skill')
+    
+    return redirect('user-admin-skills')
+
+
+def update_skill(request):
+    id = request.POST['id']
+    title = request.POST['title']
+
+    try:
+        skill = Skill.objects.get(id = id)
+        skill.title = title
+        skill.save()
+        response = {'success' : True}
+    except:
+        response = {'success' : False}
+    return JsonResponse(response)

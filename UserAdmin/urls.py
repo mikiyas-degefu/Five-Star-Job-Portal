@@ -12,4 +12,9 @@ urlpatterns = [
     path('sector-delete/<str:id>/', views.sector_delete, name='user-admin-sector-delete'),
 
 
+    path('skills/', views.skills, name='user-admin-skills'),
+    path('update-skill/', views.update_skill, name='user-admin-update-skills'),
+    path('skill-delete/<str:id>/', views.skill_delete, name='user-admin-skill-delete'),
+
+
    ]
