@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('JobPortal.urls')),
     path('company/', include('Company.urls')),
+    path('user-management/', include('UserManagement.urls')),
     path('user-admin/', include('UserAdmin.urls')),
     path('froala_editor/', include('froala_editor.urls')),
 
