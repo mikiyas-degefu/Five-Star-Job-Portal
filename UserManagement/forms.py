@@ -13,6 +13,31 @@ class Login_Form(forms.Form):
         'placeholder' : 'Enter Your Password'
     }))
 
+class CustomUserEditForm(forms.ModelForm):
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), widget=forms.Select(attrs={
+        'class' : 'form-select ',
+        'onkeyup' : 'filterFunction()'
+    }))
+    date_of_birth = forms.DateField(label='End Date: ', widget=forms.DateInput(attrs={
+        'class' : 'form-control',
+        'Placeholder' : 'mm/dd/yyyy (Required)',
+        'type' : 'Date'
+    }))
+    class Meta:
+        model = CustomUser
+        fields =  ('first_name', 'last_name', 'photo', 'gender', 'date_of_birth', 'email', 'phone', 'company', 'address', 'linked_in', 'country', 'city')
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'photo': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'gender': forms.Select(attrs={'class': 'form-select'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'linked_in': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={

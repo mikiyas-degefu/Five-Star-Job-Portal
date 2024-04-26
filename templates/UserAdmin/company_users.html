@@ -34,11 +34,11 @@
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
                       {% include 'UserAdmin/include/messages.html' %}                    
-                      <caption>Admin Users</caption>
+                      <caption>Company Users</caption>
                         <button class="btn btn-primary float-end" 
                         data-bs-toggle="modal"
-                        data-bs-target="#AddAdminUser"
-                        data-bs-whatever="@mdo">Add New Admin</button>
+                        data-bs-target="#AddCompanyUser"
+                        data-bs-whatever="@mdo">Add New Company User</button>
                       <div class="row">
 
                         <form>
@@ -61,12 +61,13 @@
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
                             <th scope="col">Address</th>
+                            <th scope="col">Company</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {% if admin_user %}
-                            {% for user in admin_user %}
+                          {% if company_user %}
+                            {% for user in company_user %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
                             {% if user.photo %}
@@ -79,6 +80,7 @@
                             <td>{{user.email}}</td>
                             <td>{{user.phone}}</td>
                             <td>{{user.address}}</td>
+                            <td>{{user.company}}</td>
                             <td>
                                
                             <button 
@@ -103,7 +105,7 @@
                             <i class="fa fa-eye"></i> 
                             </button>
                             
-                        <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'admin_user-detail' user.id %}"><i class="fa fa-pen"></i></a>
+                       <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company_user-detail' user.id %}"><i class="fa fa-pen"></i></a>
                          
                         </button>
                         </button>
@@ -131,9 +133,9 @@
                       <!-- Pagination -->
              <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-circle pagination-outline justify-content-center" >
-                {% if admin_user.has_previous %}
+                {% if company_user.has_previous %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ admin_user.previous_page_number }}">Previous</a>
+                  <a class="page-link" href="?page={{ company_user.previous_page_number }}">Previous</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -141,30 +143,30 @@
                   </li>
                 {% endif %}
             
-                {% if admin_user.number|add:'-4' > 1 %}
-                  <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'-5' }}">&hellip;</a></li>
+                {% if company_user.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ company_user.number|add:'-5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% for i in admin_user.paginator.page_range %}
-                  {% if admin_user.number == i %}
+                {% for i in company_user.paginator.page_range %}
+                  {% if company_user.number == i %}
                     <li class="page-item active" aria-current="page">
                     <span class="page-link">
                     {{ i }}
                     <span class="sr-only">(current)</span>
                     </span>
                   </li>
-                  {% elif i > admin_user.number|add:'-5' and i < admin_user.number|add:'5' %}
+                  {% elif i > company_user.number|add:'-5' and i < company_user.number|add:'5' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                   {% endif %}
                 {% endfor %}
             
-                {% if admin_user.paginator.num_pages > admin_user.number|add:'4' %}
-                   <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'5' }}">&hellip;</a></li>
+                {% if company_user.paginator.num_pages > company_user.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ company_user.number|add:'5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% if admin_user.has_next %}
+                {% if company_user.has_next %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ admin_user.next_page_number }}">Next</a>
+                  <a class="page-link" href="?page={{ company_user.next_page_number }}">Next</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -191,7 +193,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailCompaniesLabel">Admin User Information</h5>
+        <h5 class="modal-title" id="detailCompaniesLabel">Company User Information</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <div id="detailModalBody" class="modal-body">
@@ -203,12 +205,12 @@
 
 <!--Add Company Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="AddAdminUser" tabindex="-1" aria-labelledby="AddAdminUserLabel"
+  <div class="modal fade" id="AddCompanyUser" tabindex="-1" aria-labelledby="AddCompanyUserLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="AddAdminUserLabel">Admin User Information</h5>
+        <h5 class="modal-title" id="AddCompanyUserLabel">Company User Information</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <form  method="post" enctype="multipart/form-data">
