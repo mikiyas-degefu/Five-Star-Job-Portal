@@ -21,4 +21,9 @@ urlpatterns = [
     path('delete-job_posting/<str:id>/', views.job_delete, name='user-admin-delete-job-posting'),
 
 
+    path('blog_category/', views.blog_category, name='user-admin-blog-category'),
+    path('update-blog/', views.update_blog_category, name='user-admin-update-blog-category'),
+    path('delete-blog/<str:id>/', views.blog_category_delete, name='user-admin-delete-blog-category'),
+
+
    ]
