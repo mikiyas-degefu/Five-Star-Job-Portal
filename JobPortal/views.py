@@ -17,6 +17,11 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 import os
 import telebot
 import requests
+import random
+from datetime import date
+import string
+from UserManagement.models import CustomUser
+from django.contrib.auth.hashers import make_password
 
 
 def scrap_skill():

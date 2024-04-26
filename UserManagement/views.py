@@ -159,16 +159,9 @@ def company_user_detail(request, id):
 
 
 
-
-
-
-
-
-
-
 def candidate_user(request):
     form = CustomUserCreationForm(request.POST or None, request.FILES or None)
-    candidate_user = CustomUser.objects.all()
+    candidate_user = CustomUser.objects.filter(is_candidate=True)
     count = 30
    
     if 'q' in request.GET:
