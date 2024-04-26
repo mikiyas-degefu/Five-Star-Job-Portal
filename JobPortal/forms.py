@@ -275,7 +275,7 @@ class JobPostingForm(forms.ModelForm):
 class SectorForm(forms.ModelForm):
     class Meta:
         model = Sector
-        fields = '__all__'
+        fields = ('name',)
     
         widgets = {
             'name' : forms.TextInput(attrs={

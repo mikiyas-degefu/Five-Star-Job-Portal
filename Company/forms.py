@@ -1,5 +1,5 @@
 from django import forms
-from  .models import Comment, Contact_Message, Company
+from  .models import (Comment, Contact_Message, Company)
 from froala_editor.widgets import FroalaEditor
 
 class CompanyForm(forms.ModelForm):
@@ -78,3 +78,5 @@ class ContactForm(forms.ModelForm):
      if len(name) < 2:
          raise forms.ValidationError(' Enter a valid name.')
      return name
+
+
