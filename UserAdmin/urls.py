@@ -10,5 +10,9 @@ urlpatterns = [
     path('sector/', views.job_sector, name='user-admin-sector'),
     path('update-sector/', views.update_sector, name='user-admin-update-sector'),
 
+    path('job_posting/', views.job_posting, name='user-admin-job-posting'),
+    path('update-job_posting/<str:id>', views.job_detail, name='user-admin-job-detail'),
+    path('delete-job_posting/<str:id>/', views.job_delete, name='user-admin-delete-job-posting'),
+
 
    ]
