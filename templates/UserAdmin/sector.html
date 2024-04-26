@@ -67,6 +67,7 @@
                             <td>
                                
                             <button 
+                            id="sectorButton_{{sector.id}}"
                             type="button" 
                             class="btn btn-edit btn-outline-warning mt-2 btn-sm me-2"
                             data-bs-toggle="modal"
@@ -84,7 +85,7 @@
                               <button 
                               class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
                               data-bs-toggle="modal" 
-                              data-bs-target="#deleteCompanyModal"
+                              data-bs-target="#deleteSectorModal"
                               data-bs-whatever="@mdo"
                               data-id = {{sector.id}}
                               data-name = {{sector.name}}
@@ -105,9 +106,9 @@
                       <!-- Pagination -->
              <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-circle pagination-outline justify-content-center" >
-                {% if companies.has_previous %}
+                {% if sectors.has_previous %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ companies.previous_page_number }}">Previous</a>
+                  <a class="page-link" href="?page={{ sectors.previous_page_number }}">Previous</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -115,30 +116,30 @@
                   </li>
                 {% endif %}
             
-                {% if companies.number|add:'-4' > 1 %}
-                  <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'-5' }}">&hellip;</a></li>
+                {% if sectors.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ sectors.number|add:'-5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% for i in companies.paginator.page_range %}
-                  {% if companies.number == i %}
+                {% for i in sectors.paginator.page_range %}
+                  {% if sectors.number == i %}
                     <li class="page-item active" aria-current="page">
                     <span class="page-link">
                     {{ i }}
                     <span class="sr-only">(current)</span>
                     </span>
                   </li>
-                  {% elif i > companies.number|add:'-5' and i < companies.number|add:'5' %}
+                  {% elif i > sectors.number|add:'-5' and i < sectors.number|add:'5' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                   {% endif %}
                 {% endfor %}
             
-                {% if companies.paginator.num_pages > companies.number|add:'4' %}
-                   <li class="page-item"><a class="page-link" href="?page={{ companies.number|add:'5' }}">&hellip;</a></li>
+                {% if sectors.paginator.num_pages > sectors.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ sectors.number|add:'5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% if companies.has_next %}
+                {% if sectors.has_next %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ companies.next_page_number }}">Next</a>
+                  <a class="page-link" href="?page={{ sectors.next_page_number }}">Next</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -175,8 +176,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-             <button type="submit" class="btn btn-primary">Save</button>
-            
+            <button  id="saveSector" type="submit" class="btn btn-primary">Save changes</button>
+            <button style="display: none;" id="btnLoadding" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
           </div>
 
         </form>
@@ -193,7 +197,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="AddCompanyLabel">Company Information</h5>
+        <h5 class="modal-title" id="AddCompanyLabel">Add New Sector</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <form  method="post" enctype="multipart/form-data">
@@ -215,21 +219,21 @@
 
 <!--Delete  Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="deleteCompanyModal" tabindex="-1" aria-labelledby="deleteCompanyModalLabel"
+  <div class="modal fade" id="deleteSectorModal" tabindex="-1" aria-labelledby="deleteSectorModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteCompanyModalLabel">Delete Responsible Ministry</h5>
+          <h5 class="modal-title" id="deleteSectorModalLabel">Delete Sector</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p class="h4 fw-normal" id="deleteMessageYear"></p>
+          <p class="h4 fw-normal" id="deleteMessageSector"></p>
         </div> 
           
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <a href="#" id="deleteCompanyAnchor" type="submit" class="btn btn-danger">Delete</a>
+          <a href="#" id="deleteSectorAnchor" type="submit" class="btn btn-danger">Delete</a>
         </div>
         
       </div>
@@ -243,7 +247,9 @@
 <!-- END layout-wrapper -->
 
 <!-- JAVASCRIPT -->
-<script src="{% static 'UserAdmin/libs/jquery/jquery.min.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-toast-plugin@1.3.2/dist/jquery.toast.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/jquery-toast-plugin@1.3.2/dist/jquery.toast.min.css" rel="stylesheet">
 <script src="{% static 'UserAdmin/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'UserAdmin/libs/metismenu/metisMenu.min.js' %}"></script>
 <script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
@@ -253,7 +259,16 @@
 <script>
 $(document).ready(function(){
 
-    // Start Detail Data
+     // Function to show toast messages
+     showToast = (title, body, cssClass)=> {
+      $.toast({
+              heading: title,
+              text: body,
+              showHideTransition: 'slide',
+              icon: cssClass,
+              position: 'top-right',
+              })
+        }
 
     //Event handler that handle button on Click
     $(".btn-edit").on('click', function(){
@@ -273,9 +288,12 @@ $(document).ready(function(){
      //Event handler that handle on Click to delete
      $(".btn-delete").on('click', function(){
           const buttonData = $(this).data()
-          $("#deleteCompanyAnchor").attr("href", `/user-admin/company-delete/${buttonData.id}`)
-          $("#deleteMessageYear").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+          $("#deleteSectorAnchor").attr("href", `/user-admin/sector-delete/${buttonData.id}`)
+          $("#deleteMessageSector").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
         })
+
+
+      
 
 
     
@@ -287,6 +305,8 @@ $(document).ready(function(){
         let id = $('#id_id').val()
         let name = $('#id_name').val()
 
+       
+
 
         $.ajax({
           type: 'POST',
@@ -296,17 +316,40 @@ $(document).ready(function(){
               'name' : name,
               csrfmiddlewaretoken: '{{csrf_token}}'
             },
+            beforeSend: function() {
+              $('#saveSector').hide()
+               $("#btnLoadding").show();
+             },
+             // hides the loader after completion of request, whether successfull or failor.             
+             complete: function() {
+              //Show save button finished 
+               $('#saveSector').show()
+               $("#btnLoadding").hide();
+             },
           success: function(response){
-            console.log(response)
             if(response.success){
-              let htmlName = $('#sector'+id)
-              htmlName.text(name)
-            }else{
 
+              //show succuss message
+              showToast('&#128515 Hello, User', 'Successfully Updated', 'success' )
+              $('#EditSector').modal('hide'); //Hide Modal
+              let htmlName = $('#sector'+id)
+              let buttonHtml = $('#sectorButton_'+id) 
+              //Update Table Value
+              htmlName.text(name)
+
+              //update Button Value
+              buttonHtml.data("name", name)
+
+
+
+            }else{
+               //show succuss message
+               showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
             }
           },
           error: function(){
-
+            //show succuss message
+            showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
           }
         })
       })

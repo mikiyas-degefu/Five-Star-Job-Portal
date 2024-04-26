@@ -9,6 +9,7 @@ urlpatterns = [
 
     path('sector/', views.job_sector, name='user-admin-sector'),
     path('update-sector/', views.update_sector, name='user-admin-update-sector'),
+    path('sector-delete/<str:id>/', views.sector_delete, name='user-admin-sector-delete'),
 
 
    ]

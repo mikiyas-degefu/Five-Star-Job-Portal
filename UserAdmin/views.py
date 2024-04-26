@@ -39,9 +39,10 @@ def company(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            messages.success(request, '&#128515 Hello User, Successfully Added')
+            return redirect('user-admin-company')
         else:
-            messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Company')
     
 
     
@@ -116,9 +117,10 @@ def job_sector(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            messages.success(request, '&#128515 Hello User, Successfully Added')
+            return redirect('user-admin-sector')
         else:
-            messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Sector')
     
 
     
@@ -134,6 +136,7 @@ def job_sector(request):
 
 
     ########### Save Data
+
 def update_sector(request):
     id = request.POST['id']
     name = request.POST['name']
@@ -146,3 +149,13 @@ def update_sector(request):
     except:
         response = {'success' : False}
     return JsonResponse(response)
+
+def sector_delete(request, id):
+    try:
+        sector = Sector.objects.get(pk = id)
+        sector.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Sector')
+    
+    return redirect('user-admin-sector')
