@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from Company.models import (Company)
-from Company.forms import (CompanyForm)
+from Company.models import (Company, Blog_Categories, Blog)
+from Company.forms import (CompanyForm, BlogCategoriesForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
 from django.db.models import Q
@@ -302,6 +302,78 @@ def update_skill(request):
         skill = Skill.objects.get(id = id)
         skill.title = title
         skill.save()
+        response = {'success' : True}
+    except:
+        response = {'success' : False}
+    return JsonResponse(response)
+
+
+
+def blog_category(request):
+    form = BlogCategoriesForm(request.POST or None, request.FILES or None)
+    jobs = Blog_Categories.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        jobs = Blog_Categories.objects.filter(Q(name__contains=q))
+    
+    paginator = Paginator(jobs, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello User, Successfully Added')
+            return redirect('user-admin-blog-category')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Blog Category')
+    
+
+    
+    context = {
+        'categories' : page,
+        'count' : count,
+        'form' : form
+    }
+    return render(request, 'UserAdmin/blog_category.html', context=context)
+
+
+
+def blog_category_delete(request, id):
+    try:
+        blog = Blog_Categories.objects.get(pk = id)
+        blog.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Blog Category')
+    
+    return redirect('user-admin-blog-category')
+
+
+
+def update_blog_category(request):
+    id = request.POST['id']
+    name = request.POST['name']
+
+
+    try:
+        category = Blog_Categories.objects.get(pk = id)
+        category.name = name
+        category.save()
         response = {'success' : True}
     except:
         response = {'success' : False}

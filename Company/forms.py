@@ -1,5 +1,5 @@
 from django import forms
-from  .models import (Comment, Contact_Message, Company)
+from  .models import (Comment, Contact_Message, Company, Blog, Blog_Categories)
 from froala_editor.widgets import FroalaEditor
 
 class CompanyForm(forms.ModelForm):
@@ -79,4 +79,15 @@ class ContactForm(forms.ModelForm):
          raise forms.ValidationError(' Enter a valid name.')
      return name
 
+
+class BlogCategoriesForm(forms.ModelForm):
+    class Meta:
+        model = Blog_Categories
+        fields = ('name', )
+
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            })
+        }
 
