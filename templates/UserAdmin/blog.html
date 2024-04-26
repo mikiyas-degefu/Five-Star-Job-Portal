@@ -1,0 +1,334 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'UserAdmin/include/messages.html' %}                    
+                      <caption>Blog</caption>
+                        <button class="btn btn-primary float-end" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#AddSkill"
+                        data-bs-whatever="@mdo">Add New Blog</button>
+                      <div class="row">
+
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                          </div>        
+                        </form>            
+                      </div>
+
+
+                      {% if blogs %}
+
+                     
+
+                      <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
+                        {% for blog in blogs %}
+
+                       
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/media/{{blog.image}}" class="card-img-top img-fluid" alt="...">
+                              <div class="card-body">
+                                <h5 class="card-title"><a href="{% url 'user-admin-blog-detail' blog.id%}">{{blog.title}}</a></h5>
+                                <p class="card-text">{{blog.description}}</p>
+                              </div>
+                              <div class="card-footer">
+                                <small class="text-muted">Last updated {{blog.updated_at | timesince}} ago</small>
+                              </div>
+                            </div>
+                          </div>                        
+                      
+                      {% endfor %}
+                    </div>
+
+
+
+                      {% else %}
+
+                      <p class="text-danger text-center h4">No Blog Found</p>
+                      {% endif %}
+
+                      </table>
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+                {% if blogs.has_previous %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ blogs.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                  </li>
+                {% endif %}
+            
+                {% if blogs.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ blogs.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% for i in blogs.paginator.page_range %}
+                  {% if blogs.number == i %}
+                    <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  {% elif i > blogs.number|add:'-5' and i < blogs.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            
+                {% if blogs.paginator.num_pages > blogs.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ blogs.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% if blogs.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ blogs.next_page_number }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                  </li>
+                {% endif %}
+                </ul>
+              </nav>
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+<!--Edit Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditCategoryModal" tabindex="-1" aria-labelledby="EditCategoryModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditCategoryModalLabel">Edit Skill</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  id="editSkillForm" method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            <input type="hidden" value="" id="id_id">
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button  id="saveBlogCategory" type="submit" class="btn btn-primary">Save changes</button>
+            <button style="display: none;" id="btnLoadding" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+
+<!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddSkill" tabindex="-1" aria-labelledby="AddSkillLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddSkillLabel">Add New Skill</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteBlogCategoryModal" tabindex="-1" aria-labelledby="deleteBlogCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteBlogCategoryModalLabel">Delete Sector</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteMessageBlogCategory"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteBlogCategoryAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+
+
+<script>
+$(document).ready(function(){
+
+     // Function to show toast messages
+     showToast = (title, body, cssClass)=> {
+      $.toast({
+              heading: title,
+              text: body,
+              showHideTransition: 'slide',
+              icon: cssClass,
+              position: 'top-right',
+              })
+        }
+
+    //Event handler that handle button on Click
+    $(".btn-edit").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+          handleEditModalCategory(buttonData.name, buttonData.id)
+    });
+
+
+    handleEditModalCategory = (name, id)=>{
+      $('#id_name').val(name)
+      $('#id_id').val(id)
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteBlogCategoryAnchor").attr("href", `/user-admin/delete-blog/${buttonData.id}`)
+          $("#deleteMessageBlogCategory").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+        })
+
+
+      
+
+
+    
+         // Edit Data Detail
+
+      $('#editSkillForm').on('submit', function(e){
+        e.preventDefault()
+        let id = $('#id_id').val()
+        let name = $('#id_name').val()
+       
+        $.ajax({
+          type: 'POST',
+          url : '{% url "user-admin-update-blog-category" %}',
+          data: {
+              'id' : id,
+              'name' : name,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            beforeSend: function() {
+              $('#saveBlogCategory').hide()
+               $("#btnLoadding").show();
+             },
+             // hides the loader after completion of request, whether successfull or failor.             
+             complete: function() {
+              //Show save button finished 
+               $('#saveBlogCategory').show()
+               $("#btnLoadding").hide();
+             },
+          success: function(response){
+            if(response.success){
+
+              //show succuss message
+              showToast('&#128515 Hello, User', 'Successfully Updated', 'success' )
+              $('#EditCategoryModal').modal('hide'); //Hide Modal
+
+
+              let htmlName = $('#category_name_'+id)
+              let buttonHtml = $('#categoryButton_'+id) 
+              //Update Table Value
+              htmlName.text(name)
+
+              //update Button Value
+              buttonHtml.data("name", name)
+
+
+
+            }else{
+               //show succuss message
+               showToast('&#128532 Hello User', 'Failed to update Category.', 'error' )
+            }
+          },
+          error: function(){
+            //show succuss message
+            showToast('&#128532 Hello User', 'Failed to update Category.', 'error' )
+          }
+        })
+      })
+
+    })
+
+</script>
+
+</body>
+</html>

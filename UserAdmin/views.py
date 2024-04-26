@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from Company.models import (Company, Blog_Categories, Blog)
-from Company.forms import (CompanyForm, BlogCategoriesForm)
+from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
 from django.db.models import Q
@@ -311,14 +311,14 @@ def update_skill(request):
 
 def blog_category(request):
     form = BlogCategoriesForm(request.POST or None, request.FILES or None)
-    jobs = Blog_Categories.objects.all()
+    categories = Blog_Categories.objects.all()
     count = 30
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Blog_Categories.objects.filter(Q(name__contains=q))
+        categories = Blog_Categories.objects.filter(Q(name__contains=q))
     
-    paginator = Paginator(jobs, 30) 
+    paginator = Paginator(categories, 30) 
     page_number = request.GET.get('page')
 
     try:
@@ -378,3 +378,80 @@ def update_blog_category(request):
     except:
         response = {'success' : False}
     return JsonResponse(response)
+
+
+
+def blog(request):
+    form = BlogForm(request.POST or None, request.FILES or None)
+    blogs = Blog.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        blogs = Blog.objects.filter(Q(title__contains=q))
+    
+    paginator = Paginator(blogs, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello User, Successfully Added')
+            return redirect('user-admin-blog')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Blog')
+    
+
+    
+    context = {
+        'blogs' : page,
+        'count' : count,
+        'form' : form
+    }
+    return render(request, 'UserAdmin/blog.html', context=context)
+
+
+def blog_detail(request, id):
+    try:
+        blog = Blog.objects.get(pk = id)
+    except:
+        blog = None
+    
+    form = BlogForm(request.POST or None, request.FILES or None, instance=blog)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            return redirect('user-admin-blog-detail',f'{id}')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
+    context = {
+        'form': form,
+        'blog' : blog
+    }
+    return render(request, 'UserAdmin/blog_detail.html', context=context)
+
+
+def blog_delete(request, id):
+    try:
+        blog = Blog.objects.get(pk = id)
+        blog.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Blog')
+    
+    return redirect('user-admin-blog')

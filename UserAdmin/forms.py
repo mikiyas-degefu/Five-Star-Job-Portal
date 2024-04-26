@@ -31,27 +31,5 @@ class SuperUserCreationForm(UserCreationForm):
         }
 
 
-class BlogForm(forms.ModelForm):
-    
-    class Meta:
-        model = Blog
-        fields =('title', 'image', 'description', 'content', 'type')
-
-        widgets  = {
-            'title' : forms.TextInput(attrs={
-                'class' : 'form-control'
-            }),
-            'image' : forms.ClearableFileInput(attrs={
-                'class' : 'form-control'
-            }),
-            'description' : forms.TextInput(attrs={
-                'class' : 'form-control'
-            }),
-            'content' : FroalaEditor,
-            'type' : forms.SelectMultiple(attrs={
-                'class' : 'form-select'
-            })
-        }
-
 
 
