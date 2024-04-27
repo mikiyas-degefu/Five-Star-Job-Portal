@@ -1,7 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 from .models import CustomUser
 from Company.models import Company
+from django.urls import reverse_lazy
 
 class Login_Form(forms.Form):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={
@@ -152,3 +154,25 @@ class InterviewerForm(forms.ModelForm):
         fields = ('first_name','last_name', 'email', 'photo')
     
 
+
+
+
+class ChangePasswordForm(PasswordChangeForm):
+    error_css_class = 'text-danger'
+    old_password = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={'autocomplete': 'current-password', 'autofocus': True, 'class': 'form-control',
+                   'placeholder': 'Old Password'}),
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'autocomplete': 'new-password', 'class': 'form-control', 'placeholder': 'New Password'}),
+        strip=False,
+    )
+    new_password2 = forms.CharField(
+        strip=False,
+        label="Confirm Password",
+        widget=forms.PasswordInput(
+            attrs={'autocomplete': 'new-password', 'class': 'form-control', 'placeholder': 'Confirm password'}),
+    )

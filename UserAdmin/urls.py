@@ -31,6 +31,7 @@ urlpatterns = [
     path('blog-delete/<str:id>/', views.blog_delete, name='user-admin-blog-delete'),
 
 
-    path('profile/',views.admin_profile, name='admin-profile')
+    path('profile/',views.admin_profile, name='admin-profile'),
+    path('change-password', views.admin_change_password, name="admin-change-password")
 
    ]

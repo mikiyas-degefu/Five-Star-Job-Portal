@@ -9,7 +9,9 @@ from JobPortal.models import (Sector, Skill , Job_Posting)
 from UserManagement.models import CustomUser
 from django.db.models import Q
 from UserManagement.decorators import (admin_super_user_required)
-from UserManagement.forms import (CustomUserEditFormAdmin)
+from UserManagement.forms import (CustomUserEditFormAdmin, ChangePasswordForm)
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import logout
 # Create your views here.
 
 
@@ -488,3 +490,21 @@ def admin_profile(request):
     }
 
     return render(request, 'UserAdmin/profile.html', context=context)
+
+
+
+@admin_super_user_required
+def admin_change_password(request):
+    form = ChangePasswordForm(request.user)
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user,request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hello User,Password Successfully Updated')
+            logout(request)
+            return redirect('login')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Updating User Password! ')
+
+    
+    return render(request,'UserAdmin/change_password.html', {'form': form})
