@@ -13,5 +13,8 @@ urlpatterns = [
 
     path('candidate-user/', views.candidate_user, name='candidate_user'),
     path('candidate-user/<str:id>/', views.candidate_user_detail, name='candidate_user-detail'),
-    path('candidate-user-delete/<str:id>/', views.candidate_user_delete, name='candidate_user-delete')
+    path('candidate-user-delete/<str:id>/', views.candidate_user_delete, name='candidate_user-delete'),
+
+
+    path('logout/', views.logout_view, name="logout")
    ]
