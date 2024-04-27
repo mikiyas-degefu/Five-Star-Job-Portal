@@ -6,11 +6,19 @@ from Company.models import (Company, Blog_Categories, Blog)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
+from UserManagement.models import CustomUser
 from django.db.models import Q
+from UserManagement.decorators import (admin_super_user_required)
+from UserManagement.forms import (CustomUserEditFormAdmin)
 # Create your views here.
+
+
+@admin_super_user_required
 def index(request):
     return render(request, 'UserAdmin/index.html')
 
+
+@admin_super_user_required
 def company(request):
     form = CompanyForm(request.POST or None, request.FILES or None)
     companies = Company.objects.all()
@@ -55,7 +63,7 @@ def company(request):
     
 
     
-
+@admin_super_user_required
 def company_detail(request, id):
     try:
         company = Company.objects.get(pk = id)
@@ -76,7 +84,7 @@ def company_detail(request, id):
     }
     return render(request, 'UserAdmin/company_detail.html', context=context)
 
-
+@admin_super_user_required
 def company_delete(request, id):
     try:
         company = Company.objects.get(pk = id)
@@ -88,7 +96,7 @@ def company_delete(request, id):
     return redirect('user-admin-company')
 
 
-
+@admin_super_user_required
 def job_sector(request):
     form = SectorForm(request.POST or None)
     sector = Sector.objects.all()
@@ -137,6 +145,8 @@ def job_sector(request):
 
     ########### Save Data
 
+
+@admin_super_user_required
 def update_sector(request):
     id = request.POST['id']
     name = request.POST['name']
@@ -152,7 +162,7 @@ def update_sector(request):
 
 
 
-
+@admin_super_user_required
 def job_posting(request):
     form = JobPostingForm(request.POST or None, request.FILES or None)
     jobs = Job_Posting.objects.all()
@@ -194,6 +204,8 @@ def job_posting(request):
     }
     return render(request, 'UserAdmin/job_posting.html', context=context)
     
+
+@admin_super_user_required    
 def job_delete(request, id):
     try:
         job = Job_Posting.objects.get(pk = id)
@@ -204,7 +216,7 @@ def job_delete(request, id):
     
     return redirect('user-admin-job-posting')    
 
-
+@admin_super_user_required
 def job_detail(request, id):
     try:
         job = Job_Posting.objects.get(pk = id)
@@ -225,6 +237,8 @@ def job_detail(request, id):
     }
     return render(request, 'UserAdmin/job_detail.html', context=context)
 
+
+@admin_super_user_required
 def sector_delete(request, id):
     try:
         sector = Sector.objects.get(pk = id)
@@ -235,7 +249,7 @@ def sector_delete(request, id):
     
     return redirect('user-admin-sector')
 
-
+@admin_super_user_required
 def skills(request):
     form = SkillForm(request.POST or None)
     skills = Skill.objects.all()
@@ -282,7 +296,7 @@ def skills(request):
     }
     return render(request, 'UserAdmin/skills.html', context=context)
     
-
+@admin_super_user_required
 def skill_delete(request, id):
     try:
         skill = Skill.objects.get(pk = id)
@@ -293,7 +307,7 @@ def skill_delete(request, id):
     
     return redirect('user-admin-skills')
 
-
+@admin_super_user_required
 def update_skill(request):
     id = request.POST['id']
     title = request.POST['title']
@@ -308,7 +322,7 @@ def update_skill(request):
     return JsonResponse(response)
 
 
-
+@admin_super_user_required
 def blog_category(request):
     form = BlogCategoriesForm(request.POST or None, request.FILES or None)
     categories = Blog_Categories.objects.all()
@@ -352,7 +366,7 @@ def blog_category(request):
     return render(request, 'UserAdmin/blog_category.html', context=context)
 
 
-
+@admin_super_user_required
 def blog_category_delete(request, id):
     try:
         blog = Blog_Categories.objects.get(pk = id)
@@ -364,7 +378,7 @@ def blog_category_delete(request, id):
     return redirect('user-admin-blog-category')
 
 
-
+@admin_super_user_required
 def update_blog_category(request):
     id = request.POST['id']
     name = request.POST['name']
@@ -380,7 +394,7 @@ def update_blog_category(request):
     return JsonResponse(response)
 
 
-
+@admin_super_user_required
 def blog(request):
     form = BlogForm(request.POST or None, request.FILES or None)
     blogs = Blog.objects.all()
@@ -423,7 +437,7 @@ def blog(request):
     }
     return render(request, 'UserAdmin/blog.html', context=context)
 
-
+@admin_super_user_required
 def blog_detail(request, id):
     try:
         blog = Blog.objects.get(pk = id)
@@ -445,7 +459,7 @@ def blog_detail(request, id):
     }
     return render(request, 'UserAdmin/blog_detail.html', context=context)
 
-
+@admin_super_user_required
 def blog_delete(request, id):
     try:
         blog = Blog.objects.get(pk = id)
@@ -455,3 +469,22 @@ def blog_delete(request, id):
         messages.error(request, '&#128532 Hello User , An error occurred while Deleting Blog')
     
     return redirect('user-admin-blog')
+
+
+@admin_super_user_required
+def admin_profile(request):
+    user = request.user
+    form =  CustomUserEditFormAdmin(request.POST or None, request.POST or None, instance=user)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Updating User Information ')
+
+    context = {
+        'user' : user,
+        'form' : form
+    }
+
+    return render(request, 'UserAdmin/profile.html', context=context)

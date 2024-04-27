@@ -36,7 +36,7 @@
                   <div class="row justify-content-center">
                     <div class="col-8 card p-3">
                         {% include 'UserAdmin/include/messages.html' %}
-                       <h2> Edit Company</h2>
+                       <h2> Edit Blog</h2>
                        <hr>
                         {{ form.as_p }}
                        <div class="btn-group gap-3">
@@ -61,7 +61,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Delete Blog</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -76,14 +76,6 @@
   </div>
 </div>
 <!-- END layout-wrapper -->
-
-<!-- JAVASCRIPT -->
-<script src="{% static 'UserAdmin/libs/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'UserAdmin/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'UserAdmin/libs/metismenu/metisMenu.min.js' %}"></script>
-<script src="{% static 'UserAdmin/libs/simplebar/simplebar.min.js' %}"></script>
-<script src="{% static 'UserAdmin/libs/node-waves/waves.min.js' %}"></script>
-<script src="{% static 'UserAdmin/js/app.js' %}"></script>
 
 </body>
 </html>

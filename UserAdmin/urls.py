@@ -30,4 +30,7 @@ urlpatterns = [
     path('blog/<str:id>/', views.blog_detail, name='user-admin-blog-detail'),
     path('blog-delete/<str:id>/', views.blog_delete, name='user-admin-blog-delete'),
 
+
+    path('profile/',views.admin_profile, name='admin-profile')
+
    ]
