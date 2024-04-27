@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from Company.models import (Company, Blog_Categories, Blog)
-from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm)
+from Company.models import (Company, Blog_Categories, Blog, Social_Media)
+from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
 from UserManagement.models import CustomUser
@@ -508,3 +508,62 @@ def admin_change_password(request):
 
     
     return render(request,'UserAdmin/change_password.html', {'form': form})
+
+
+
+@admin_super_user_required
+def admin_social_media(request):
+    form = SocialMediaForm(request.POST or None)
+    social_media = Social_Media.objects.all()
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hello User,Password Successfully Updated')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Updating Social Media! ')
+
+
+
+    context = {
+        'social_medias' : social_media,
+        'form' : form
+    }
+
+    return render(request, 'UserAdmin/social_media.html', context=context)
+
+
+@admin_super_user_required
+def admin_social_media_detail(request, id):
+    try:
+        social = Social_Media.objects.get(pk = id)
+    except:
+        social = None
+    
+    form = SocialMediaForm(request.POST or None, instance=social)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            return redirect('admin-social-media')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while updating Social Media')
+    context = {
+        'form': form,
+        'social_media' : social
+    }
+    return render(request, 'UserAdmin/social_media_detail.html', context=context)
+
+
+
+@admin_super_user_required
+def delete_social_media(request, id):
+    try:
+        social = Social_Media.objects.get(pk = id)
+        social.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Social Media')
+    
+    return redirect('admin-social-media')
