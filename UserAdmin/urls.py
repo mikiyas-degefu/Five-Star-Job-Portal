@@ -26,4 +26,20 @@ urlpatterns = [
     path('delete-blog/<str:id>/', views.blog_category_delete, name='user-admin-delete-blog-category'),
 
 
+    path('blog/', views.blog, name='user-admin-blog'),
+    path('blog/<str:id>/', views.blog_detail, name='user-admin-blog-detail'),
+    path('blog-delete/<str:id>/', views.blog_delete, name='user-admin-blog-delete'),
+
+
+    path('profile/',views.admin_profile, name='admin-profile'),
+    path('change-password/', views.admin_change_password, name="admin-change-password"),
+
+    path('social-media/', views.admin_social_media, name="admin-social-media"),
+    path('social-media-detail/<str:id>/', views.admin_social_media_detail, name="admin-social-media-detail"),
+    path('social-media-delete/<str:id>/', views.delete_social_media, name='user-admin-delete-social-media'),
+
+
+    path('contact-messages/', views.contact_messages, name="admin-contact-message"),
+    path('contact-messages/<str:id>/', views.contact_messages_detail, name="admin-contact-message-detail"),
+
    ]

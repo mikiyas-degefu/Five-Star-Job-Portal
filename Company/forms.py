@@ -1,5 +1,5 @@
 from django import forms
-from  .models import (Comment, Contact_Message, Company, Blog, Blog_Categories)
+from  .models import (Comment, Contact_Message, Company, Blog, Blog_Categories, Social_Media)
 from froala_editor.widgets import FroalaEditor
 
 class CompanyForm(forms.ModelForm):
@@ -91,3 +91,43 @@ class BlogCategoriesForm(forms.ModelForm):
             })
         }
 
+
+
+
+class BlogForm(forms.ModelForm):
+    
+    class Meta:
+        model = Blog
+        fields =('title', 'image', 'description', 'content', 'type')
+
+        widgets  = {
+            'title' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'image' : forms.ClearableFileInput(attrs={
+                'class' : 'form-control'
+            }),
+            'description' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'content' : FroalaEditor,
+            'type' : forms.SelectMultiple(attrs={
+                'class' : 'form-select'
+            })
+        }
+
+
+class SocialMediaForm(forms.ModelForm):
+    
+    class Meta:
+        model = Social_Media
+        fields = '__all__'
+
+        widgets  = {
+            'name' : forms.TextInput(attrs={
+                'class' : 'form-control'
+            }),
+            'link' : forms.URLInput(attrs={
+                'class' : 'form-control'
+            }),
+        }

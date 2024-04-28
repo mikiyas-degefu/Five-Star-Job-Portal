@@ -1,0 +1,81 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <form method="post" enctype="multipart/form-data"enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row justify-content-center">
+                    <div class="col-8 card p-3">
+                        {% include 'UserAdmin/include/messages.html' %}
+                       <h2> Edit Blog</h2>
+                       <hr>
+                        {{ form.as_p }}
+                       <div class="btn-group gap-3">
+                        <a href="{% url 'user-admin-blog' %}" class="btn btn-secondary"  type="submit">Cancel</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                           Delete
+                          </button>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                       </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Blog</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you Sure you want to delete <span class="fw-bold">{{blog.title}}</span>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="{% url 'user-admin-blog-delete' blog.id%}" class="btn btn-primary">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END layout-wrapper -->
+
+</body>
+</html>

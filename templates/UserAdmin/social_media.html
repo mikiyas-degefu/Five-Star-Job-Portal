@@ -1,0 +1,303 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'UserAdmin/include/messages.html' %}                    
+                      <caption>Social Media's</caption>
+                        <button class="btn btn-primary float-end" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#AddCompany"
+                        data-bs-whatever="@mdo">Add New Social Media</button>
+                      <div class="row">
+
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                          </div>        
+                        </form>            
+                      </div>
+
+                        <thead  class="table-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Icon</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Link</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if social_medias %}
+                            {% for social_media in social_medias %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td ><i class="fab fa-{{social_media.icon.name}} fa-lg"></i></td>
+                            <td >{{social_media.name}}</td>
+                            <td >{{social_media.link}}</td>
+                            <td>
+                               
+                              <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'admin-social-media-detail' social_media.id %}"><i class="fa fa-pen"></i></a>
+                            
+                        
+                        </button>
+                        </button>
+                              <button 
+                              class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
+                              data-bs-toggle="modal" 
+                              data-bs-target="#deleteSocialMediaModal"
+                              data-bs-whatever="@mdo"
+                              data-id = {{social_media.id}}
+                              data-name = {{social_media.name}}
+                              >
+                              <i class="fa fa-trash"></i> 
+                            </button>
+                        </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+
+                     
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+<!--Edit Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditSector" tabindex="-1" aria-labelledby="EditSectorLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditSectorLabel">Edit Sector</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  id="editSectorForm" method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            <input type="hidden" value="" id="id_id">
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button  id="saveSector" type="submit" class="btn btn-primary">Save changes</button>
+            <button style="display: none;" id="btnLoadding" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+
+<!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddCompany" tabindex="-1" aria-labelledby="AddCompanyLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddCompanyLabel">Add New Sector</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteSocialMediaModal" tabindex="-1" aria-labelledby="deleteSocialMediaModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteSocialMediaModalLabel">Delete Sector</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteMessageSocialMedia"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteSocialMediaAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+
+
+<script>
+$(document).ready(function(){
+
+     // Function to show toast messages
+     showToast = (title, body, cssClass)=> {
+      $.toast({
+              heading: title,
+              text: body,
+              showHideTransition: 'slide',
+              icon: cssClass,
+              position: 'top-right',
+              })
+        }
+
+    //Event handler that handle button on Click
+    $(".btn-edit").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+          handleEditModalSector(buttonData.name, buttonData.id)
+    });
+
+
+    handleEditModalSector = (name, id)=>{
+      $('#id_name').val(name)
+      $('#id_id').val(id)
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteSocialMediaAnchor").attr("href", `/user-admin/social-media-delete/${buttonData.id}`)
+          $("#deleteMessageSocialMedia").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+        })
+
+
+      
+
+
+    
+         // Edit Data Detail 
+
+
+      $('#editSectorForm').on('submit', function(e){
+        e.preventDefault()
+        let id = $('#id_id').val()
+        let name = $('#id_name').val()
+
+       
+
+
+        $.ajax({
+          type: 'POST',
+          url : '{% url "user-admin-update-sector" %}',
+          data: {
+              'id' : id,
+              'name' : name,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            beforeSend: function() {
+              $('#saveSector').hide()
+               $("#btnLoadding").show();
+             },
+             // hides the loader after completion of request, whether successfull or failor.             
+             complete: function() {
+              //Show save button finished 
+               $('#saveSector').show()
+               $("#btnLoadding").hide();
+             },
+          success: function(response){
+            if(response.success){
+
+              //show succuss message
+              showToast('&#128515 Hello, User', 'Successfully Updated', 'success' )
+              $('#EditSector').modal('hide'); //Hide Modal
+              let htmlName = $('#sector'+id)
+              let buttonHtml = $('#sectorButton_'+id) 
+              //Update Table Value
+              htmlName.text(name)
+
+              //update Button Value
+              buttonHtml.data("name", name)
+
+
+
+            }else{
+               //show succuss message
+               showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
+            }
+          },
+          error: function(){
+            //show succuss message
+            showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
+          }
+        })
+      })
+
+    })
+
+</script>
+
+</body>
+</html>
