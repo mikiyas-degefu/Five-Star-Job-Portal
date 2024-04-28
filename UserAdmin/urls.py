@@ -34,8 +34,11 @@ urlpatterns = [
     path('profile/',views.admin_profile, name='admin-profile'),
     path('change-password/', views.admin_change_password, name="admin-change-password"),
 
-    path('social-media', views.admin_social_media, name="admin-social-media"),
-    path('social-media-detail/<str:id>', views.admin_social_media_detail, name="admin-social-media-detail"),
+    path('social-media/', views.admin_social_media, name="admin-social-media"),
+    path('social-media-detail/<str:id>/', views.admin_social_media_detail, name="admin-social-media-detail"),
     path('social-media-delete/<str:id>/', views.delete_social_media, name='user-admin-delete-social-media'),
+
+
+     path('contact-messages/', views.contact_messages, name="admin-contact-message"),
 
    ]

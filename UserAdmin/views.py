@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from Company.models import (Company, Blog_Categories, Blog, Social_Media)
+from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
@@ -17,7 +17,10 @@ from django.contrib.auth import logout
 
 @admin_super_user_required
 def index(request):
-    return render(request, 'UserAdmin/index.html')
+    context = {
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/index.html', context=context)
 
 
 @admin_super_user_required
@@ -59,7 +62,8 @@ def company(request):
     context = {
         'companies' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/company.html', context=context)
     
@@ -82,7 +86,8 @@ def company_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
-        'form': form
+        'form': form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/company_detail.html', context=context)
 
@@ -137,7 +142,8 @@ def job_sector(request):
     context = {
         'sectors' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/sector.html', context=context)
     
@@ -202,7 +208,8 @@ def job_posting(request):
     context = {
         'jobs' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/job_posting.html', context=context)
     
@@ -235,7 +242,8 @@ def job_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello Job , An error occurred while updating job')
     context = {
-        'form': form
+        'form': form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/job_detail.html', context=context)
 
@@ -294,7 +302,8 @@ def skills(request):
     context = {
         'skills' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/skills.html', context=context)
     
@@ -363,7 +372,8 @@ def blog_category(request):
     context = {
         'categories' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/blog_category.html', context=context)
 
@@ -435,7 +445,8 @@ def blog(request):
     context = {
         'blogs' : page,
         'count' : count,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/blog.html', context=context)
 
@@ -457,7 +468,8 @@ def blog_detail(request, id):
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
         'form': form,
-        'blog' : blog
+        'blog' : blog,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/blog_detail.html', context=context)
 
@@ -486,7 +498,8 @@ def admin_profile(request):
 
     context = {
         'user' : user,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
 
     return render(request, 'UserAdmin/profile.html', context=context)
@@ -527,7 +540,8 @@ def admin_social_media(request):
 
     context = {
         'social_medias' : social_media,
-        'form' : form
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
 
     return render(request, 'UserAdmin/social_media.html', context=context)
@@ -551,7 +565,8 @@ def admin_social_media_detail(request, id):
             messages.error(request, '&#128532 Hello User , An error occurred while updating Social Media')
     context = {
         'form': form,
-        'social_media' : social
+        'social_media' : social,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/social_media_detail.html', context=context)
 
@@ -567,3 +582,40 @@ def delete_social_media(request, id):
         messages.error(request, '&#128532 Hello User , An error occurred while Deleting Social Media')
     
     return redirect('admin-social-media')
+
+
+@admin_super_user_required
+def contact_messages(request):
+    message = Contact_Message.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        message = Contact_Message.objects.filter(Q(name__contains=q) | Q(email__contains=q) | Q(subject__contains=q))
+    
+    paginator = Paginator(message, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+    
+
+    
+    context = {
+        'contact_messages' : page,
+        'count' : count,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/contact_messages.html', context=context)
+
+

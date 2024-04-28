@@ -62,7 +62,12 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{% url 'admin-social-media'%}">Social Media</a></li>
-                        <li><a href="{% url 'user-admin-blog'%}">Contact Messages</a></li>
+
+
+
+
+                        <li><a href="{% url 'admin-contact-message'%}">Contact Messages <span
+                            class="badge rounded-pill bg-primary float-end">{{count_messages}}</span></a></li>
                     </ul>
                 </li>
             </ul>

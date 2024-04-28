@@ -1,0 +1,331 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+<style>
+  .scroll {
+  max-height: 600px;
+  overflow: auto;
+}
+</style>
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+  <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+  <!-- Begin page -->
+  <div id="layout-wrapper">
+
+
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+      <div class="page-content">
+        <div class="container-fluid">
+
+          <div class="row">
+            
+            <div class=" col-md-4 scroll ">
+              <div class="scroll card">
+                <div class="card-body">
+                  <p>Contact Messages</p>
+                  <ul class="list-group table-hover">
+
+
+                    {% if contact_messages %}
+                    {% for msg in contact_messages %}
+                    <li class="list-group-item d-flex  list-group-item-action justify-content-between align-items-start">
+                     <a href="#">
+                      <div class="">
+                        <div class="{% if not msg.is_read %} fw-bold {% endif%} text-dark"> <span> {{count | add:forloop.counter}} </span> {{msg.name}}</div>
+                       {{msg.subject}}
+                      </div>
+                     </a>
+                    </li>
+
+                    {% endfor %}
+                    {%  endif %}
+
+                    
+        
+    
+                  </ul>
+                </div>
+              </div>
+
+             
+            </div>
+
+            <div class="col-md-8 bg-white">
+              <div class="card h-100">
+                <div class="card-body text-center">
+                  <h5 class="card-title">No contact message selected</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- container-fluid -->
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-circle pagination-outline justify-content-center">
+          {% if contact_messages.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ contact_messages.previous_page_number }}">Previous</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+          </li>
+          {% endif %}
+
+          {% if contact_messages.number|add:'-4' > 1 %}
+          <li class="page-item"><a class="page-link" href="?page={{ contact_messages.number|add:'-5' }}">&hellip;</a>
+          </li>
+          {% endif %}
+
+          {% for i in contact_messages.paginator.page_range %}
+          {% if contact_messages.number == i %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">
+              {{ i }}
+              <span class="sr-only">(current)</span>
+            </span>
+          </li>
+          {% elif i > contact_messages.number|add:'-5' and i < contact_messages.number|add:'5' %} <li class="page-item">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if contact_messages.paginator.num_pages > contact_messages.number|add:'4' %}
+            <li class="page-item"><a class="page-link" href="?page={{ contact_messages.number|add:'5' }}">&hellip;</a>
+            </li>
+            {% endif %}
+
+            {% if contact_messages.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ contact_messages.next_page_number }}">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+      </nav>
+    </div>
+    <!-- End Page-content -->
+    {% include 'UserAdmin/include/footer.html' %}
+  </div>
+  <!-- end main content-->
+
+
+
+  <!--Edit Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="EditCategoryModal" tabindex="-1" aria-labelledby="EditCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="EditCategoryModalLabel">Edit Skill</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editSkillForm" method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            <input type="hidden" value="" id="id_id">
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="saveBlogCategory" type="submit" class="btn btn-primary">Save changes</button>
+            <button style="display: none;" id="btnLoadding" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+  <!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddSkill" tabindex="-1" aria-labelledby="AddSkillLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="AddSkillLabel">Add New Skill</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+  <!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteBlogCategoryModal" tabindex="-1" aria-labelledby="deleteBlogCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteBlogCategoryModalLabel">Delete Sector</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteMessageBlogCategory"></p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteBlogCategoryAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+  </div>
+  <!-- END layout-wrapper -->
+
+
+
+  <script>
+    $(document).ready(function () {
+
+      // Function to show toast messages
+      showToast = (title, body, cssClass) => {
+        $.toast({
+          heading: title,
+          text: body,
+          showHideTransition: 'slide',
+          icon: cssClass,
+          position: 'top-right',
+        })
+      }
+
+      //Event handler that handle button on Click
+      $(".btn-edit").on('click', function () {
+        const buttonData = $(this).data()
+        //Open Modal
+        handleEditModalCategory(buttonData.name, buttonData.id)
+      });
+
+
+      handleEditModalCategory = (name, id) => {
+        $('#id_name').val(name)
+        $('#id_id').val(id)
+      }
+
+
+
+      //Event handler that handle on Click to delete
+      $(".btn-delete").on('click', function () {
+        const buttonData = $(this).data()
+        $("#deleteBlogCategoryAnchor").attr("href", `/user-admin/delete-blog/${buttonData.id}`)
+        $("#deleteMessageBlogCategory").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+      })
+
+
+
+
+
+
+      // Edit Data Detail
+
+      $('#editSkillForm').on('submit', function (e) {
+        e.preventDefault()
+        let id = $('#id_id').val()
+        let name = $('#id_name').val()
+
+        $.ajax({
+          type: 'POST',
+          url: '{% url "user-admin-update-blog-category" %}',
+          data: {
+            'id': id,
+            'name': name,
+            csrfmiddlewaretoken: '{{csrf_token}}'
+          },
+          beforeSend: function () {
+            $('#saveBlogCategory').hide()
+            $("#btnLoadding").show();
+          },
+          // hides the loader after completion of request, whether successfull or failor.             
+          complete: function () {
+            //Show save button finished 
+            $('#saveBlogCategory').show()
+            $("#btnLoadding").hide();
+          },
+          success: function (response) {
+            if (response.success) {
+
+              //show succuss message
+              showToast('&#128515 Hello, User', 'Successfully Updated', 'success')
+              $('#EditCategoryModal').modal('hide'); //Hide Modal
+
+
+              let htmlName = $('#category_name_' + id)
+              let buttonHtml = $('#categoryButton_' + id)
+              //Update Table Value
+              htmlName.text(name)
+
+              //update Button Value
+              buttonHtml.data("name", name)
+
+
+
+            } else {
+              //show succuss message
+              showToast('&#128532 Hello User', 'Failed to update Category.', 'error')
+            }
+          },
+          error: function () {
+            //show succuss message
+            showToast('&#128532 Hello User', 'Failed to update Category.', 'error')
+          }
+        })
+      })
+
+    })
+
+  </script>
+
+</body>
+
+</html>
