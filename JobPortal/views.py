@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from Company.models import Social_Media, Contact
-from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm
+from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews
 from Company.models import Company
+from Company.forms import CompanyForm
 from django.contrib import messages
 import csv
 from django.shortcuts import render, redirect
@@ -93,6 +94,28 @@ def registration_view(request):
 
     return render(request, 'RMS/registrations.html', context)
 
+
+def register_company_front(request):
+    if request.method == 'POST':
+        company_form = CompanyFormFront(request.POST)
+        user_form = CustomUserFormFront(request.POST)
+        if company_form.is_valid() and user_form.is_valid():
+            company = company_form.save()
+            user = user_form.save(commit=False)
+            user.is_admin = True
+            user.company = company
+            user.save()
+            messages.success(request, 'Your company is successusfuly registerd log in to see details!')
+            return redirect('login')
+    else:
+        company_form = CompanyFormFront()
+        user_form = CustomUserFormFront()
+    
+    context = {
+        'company_form': company_form,
+        'user_form': user_form,
+    }
+    return render(request, 'RMS/company-register.html', context)
 
 
 #Lists

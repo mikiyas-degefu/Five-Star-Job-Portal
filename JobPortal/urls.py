@@ -5,6 +5,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('signup/', views.registration_view, name="signup"),
+    path('register_company_front/', views.register_company_front, name='register_company_front'),
     path('job-list/', views.job_list, name='job-list'),
     path('job-sector/<slug:slug>', views.job_sector_categories, name='job_sector_categories'),
     path('job-detail/<slug:slug>', views.job_detail, name='Job-detail'),

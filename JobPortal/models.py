@@ -14,8 +14,6 @@ gender_list = [
 
 class Candidate(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
     gender = models.CharField(max_length=10, choices=gender_list)
     date_of_birth = models.DateField()
     email = models.EmailField(max_length=40)
@@ -28,8 +26,7 @@ class Candidate(models.Model):
     city = models.CharField(max_length=20)
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     photo = models.ImageField(upload_to='Candidate/photo', null=True, blank=True)
-    resume = models.FileField(upload_to='Candidate/Resume', null=True, blank=True)
-    about = models.TextField()
+    resume = FroalaField()
     skill = models.ManyToManyField("Skill", blank=False) 
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
     date_created = models.DateField(auto_now_add=True)

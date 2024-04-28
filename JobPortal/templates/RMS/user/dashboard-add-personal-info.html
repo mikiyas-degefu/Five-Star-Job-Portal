@@ -113,30 +113,7 @@
                       </div>
                      </div>
                       <div class="row mt-2 ">
-                        <!--First Name-->
-                        <div class="col-xl-6 col-lg-6">
-                          <div class="form-group">
-                            <label
-                              class="text-dark ft-medium"
-                              for="id_first_name"
-                              >*First Name {% for err in form.first_name.errors %} <small class="text-danger"> {{err}} </small> {% endfor %} </label
-                            >
-                            {{form.first_name}}
-                          </div>
-                        </div>
-
-                        <!--Last Name-->
-                        <div class="col-xl-6 col-lg-6">
-                          <div class="form-group">
-                            <label
-                              class="text-dark ft-medium"
-                              for="id_last_name"
-                              >*Last Name {% for err in form.last_name.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label
-                            >
-                            {{form.last_name}}
-                          </div>
-                        </div>
-
+                       
                         <!--Gender-->
                         <div class="col-xl-6 col-lg-6">
                           <div class="form-group">
@@ -274,14 +251,7 @@
                      
                       <!--Resume Content-->
 
-                        <div class="col-xl-12 col-lg-12">
-                          <div class="form-group">
-                            <label class="text-dark ft-medium" for="id_about"
-                              >*Resume Content {% for err in form.about.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label
-                            >
-                            {{form.about}}
-                          </div>
-                        </div>
+                  
                       </div>
                     </div>
 

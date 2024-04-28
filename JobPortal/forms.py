@@ -5,21 +5,44 @@ from datetime import date
 from django.forms import formset_factory
 from phonenumber_field.formfields import PhoneNumberField
 from froala_editor.widgets import FroalaEditor
+from django.contrib.auth.forms import UserCreationForm
+from UserManagement.models import CustomUser
+
+
+
+
+
+class CompanyFormFront(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'slogan', 'location']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'slogan': forms.TextInput(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class CustomUserFormFront(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email' ,'password1', 'password2', 'phone', 'address']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class CandidateForm(forms.ModelForm):
+    resume = FroalaEditor()
     gender_list = [
     ('male', 'Male'),
     ('female', 'Female'),
 ]
-    first_name = forms.CharField( max_length=20,widget=forms.TextInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'First Name (Required)'
-    }))
-    last_name = forms.CharField( max_length=20,widget=forms.TextInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Last Name (Required)'
-    }))
     gender = forms.ChoiceField(choices=gender_list, widget=forms.Select(attrs={
         'class': 'form-select',
         'placeholder' : 'Select Gender (Required)'
@@ -71,15 +94,7 @@ class CandidateForm(forms.ModelForm):
         'class' : 'form-control text-sm ',
         'accept':'image/*',
     }))
-    resume = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Resume (Optional)',
-        'accept' : 'application/pdf application/vnd.ms-word'
-    }))
-    about = forms.CharField(widget=forms.Textarea(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'About Your Self (Required)'
-    }))
+    
     
     
     class Meta:
