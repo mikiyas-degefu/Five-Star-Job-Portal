@@ -1,0 +1,325 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'UserAdmin/include/messages.html' %}                    
+                      <caption>Admin Users</caption>
+                        <button class="btn btn-primary float-end" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#AddAdminUser"
+                        data-bs-whatever="@mdo">Add New Admin</button>
+                      <div class="row">
+
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                          </div>        
+                        </form>    
+                                
+                      </div>
+
+                        <thead  class="table-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Photo</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if admin_user %}
+                            {% for user in admin_user %}
+                          <tr>
+                            <th scope="row">{{count | add:forloop.counter}}</th>
+                            {% if user.photo %}
+                            <td><img src="/media/{{user.photo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
+                            {% else %}
+                            <td><img src="/media/avatar.jpg" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
+                            {% endif %}
+                            <td>{{user.first_name}} {{user.last_name}}</td>
+                            <td>{{user.gender}}</td>
+                            <td>{{user.email}}</td>
+                            <td>{{user.phone}}</td>
+                            <td>{{user.address}}</td>
+                            <td>
+                               
+                            <button 
+                            type="button" 
+                            class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#detailCompanies"
+                            data-bs-whatever="@mdo"
+                            data-photo="{{user.photo}}"
+                            data-first_name="{{user.first_name}}"
+                            data-last_name="{{user.last_name}}"
+                            data-company="{{user.company}}"
+                            data-gender="{{user.gender}}"
+                            data-email="{{user.email}}"
+                            data-address="{{user.address}}"
+                            data-phone="{{user.phone}}"
+                            data-date_of_birth="{{user.date_of_birth}}"
+                            data-linked_in="{{user.linked_in}}"
+                            data-country="{{user.country}}"
+                            data-city="{{user.city}}"
+                            >
+                            <i class="fa fa-eye"></i> 
+                            </button>
+                            
+                        <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'admin_user-detail' user.id %}"><i class="fa fa-pen"></i></a>
+                         
+                        </button>
+                        </button>
+                              <button 
+                              class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
+                              data-bs-toggle="modal" 
+                              data-bs-target="#deleteUserModal"
+                              data-bs-whatever="@mdo"
+                              data-id = {{user.id}}
+                              data-first_name = {{user.first_name}}
+                              >
+                              <i class="fa fa-trash"></i> 
+                            </button>
+                        </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+                {% if admin_user.has_previous %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ admin_user.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                  </li>
+                {% endif %}
+            
+                {% if admin_user.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% for i in admin_user.paginator.page_range %}
+                  {% if admin_user.number == i %}
+                    <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  {% elif i > admin_user.number|add:'-5' and i < admin_user.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            
+                {% if admin_user.paginator.num_pages > admin_user.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% if admin_user.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ admin_user.next_page_number }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                  </li>
+                {% endif %}
+                </ul>
+              </nav>
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+<!--Detail Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="detailCompanies" tabindex="-1" aria-labelledby="detailCompaniesLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailCompaniesLabel">Admin User Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <div id="detailModalBody" class="modal-body">
+        </div>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddAdminUser" tabindex="-1" aria-labelledby="AddAdminUserLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddAdminUserLabel">Admin User Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteMessageYear"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteUserAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+<script>
+$(document).ready(function(){
+
+    // Start Detail Data
+
+    //Event handler that handle button on Click
+    $(".btn-detail").on('click', function(){
+          const buttonData = $(this).data()
+          console.log(buttonData)
+          //Open Modal
+         handleDetailModalCompany(
+            buttonData.first_name, 
+            buttonData.last_name, 
+            buttonData.photo, 
+            buttonData.gender,
+            buttonData.date_of_birth,
+            buttonData.phone,
+            buttonData.email,
+            buttonData.company,
+            buttonData.address,
+            buttonData.linked_in,
+            buttonData.country,
+            buttonData.city,
+            )
+    });
+
+
+    handleDetailModalCompany = (first_name, last_name, photo, gender, date_of_birth, email, phone, company, address, linked_in, country , city )=>{
+        let htmlBody = `
+        <div class="mt-3">
+            <p class="fw-bold">First Name: <span class="fw-normal">${first_name}</span></p>
+            <p class="fw-bold">Last Name: <span class="fw-normal">${last_name}</span></p>
+            <p class="fw-bold">Photo: <span class="fw-normal">${photo}</span></p>
+            <p class="fw-bold">Gender: <span class="fw-normal">${gender}</span></p>
+            <p class="fw-bold">Date of Birth: <span class="fw-normal">${date_of_birth}</span></p>
+            <p class="fw-bold">Email: <span class="fw-normal">${email}</span></p>
+            <p class="fw-bold">Phone: <span class="fw-normal">${phone}</span></p>
+            <p class="fw-bold">Company: <span class="fw-normal">${company}</span></p>
+            <p class="fw-bold">Address: <span class="fw-normal">${address}</span></p>
+            <p class="fw-bold">LinkedIn: <span class="fw-normal">${linked_in}</span></p>
+            <p class="fw-bold">Country: <span class="fw-normal">${country}</span></p>
+            <p class="fw-bold">City: <span class="fw-normal">${city}</span></p>
+        </div>
+        `
+        $('#detailModalBody').html(htmlBody)
+
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteUserAnchor").attr("href", `/user-management/admin-user-delete/${buttonData.id}`)
+          $("#deleteMessageYear").html(`Are you sure you want to delete <div> <code> ${buttonData.first_name}</code>? </div> `)
+        })
+
+
+         // Edit Data Detail 
+
+    })
+
+</script>
+
+</body>
+</html>
