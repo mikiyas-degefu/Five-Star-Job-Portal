@@ -79,6 +79,11 @@ def logout_view(request):
     logout(request)
     return render(request, 'RMS/sign-out.html')
 
+
+
+def choose_register(request):
+    return render(request, 'RMS/choose_sign_up.html')    
+
 def registration_view(request):
     form = CustomUserCreationForm(request.POST or None)
     if request.method == 'POST':
