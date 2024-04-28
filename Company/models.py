@@ -20,6 +20,7 @@ class Company(models.Model):
     name = models.CharField(max_length=50)
     logo = models.ImageField(upload_to="company/logo", null=True, blank=True)
     slogan = models.CharField(max_length=50, null=True, blank=True)
+    active = models.BooleanField(default=False)
     about = FroalaField()
     email = models.EmailField( max_length=254)
     address = models.CharField(max_length=100)

@@ -2,6 +2,8 @@
 <!doctype html>
 <html lang="en">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- head-->
 {% include 'UserAdmin/include/head.html' %}
 {{ form.media }}
@@ -63,6 +65,7 @@
                             <th scope="col">Views</th>
                             <th scope="col">Total Jobs</th>
                             <th scope="col">Action</th>
+                            <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -115,6 +118,19 @@
                               >
                               <i class="fa fa-trash"></i> 
                             </button>
+                        </td>
+                        <td scope="col">
+                          {% if company.active %}
+                          <button data-id = {{company.id}}  class="btn btn-danger btn-status" id="inactive-btn" >
+                            Deactive
+                          </button>
+                           
+                          {% else %}
+                          <button  data-id = {{company.id}} class="btn btn-success btn-status" id="active-btn" >
+                            Active
+                          </button>
+            
+                          {% endif %}
                         </td>
                           </tr>
                           {% endfor %}
@@ -256,6 +272,7 @@
 <!-- END layout-wrapper -->
 
 <script>
+  
 $(document).ready(function(){
 
     // Start Detail Data
@@ -314,7 +331,47 @@ $(document).ready(function(){
 
          // Edit Data Detail 
 
-    })
+ 
+
+         $(".btn-status").on('click', function() {
+          const buttonElement = $(this); // Store the reference to the button element
+          const companyId = buttonElement.data().id;
+          const url = `/user-admin/change_status/${companyId}/`;
+        
+          console.log("Button clicked");
+          console.log("URL:", url);
+        
+          $.ajax({
+            url: url,
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}' // Replace with the appropriate Django template variable
+            },
+            success: function(response) {
+              console.log("AJAX request successful");
+              console.log("Response:", response);
+        
+              // Toggle the active state and update the button style
+              const isActive = buttonElement.hasClass('btn-success');
+              if (isActive) {
+                buttonElement.removeClass('btn-success').addClass('btn-danger').text('Deactive');
+              } else {
+                buttonElement.removeClass('btn-danger').addClass('btn-success').text('Active');
+              }
+            },
+            error: function(error) {
+              console.log("AJAX request error");
+              console.log("Error:", error);
+        
+              // Handle the error
+            }
+          });
+        });
+
+
+     // Edit Data Detail 
+
+})
 
 </script>
 

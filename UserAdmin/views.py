@@ -91,6 +91,7 @@ def company_detail(request, id):
     }
     return render(request, 'UserAdmin/company_detail.html', context=context)
 
+
 @admin_super_user_required
 def company_delete(request, id):
     try:
@@ -102,6 +103,21 @@ def company_delete(request, id):
     
     return redirect('user-admin-company')
 
+
+def change_status(request, company_id):
+    company = Company.objects.get(id=company_id)
+
+    if company.active:
+        company.active = False
+        company.save()
+        messages.success(request, 'Successfully Deactivated')
+    else:
+        company.active = True
+        company.save()
+        messages.success(request, 'Successfully Activated')
+    company.save()
+
+    return redirect('user-admin-company')
 
 @admin_super_user_required
 def job_sector(request):

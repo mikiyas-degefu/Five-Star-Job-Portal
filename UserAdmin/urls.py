@@ -6,6 +6,7 @@ urlpatterns = [
     path('company/', views.company, name='user-admin-company'),
     path('company/<str:id>/', views.company_detail, name='user-admin-company-detail'),
     path('company-delete/<str:id>/', views.company_delete, name='user-admin-company-delete'),
+    path('change_status/<int:company_id>/', views.change_status, name='change_status'),
 
     path('sector/', views.job_sector, name='user-admin-sector'),
     path('update-sector/', views.update_sector, name='user-admin-update-sector'),
