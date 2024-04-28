@@ -6,9 +6,9 @@
 {% include 'UserAdmin/include/head.html' %}
 <style>
   .scroll {
-  max-height: 600px;
-  overflow: auto;
-}
+    max-height: 600px;
+    overflow: auto;
+  }
 </style>
 {{ form.media }}
 <!--/ head-->
@@ -37,45 +37,78 @@
 
       <div class="page-content">
         <div class="container-fluid">
+          <div class="row justify-content-center">
 
-          <div class="row">
-            
-            <div class=" col-md-4 scroll ">
-              <div class="scroll card">
-                <div class="card-body">
+            <div class=" col-md-4 scroll border-end border-5 bg-white">
+              <div class="scroll card border-0">
+                <div class="p-3">
                   <p>Contact Messages</p>
-                  <ul class="list-group table-hover">
+
+                  <form class="">
+                    <div class="row mb-2">
+                      <div class="col-8 m-1">
+                        <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                      </div>
+                      <div class="col-3 m-1">
+                        <button type="submit" class="btn btn-primary"><span class="mdi mdi-magnify"></span></button>
+                      </div>
+                    </div>
+                  </form>
+                  <ul class="list-group  table-hover ">
 
 
                     {% if contact_messages %}
                     {% for msg in contact_messages %}
-                    <li class="list-group-item d-flex  list-group-item-action justify-content-between align-items-start">
-                     <a href="#">
-                      <div class="">
-                        <div class="{% if not msg.is_read %} fw-bold {% endif%} text-dark"> <span> {{count | add:forloop.counter}} </span> {{msg.name}}</div>
-                       {{msg.subject}}
-                      </div>
-                     </a>
+                    <li
+                      class="list-group-item d-flex  list-group-item-action justify-content-between align-items-start">
+                      <a href="{% url 'admin-contact-message-detail' msg.pk %}">
+                        <div class="">
+                          <div class="{% if not msg.is_read %} fw-bold {% endif%} text-dark"> <span> 
+                            {{count | add:forloop.counter}} </span> {{msg.name}}</div>
+                          {{msg.subject}}
+                        </div>
+                      </a>
                     </li>
 
                     {% endfor %}
-                    {%  endif %}
+                    {% else %}
+                    <div class="card-body text-center">
+                      <h5 class="card-title">No contact message</h5>
+                    </div>
+                    {% endif %}
 
-                    
-        
-    
+
                   </ul>
                 </div>
               </div>
 
-             
+
             </div>
 
-            <div class="col-md-8 bg-white">
+            <div class="col-md-7 bg-white">
               <div class="card h-100">
+                {% if contact_message %}
+                <div class="card  pt-3">
+                  <div class="card-body ">
+                    <div class="h3 text-center">Messages</div>
+                    <hr>
+                    <div class="border-1">
+                      <div class="fw-bold p-2">Name: <div class="fw-normal">{{contact_message.name}}</div>
+                      </div>
+                      <div class="fw-bold p-2">Email: <div class="fw-normal">{{contact_message.email}}</div>
+                      </div>
+                      <div class="fw-bold p-2">Subject: <div class="fw-normal">{{contact_message.subject}}</div>
+                      </div>
+                      <div class="fw-bold p-2">Content: <div class="fw-normal">{{contact_message.message}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% else %}
                 <div class="card-body text-center">
                   <h5 class="card-title">No contact message selected</h5>
                 </div>
+                {% endif %}
               </div>
             </div>
           </div>

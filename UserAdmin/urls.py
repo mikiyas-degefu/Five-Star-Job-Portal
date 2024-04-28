@@ -39,6 +39,7 @@ urlpatterns = [
     path('social-media-delete/<str:id>/', views.delete_social_media, name='user-admin-delete-social-media'),
 
 
-     path('contact-messages/', views.contact_messages, name="admin-contact-message"),
+    path('contact-messages/', views.contact_messages, name="admin-contact-message"),
+    path('contact-messages/<str:id>/', views.contact_messages_detail, name="admin-contact-message-detail"),
 
    ]

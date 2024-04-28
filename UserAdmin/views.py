@@ -619,3 +619,48 @@ def contact_messages(request):
     return render(request, 'UserAdmin/contact_messages.html', context=context)
 
 
+
+
+@admin_super_user_required
+def contact_messages_detail(request, id):
+    try:
+        contact_message = Contact_Message.objects.get(pk = id)
+    except:
+        contact_message = None
+
+    contact_message.is_read=True
+    contact_message.save()
+    
+    message = Contact_Message.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        message = Contact_Message.objects.filter(Q(name__contains=q) | Q(email__contains=q) | Q(subject__contains=q))
+    
+    paginator = Paginator(message, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+    
+
+    
+    context = {
+        'contact_message': contact_message,
+        'contact_messages' : page,
+        'count' : count,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/contact_messages.html', context=context)
+    

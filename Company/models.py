@@ -112,13 +112,13 @@ class Contact_Message(models.Model):
     subject = models.CharField(max_length=100)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add= True)
 
     def __str__(self) -> str:
         return self.name
     
-
-    def count_unread_messages(self):
-        return Contact_Message.objects.filter(is_read = False).count()
+    class Meta:
+        ordering = ['-created_at'] #New's First
 
 
 
