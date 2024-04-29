@@ -55,7 +55,6 @@
                         <thead  class="table-light">
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Company</th>
                             <th scope="col">Title</th>
                             <th scope="col">Sector</th>
                             <th scope="col">Salary Start</th>
@@ -68,7 +67,6 @@
                             {% for job in jobs %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
-                            <td>{{job.company}}</td>
                             <td>{{job.title}}</td>
                             <td>{{job.sector}}</td>
                             <td>{{job.salary_range_start}}</td>

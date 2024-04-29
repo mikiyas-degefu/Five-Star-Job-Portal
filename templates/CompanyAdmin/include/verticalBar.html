@@ -25,7 +25,7 @@
                         <span>Data</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{% url 'user-admin-job-posting'%}">Job Posting</a></li>
+                        <li><a href="{% url 'company-admin-job-posting'%}">Job Posting</a></li>
                         <li><a href="{% url 'user-admin-job-posting'%}">Applicant</a></li>
                     </ul>
                 </li>
@@ -53,7 +53,18 @@
 
 
          <div style="position: absolute; bottom: 0;"> 
-                <img class="img-fluid rounded mx-auto d-block mb-2" style="width: 60%;"   src="{% static 'assets/images/logo/logo-no-background.png'   %}"  alt="logo-sm-light">
+
+            <div class="navbar-brand-box text-center">
+                <a href="{% url 'admin-dashboard'%}" class="logo logo-light">
+
+                    <span class="logo-lg">
+                        <img class="img-fluid rounded mx-auto d-block mb-2"  src="{% static 'assets/images/logo/logo-no-background.png'   %}"  alt="logo-sm-light">
+                    </span>
+                </a>
+            </div>
+
+
+               
         </div> 
                 
             </div>

@@ -304,6 +304,85 @@ class JobPostingForm(forms.ModelForm):
            if  vacancies < 1:
             raise forms.ValidationError('Enter a Valid Number')
            return vacancies
+    
+
+
+class JobPostingCompanyAdminForm(forms.ModelForm):
+    job_type = [
+    ('full_time', 'Full Time'),
+    ('part_time', 'Part Time'),
+    ('freelance', 'Freelance'),
+    ('internship', 'Internship'),
+    ('seasonal ','seasonal'),
+    ('contract', 'Contract'),
+    ('remote', 'Remote'),
+]
+
+    compensation_types = [
+    ('monthly','Monthly'),
+    ('yearly','Yearly'),
+    ('hourly','Hourly'),
+    ('commission','Commission'),
+    ('bonus','Bonus'),
+    ('benefits','Benefits')
+]
+    
+    title = forms.CharField(widget=forms.TextInput(attrs={
+        'class' : 'form-control '
+    }))
+    sector = forms.ModelChoiceField(queryset=Sector.objects.all(), widget=forms.Select(attrs={
+        'class' : 'form-select ',
+        'onkeyup' : 'filterFunction()'
+    }))
+
+    experience = forms.CharField(widget=forms.TextInput(attrs={
+        'class ' : 'form-control'
+    }))
+    compensation_type = forms.ChoiceField(choices=compensation_types, widget=forms.Select(attrs={
+        'class' : 'form-select'
+    }))
+    location = forms.CharField(widget=forms.TextInput(attrs={
+        'class' : 'form-control'
+    }))
+    salary_range_start = forms.FloatField(widget=forms.NumberInput(attrs={
+        'class' : 'form-control'
+    }))
+    salary_range_final = forms.FloatField(widget=forms.NumberInput(attrs={
+        'class' : 'form-control'
+    }))
+    type = forms.ChoiceField(choices=job_type, widget=forms.Select(attrs={
+        'class' : 'form-select'
+    }))
+    job_status = forms.BooleanField( required=False ,widget=forms.CheckboxInput(attrs={
+        'class' : 'form-check-input'
+    }))
+    date_closed = forms.DateField(widget=forms.DateInput(attrs={
+        'class' : 'form-control',
+        'type' : 'date',
+    }))
+    description = forms.CharField(widget=FroalaEditor())
+    
+
+    class Meta:
+        model = Job_Posting
+        exclude = ['slug', 'company']
+
+        widgets = {
+            'vacancies' : forms.NumberInput(attrs={
+                'class' : 'form-control'
+            }),
+            'skills' : forms.SelectMultiple(attrs={
+                'class' : 'form-select' 
+            })
+        }
+
+        def clean_vacancies(self):
+           vacancies = self.cleaned_data['vacancies']
+           if  vacancies < 1:
+            raise forms.ValidationError('Enter a Valid Number')
+           return vacancies
+        
+
 
 class SectorForm(forms.ModelForm):
     class Meta:
