@@ -31,11 +31,14 @@
     <!-- ============================================================== -->
     <div class="main-content">
 
+     
+
         <div class="page-content">
             <div class="container-fluid">
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
-                      {% include 'UserAdmin/include/messages.html' %}                    
+                      {% include 'UserAdmin/include/messages.html' %}  
+                                        
                       <caption>Companies</caption>
                         <button class="btn btn-primary float-end" 
                         data-bs-toggle="modal"
@@ -348,10 +351,6 @@ $(document).ready(function(){
               'X-CSRFToken': '{{ csrf_token }}' // Replace with the appropriate Django template variable
             },
             success: function(response) {
-              console.log("AJAX request successful");
-              console.log("Response:", response);
-        
-              // Toggle the active state and update the button style
               const isActive = buttonElement.hasClass('btn-success');
               if (isActive) {
                 buttonElement.removeClass('btn-success').addClass('btn-danger').text('Deactive');
