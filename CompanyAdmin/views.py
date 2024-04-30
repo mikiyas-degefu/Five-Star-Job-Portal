@@ -106,7 +106,7 @@ def applicant(request):
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Job_Posting.objects.filter( job__company = request.user.company).select_related()
+        jobs = Application.objects.filter( job__company = request.user.company).select_related()
     
     paginator = Paginator(jobs, 30) 
     page_number = request.GET.get('page')
@@ -138,7 +138,7 @@ def applicant(request):
     
     
     context = {
-        'jobs' : page,
+        'applications' : page,
         'count' : count,
         'form' : form,
     }

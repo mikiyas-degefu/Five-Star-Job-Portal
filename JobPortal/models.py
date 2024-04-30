@@ -210,7 +210,7 @@ class Job_Posting(models.Model):
 
 application_status = [
     ('pending', 'Pending'),
-    ('in_review', 'In review'),
+    ('in_review', 'In Review'),
     ('rejected', 'Rejected'),
     ('hired', 'Hired')
 ]
