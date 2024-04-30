@@ -29,17 +29,19 @@
     <!-- ============================================================== -->
     <div class="main-content">
 
-        <div class="page-content">
+        <div class="page-content ">
             <div class="container-fluid">
                   <div class="row justify-content-center">
                     <div class="col-8 card p-3">
                         {% include 'UserAdmin/include/messages.html' %}
                        <h2> {{request.user.first_name|capfirst}} {{request.user.last_name|capfirst}}'s Information </h2>
                        <hr>
-                       <img class="img-fluid d-block mx-auto img-thumbnail" style="width: 15%;" src="/media/{{request.user.photo}}" alt="user photo">
+                       <img class="img-fluid d-block mx-auto  mb-5  rounded" style="width: 15%;" src="/media/{{request.user.photo}}" alt="user photo">
+                       <div class="row">
+                        <div class="col-lg">
                         <div class="h4" >First Name: <span class="fw-normal">{{request.user.first_name|capfirst}}</span></div>
                         <div class="h4" >Last Name: <span class="fw-normal">{{request.user.last_name|capfirst}}</span></div>
-                        <div class="h4" >User Name: <span class="fw-normal">{{request.user.username}}</span></div>
+                        <div class="h4" >username: <span class="fw-normal">{{request.user.username}}</span></div>
                         <div class="h4" >Superuser: <span class="fw-normal">
                             
                             
@@ -63,12 +65,16 @@
                         </span></div>
                         <div class="h4" >Gender: <span class="fw-normal">{{request.user.gender | capfirst}}</span></div>
                         <div class="h4" >Date of Birth: <span class="fw-normal">{{request.user.date_of_birth }}</span></div>
+                      </div>
+                      <div class="col-lg-6">
                         <div class="h4" >Phone: <span class="fw-normal">{{request.user.phone }}</span></div>
                         <div class="h4" >Email: <span class="fw-normal">{{request.user.email }}</span></div>
                         <div class="h4" >Address: <span class="fw-normal">{{request.user.address }}</span></div>
                         <div class="h4" >LinkedIn: <span class="fw-normal"><a href="{{request.user.linked_in }}">{{request.user.linked_in }}</a></span></div>
                         <div class="h4" >Country: <span class="fw-normal">{{request.user.country }}</span></div>
                         <div class="h4" >City: <span class="fw-normal">{{request.user.city }}</span></div>
+                      </div>
+                    </div>
                         <div  class="btn-group mt-3 gap-2">
                             <button  data-bs-toggle="modal"
                             data-bs-target="#editProfileModal"
