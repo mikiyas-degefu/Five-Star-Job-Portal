@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingCompanyAdminForm)
 from JobPortal.models import (Sector, Skill , Job_Posting)
@@ -44,6 +44,7 @@ def job_posting(request):
             obj = form.save(commit=False)
             obj.company = request.user.company
             obj.save()
+            form.save_m2m()
             messages.success(request, '&#128515 Hello User, Successfully Updated')
             return redirect('company-admin-job-posting')
         else:
@@ -61,29 +62,35 @@ def job_posting(request):
 
 def job_delete(request, id):
     try:
-        job = Job_Posting.objects.get(pk = id)
-        job.delete()
-        messages.success(request, '&#128515 Hello Job, Successfully Deleted')
+        job = Job_Posting.objects.get(pk = id, company=request.user.company)
     except:
-        messages.error(request, '&#128532 Hello Job , An error occurred while Deleting Company')
+        return HttpResponse('You are not authorized to access this page!')
+
+    try:
+        job.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Company')
     
     return redirect('company-admin-job-posting')    
 
 def job_detail(request, id):
     try:
-        job = Job_Posting.objects.get(pk = id)
+        job = Job_Posting.objects.get(pk = id, company=request.user.company)
     except:
-        job = None
+        return HttpResponse('You are not authorized to access this page!')
     
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None, instance=job)
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
-            messages.success(request, '&#128515 Hello Job, Successfully Updated')
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
             return redirect('company-admin-job-posting')
         else:
-            messages.error(request, '&#128532 Hello Job , An error occurred while updating job')
+            messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
         'form': form,
     }

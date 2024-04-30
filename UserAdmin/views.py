@@ -214,7 +214,9 @@ def job_posting(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
             messages.success(request, '&#128515 Hello User, Successfully Updated')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
@@ -235,9 +237,9 @@ def job_delete(request, id):
     try:
         job = Job_Posting.objects.get(pk = id)
         job.delete()
-        messages.success(request, '&#128515 Hello Job, Successfully Deleted')
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
     except:
-        messages.error(request, '&#128532 Hello Job , An error occurred while Deleting Company')
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Company')
     
     return redirect('user-admin-job-posting')    
 
@@ -252,11 +254,13 @@ def job_detail(request, id):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
-            messages.success(request, '&#128515 Hello Job, Successfully Updated')
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
             return redirect('user-admin-job-posting')
         else:
-            messages.error(request, '&#128532 Hello Job , An error occurred while updating job')
+            messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
         'form': form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()

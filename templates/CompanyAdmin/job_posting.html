@@ -308,7 +308,7 @@ $(document).ready(function(){
      //Event handler that handle on Click to delete
      $(".btn-delete").on('click', function(){
           const buttonData = $(this).data()
-          $("#deleteJobAnchor").attr("href", `/user-admin/delete-job_posting/${buttonData.id}`)
+          $("#deleteJobAnchor").attr("href", `/company-admin/job-posting-delete/${buttonData.id}`)
           $("#deleteJob").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
         })
 
