@@ -119,6 +119,9 @@ def change_status(request, company_id):
 
     return redirect('user-admin-company')
 
+
+ 
+
 @admin_super_user_required
 def job_sector(request):
     form = SectorForm(request.POST or None)

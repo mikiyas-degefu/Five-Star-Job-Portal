@@ -3,7 +3,7 @@
 <html lang="en">
 
 <!-- head-->
-{% include 'UserAdmin/include/head.html' %}
+{% include 'CompanyAdmin/include/head.html' %}
 {{ form.media }}
 <!--/ head-->
 
@@ -16,11 +16,11 @@
 
     
     <!-- header-->
-    {% include 'UserAdmin/include/sidebar.html' %}
+    {% include 'CompanyAdmin/include/sidebar.html' %}
     <!--/ header-->
 
    
-    {% include 'UserAdmin/include/verticalBar.html' %}
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
 
     
 
@@ -33,12 +33,12 @@
             <div class="container-fluid">
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
-                      {% include 'UserAdmin/include/messages.html' %}                    
-                      <caption>Admin Users</caption>
+                      {% include 'CompanyAdmin/include/messages.html' %}                    
+                      <caption>Company Admin Users</caption>
                         <button class="btn btn-primary float-end" 
                         data-bs-toggle="modal"
-                        data-bs-target="#AddAdminUser"
-                        data-bs-whatever="@mdo">Add New Admin</button>
+                        data-bs-target="#AddCompanyInterviewerUser"
+                        data-bs-whatever="@mdo">Add New Company Interviewer</button>
                       <div class="row">
 
                         <form>
@@ -62,11 +62,12 @@
                             <th scope="col">Phone</th>
                             <th scope="col">Address</th>
                             <th scope="col">Action</th>
+                            <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {% if admin_user %}
-                            {% for user in admin_user %}
+                          {% if company_interviewer %}
+                            {% for user in company_interviewer %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
                             {% if user.photo %}
@@ -103,7 +104,7 @@
                             <i class="fa fa-eye"></i> 
                             </button>
                             
-                        <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'admin_user-detail' user.id %}"><i class="fa fa-pen"></i></a>
+                        <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company_user_detail' user.id %}"><i class="fa fa-pen"></i></a>
                          
                         </button>
                         </button>
@@ -118,6 +119,19 @@
                               <i class="fa fa-trash"></i> 
                             </button>
                         </td>
+                        <td scope="col">
+                            {% if user.is_active %}
+                            <button data-id = {{user.id}}  class="btn btn-danger btn-status" id="inactive-btn" >
+                              Deactive
+                            </button>
+                             
+                            {% else %}
+                            <button  data-id = {{user.id}} class="btn btn-success btn-status" id="active-btn" >
+                              Active
+                            </button>
+              
+                            {% endif %}
+                          </td>
                           </tr>
                           {% endfor %}
                           {% else %}
@@ -178,7 +192,7 @@
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        {% include 'UserAdmin/include/footer.html' %}
+        {% include 'CompanyAdmin/include/footer.html' %}
     </div>
     <!-- end main content-->
 
@@ -203,12 +217,12 @@
 
 <!--Add Company Modal-->
   <!-- Modal -->
-  <div class="modal fade" id="AddAdminUser" tabindex="-1" aria-labelledby="AddAdminUserLabel"
+  <div class="modal fade" id="AddCompanyInterviewerUser" tabindex="-1" aria-labelledby="AddCompanyInterviewerUserLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="AddAdminUserLabel">Admin User Information</h5>
+        <h5 class="modal-title" id="AddCompanyInterviewerUserLabel">Admin User Information</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <form  method="post" enctype="multipart/form-data">
@@ -310,14 +324,43 @@ $(document).ready(function(){
      //Event handler that handle on Click to delete
      $(".btn-delete").on('click', function(){
           const buttonData = $(this).data()
-          $("#deleteUserAnchor").attr("href", `/user-management/admin-user-delete/${buttonData.id}`)
+          $("#deleteUserAnchor").attr("href", `/company-admin/company_user_delete/${buttonData.id}`)
           $("#deleteMessageYear").html(`Are you sure you want to delete <div> <code> ${buttonData.first_name}</code>? </div> `)
         })
 
-
-         // Edit Data Detail 
+        $(".btn-status").on('click', function() {
+            const buttonElement = $(this); // Store the reference to the button element
+            const userID = buttonElement.data().id;
+            const url = `/company-admin/change_status_user/${userID}/`;
+          
+            console.log("Button clicked");
+            console.log("URL:", url);
+          
+            $.ajax({
+              url: url,
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': '{{ csrf_token }}' // Replace with the appropriate Django template variable
+              },
+              success: function(response) {
+                const isActive = buttonElement.hasClass('btn-success');
+                if (isActive) {
+                  buttonElement.removeClass('btn-success').addClass('btn-danger').text('Deactive');
+                } else {
+                  buttonElement.removeClass('btn-danger').addClass('btn-success').text('Active');
+                }
+              },
+              error: function(error) {
+                console.log("AJAX request error");
+                console.log("Error:", error);
+          
+                // Handle the error
+              }
+            });
+          });
 
     })
+    
 
 </script>
 

@@ -15,13 +15,12 @@
             </div>
             
 
-            <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+            <button style="margin-top:10px" type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
                 <i class="ri-menu-2-line align-middle"></i>
             </button>
 
-            <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" >
-                <div class="h3 text-secondary">{{request.user.company}}</div>
-            </button>
+                <h2 style="margin-top:30px" class="h3 text-info ">{{request.user.company}}</h2>
+          
 
         </div>
 
@@ -168,9 +167,9 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                    <a class="dropdown-item" href="{% url 'admin-profile' %}"><i class="ri-user-line align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item d-block" href="{% url 'admin-change-password' %}"><i
-                            class="ri-settings-2-line align-middle me-1"></i> Password</a>
+                    <a class="dropdown-item" href="{% url 'company_admin_profile' %}"><i class="ri-user-line align-middle me-1"></i> Profile</a>
+                    <a class="dropdown-item d-block" href="{% url 'company_admin_change_password' %}"><i
+                            class="ri-settings-2-line align-middle me-1"></i>Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i
                             class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
