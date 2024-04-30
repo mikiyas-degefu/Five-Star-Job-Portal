@@ -50,7 +50,6 @@ def job_posting(request):
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
             return redirect('company-admin-job-posting')
     
-
     
     context = {
         'jobs' : page,
@@ -58,3 +57,34 @@ def job_posting(request):
         'form' : form,
     }
     return render(request, 'CompanyAdmin/job_posting.html', context=context)
+
+
+def job_delete(request, id):
+    try:
+        job = Job_Posting.objects.get(pk = id)
+        job.delete()
+        messages.success(request, '&#128515 Hello Job, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello Job , An error occurred while Deleting Company')
+    
+    return redirect('company-admin-job-posting')    
+
+def job_detail(request, id):
+    try:
+        job = Job_Posting.objects.get(pk = id)
+    except:
+        job = None
+    
+    form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None, instance=job)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Hello Job, Successfully Updated')
+            return redirect('company-admin-job-posting')
+        else:
+            messages.error(request, '&#128532 Hello Job , An error occurred while updating job')
+    context = {
+        'form': form,
+    }
+    return render(request, 'CompanyAdmin/job_detail.html', context=context)

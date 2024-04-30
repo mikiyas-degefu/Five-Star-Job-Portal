@@ -3,7 +3,7 @@
 <html lang="en">
 
 <!-- head-->
-{% include 'UserAdmin/include/head.html' %}
+{% include 'CompanyAdmin/include/head.html' %}
 {{ form.media }}
 <!--/ head-->
 
@@ -16,11 +16,11 @@
 
     
     <!-- header-->
-    {% include 'UserAdmin/include/sidebar.html' %}
+    {% include 'CompanyAdmin/include/sidebar.html' %}
     <!--/ header-->
 
    
-    {% include 'UserAdmin/include/verticalBar.html' %}
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
 
     
 
@@ -35,7 +35,7 @@
                   {% csrf_token %}
                   <div class="row justify-content-center">
                     <div class="col-8 card p-3">
-                        {% include 'UserAdmin/include/messages.html' %}
+                        {% include 'CompanyAdmin/include/messages.html' %}
                        <h2> Edit Job</h2>
                        <hr>
                         {{ form.as_p }}
@@ -50,7 +50,7 @@
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        {% include 'UserAdmin/include/footer.html' %}
+        {% include 'CompanyAdmin/include/footer.html' %}
     </div>
     <!-- end main content-->
 
