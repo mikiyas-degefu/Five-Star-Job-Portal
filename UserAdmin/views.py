@@ -31,7 +31,7 @@ def company(request):
    
     if 'q' in request.GET:
         q = request.GET['q']
-        companies = Company.objects.filter( Q(name__contains=q) | Q(phone__icontains=q) | Q(email__icontains=q) | Q(views__icontains=q) | Q(total_jobs__icontains=q))
+        companies = Company.objects.filter( Q(name__contains=q) | Q(phone__contains=q) | Q(email__contains=q) | Q(views__contains=q) | Q(total_jobs__contains=q))
     
     paginator = Paginator(companies, 30) 
     page_number = request.GET.get('page')
@@ -194,7 +194,7 @@ def job_posting(request):
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Job_Posting.objects.filter( Q(company__name__contains=q) | Q(title__icontains=q) | Q(sector__name__icontains=q) | Q(salary_range_start__icontains=q) | Q(salary_range_final__icontains=q))
+        jobs = Job_Posting.objects.filter( Q(company__name__contains=q) | Q(title__contains=q) | Q(sector__name__contains=q) | Q(salary_range_start__contains=q) | Q(salary_range_final__contains=q))
     
     paginator = Paginator(jobs, 30) 
     page_number = request.GET.get('page')

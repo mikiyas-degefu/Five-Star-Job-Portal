@@ -67,24 +67,7 @@ class CustomUserEditFormAdmin(forms.ModelForm):
         
 
 class CustomUserCreationForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Your First Name'
-    }))
-    last_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Your Last Name'
-    }))
-    username = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Enter your Username',
-        'autocomplete': 'off' 
-    }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Enter your Email',
-        'autocomplete': 'off'
-    }))
+
     password1 = forms.CharField( max_length=40, label='Password' ,widget=forms.PasswordInput(attrs={
         'class' : 'form-control',
         'placeholder' : 'Enter Your Password',
@@ -95,37 +78,16 @@ class CustomUserCreationForm(UserCreationForm):
         'placeholder' : 'Confirm Password',
         'autocomplete': 'off'
     }))
-    photo = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Add Photo(Optional)',
-   
-    }))
-    date_of_birth = forms.DateField(label='End Date: ', widget=forms.DateInput(attrs={
-        'class' : 'form-control',
-        'Placeholder' : 'mm/dd/yyyy (Required)',
-        'type' : 'Date'
-    }))
-    company = forms.ModelChoiceField(queryset=Company.objects.all(), widget=forms.Select(attrs={
-        'class' : 'form-select ',
-        'onkeyup' : 'filterFunction()'
-    }))
 
   
-
     class Meta:
         model = CustomUser
-        fields =  ('first_name', 'last_name', 'photo', 'gender', 'date_of_birth', 'email', 'phone', 'company', 'address', 'linked_in', 'country', 'city')
+        fields =  ('first_name', 'last_name', 'email','username')
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'photo': forms.FileInput(attrs={'class': 'form-control-file'}),
-            'gender': forms.Select(attrs={'class': 'form-select'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'address': forms.TextInput(attrs={'class': 'form-control'}),
-            'linked_in': forms.TextInput(attrs={'class': 'form-control'}),
-            'country': forms.TextInput(attrs={'class': 'form-control'}),
-            'city': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 class InterviewerForm(forms.ModelForm):

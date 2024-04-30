@@ -37,7 +37,6 @@ class CustomUserFormFront(UserCreationForm):
 
 
 class CandidateForm(forms.ModelForm):
-    resume = FroalaEditor()
     gender_list = [
     ('male', 'Male'),
     ('female', 'Female'),
@@ -73,10 +72,6 @@ class CandidateForm(forms.ModelForm):
         'class' : 'form-control',
         'placeholder' : 'Linked In (Optional)'
     }))
-    git_hub = forms.URLField(required=False, widget=forms.URLInput(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Git Hub (Optional)'
-    }))
     country = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
         'class' : 'form-control',
         'placeholder' : 'Country (required)'
@@ -99,6 +94,13 @@ class CandidateForm(forms.ModelForm):
     class Meta:
         model = Candidate
         exclude = ['user']
+
+        widgets = {
+            'about' : forms.Textarea(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'About (*Required)'
+            })
+        }
     
     skill = forms.ModelMultipleChoiceField(required=True,queryset=Skill.objects.all())
     def clean_first_name(self):

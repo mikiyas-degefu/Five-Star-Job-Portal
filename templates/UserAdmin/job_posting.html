@@ -58,8 +58,13 @@
                             <th scope="col">Company</th>
                             <th scope="col">Title</th>
                             <th scope="col">Sector</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Compensation Type</th>
                             <th scope="col">Salary Start</th>
                             <th scope="col">Salary Finall</th>
+                            <th scope="col">Post Date</th>
+                            <th scope="col">Close Date</th>
+                            <th scope="col">Published</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -71,8 +76,29 @@
                             <td>{{job.company}}</td>
                             <td>{{job.title}}</td>
                             <td>{{job.sector}}</td>
+                            <td class="fw-bold">{{job.get_type_display}}</td>
+                            <td class="fw-bold">{{job.get_compensation_type_display}}</td>
                             <td>{{job.salary_range_start}}</td>
                             <td>{{job.salary_range_final}}</td>
+                            <td>{{job.date_posted | timesince}} Ago</td>
+                            <td>{{job.date_closed | date:'F d, Y' }}</td>
+                            <td>
+
+                              {% if job.job_status %}
+                              <i class="text-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
+                                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+                              </svg></i>
+                              {% else %}
+                              <i class="text-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                </svg>
+                              </i>
+                              {% endif %}
+
+
+
+                            </td>
                             <td>
                                
                             <button 
