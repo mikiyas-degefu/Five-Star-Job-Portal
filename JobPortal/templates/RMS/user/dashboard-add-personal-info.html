@@ -207,15 +207,6 @@
                         </div>
 
 
-                             <!--GitHub-->
-                             <div class="col-xl-6 col-lg-6">
-                              <div class="form-group">
-                                <label class="text-dark ft-medium" for="id_git_hub"
-                                  >GitHub {% for err in form.git_hub.errors %} <small class="text-danger"> {{err}} </small> {% endfor %}</label
-                                >
-                                {{form.git_hub}}
-                              </div>
-                            </div>
     
                             <!--Linked In-->
                             <div class="col-xl-6 col-lg-6">
@@ -227,16 +218,16 @@
                               </div>
                             </div>
 
-                        <!--CV-->
-                        <div class="col-xl-12 col-lg-12">
-                          <div class="form-group">
-                            <label class="text-dark ft-medium" for="id_resume"
-                              >CV {% for err in form.resume.errors %} <small class="text-danger"> {{err}} </small> {% endfor %} </label
-                            >
-                            <br>
-                            {{form.resume}}
-                          </div>
-                        </div>
+                            <!--About-->
+                            <div class="col-xl-12 col-lg-12">
+                              <div class="form-group">
+                                <label class="text-dark ft-medium" for="id_about"
+                                  >About {% for err in form.id_about.errors %} <small class="text-danger"> {{err}} </small> {% endfor %} </label
+                                >
+                                {{form.about}}
+                              </div>
+                            </div>
+
                         
                         <!--SKILL-->
                         <div class="col-xl-12 col-lg-12">

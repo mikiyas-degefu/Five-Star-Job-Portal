@@ -3,7 +3,7 @@
 <html lang="en">
 
 <!-- head-->
-{% include 'UserAdmin/include/head.html' %}
+{% include 'CompanyAdmin/include/head.html' %}
 {{ form.media }}
 <!--/ head-->
 
@@ -16,11 +16,11 @@
 
     
     <!-- header-->
-    {% include 'UserAdmin/include/sidebar.html' %}
+    {% include 'CompanyAdmin/include/sidebar.html' %}
     <!--/ header-->
 
    
-    {% include 'UserAdmin/include/verticalBar.html' %}
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
 
     
 
@@ -33,7 +33,7 @@
             <div class="container-fluid">
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
-                      {% include 'UserAdmin/include/messages.html' %}                    
+                      {% include 'CompanyAdmin/include/messages.html' %}                    
                       <caption>Jobs</caption>
                         <button class="btn btn-primary float-end" 
                         data-bs-toggle="modal"
@@ -55,50 +55,40 @@
                         <thead  class="table-light">
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Company</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Sector</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Compensation Type</th>
-                            <th scope="col">Salary Start</th>
-                            <th scope="col">Salary Finall</th>
-                            <th scope="col">Post Date</th>
-                            <th scope="col">Close Date</th>
-                            <th scope="col">Published</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">For Job</th>
+                            <th scope="col">Date of Applied</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {% if jobs %}
-                            {% for job in jobs %}
+                          {% if applications %}
+                            {% for app in applications %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
-                            <td>{{job.company}}</td>
-                            <td>{{job.title}}</td>
-                            <td>{{job.sector}}</td>
-                            <td class="fw-bold">{{job.get_type_display}}</td>
-                            <td class="fw-bold">{{job.get_compensation_type_display}}</td>
-                            <td>{{job.salary_range_start}}</td>
-                            <td>{{job.salary_range_final}}</td>
-                            <td>{{job.date_posted | timesince}} Ago</td>
-                            <td>{{job.date_closed | date:'F d, Y' }}</td>
-                            <td>
-
-                              {% if job.job_status %}
-                              <i class="text-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
-                                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
-                              </svg></i>
-                              {% else %}
-                              <i class="text-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-                                </svg>
-                              </i>
+                            <td>{{app.user.first_name | capfirst}}</td>
+                            <td>{{app.user.last_name | capfirst}}</td>
+                            <td>{{app.user.candidate.phone1}}</td>
+                            <td>{{app.user.email}}</td>
+                            <td>{{app.job}}</td>
+                            <td>{{app.date_applied}}</td>
+                            <td> <button class="btn 
+                              {% if app.status == 'pending' %} 
+                                    btn-secondary  
+                              {% elif app.status == 'rejected' %} 
+                                     btn-danger 
+                              {% elif app.status == 'in_review' %} 
+                                     btn-info 
+                              {% elif app.status == 'hired' %} 
+                                     btn-success 
                               {% endif %}
-
-
-
-                            </td>
+                              
+                              
+                              btn-sm" type="button">{{app.get_status_display}}</button> </td>
                             <td>
                                
                             <button 
@@ -107,25 +97,25 @@
                             data-bs-toggle="modal"
                             data-bs-target="#detailJobs"
                             data-bs-whatever="@mdo"
-                            data-company="{{job.company}}"
-                            data-title="{{job.title}}"
-                            data-sector="{{job.sector}}"
-                            data-description='{{job.description}}'
-                            data-vacancies="{{job.vacancies}}"
-                            data-experience="{{job.experience}}"
-                            data-skills="{{job.skills}}"
-                            data-location="{{job.location}}"
-                            data-salary_range_start="{{job.salary_range_start}}"
-                            data-salary_range_final="{{job.salary_range_final}}"
-                            data-type="{{job.type}}"
-                            data-compensation_type="{{job.compensation_type}}"
-                            data-date_posted="{{job.date_posted}}"
-                            data-date_closed="{{job.date_closed}}"
+                            data-company="{{app.company}}"
+                            data-title="{{app.title}}"
+                            data-sector="{{app.sector}}"
+                            data-description='{{app.description}}'
+                            data-vacancies="{{app.vacancies}}"
+                            data-experience="{{app.experience}}"
+                            data-skills="{{app.skills}}"
+                            data-location="{{app.location}}"
+                            data-salary_range_start="{{app.salary_range_start}}"
+                            data-salary_range_final="{{app.salary_range_final}}"
+                            data-type="{{app.type}}"
+                            data-compensation_type="{{app.compensation_type}}"
+                            data-date_posted="{{app.date_posted}}"
+                            data-date_closed="{{app.date_closed}}"
                             >
                             <i class="fa fa-eye"></i> 
                             </button>
                             
-                         <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'user-admin-job-detail' job.id %}"><i class="fa fa-pen"></i></a>
+                         <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-job-posting-detail' app.id %}"><i class="fa fa-pen"></i></a>
                              
                         </button>
                         </button>
@@ -134,8 +124,8 @@
                               data-bs-toggle="modal" 
                               data-bs-target="#deleteJobModal"
                               data-bs-whatever="@mdo"
-                              data-id = {{job.id}}
-                              data-name = {{job.title}}
+                              data-id = {{app.id}}
+                              data-name = {{app.title}}
                               >
                               <i class="fa fa-trash"></i> 
                             </button>
@@ -144,7 +134,7 @@
                           {% endfor %}
                           {% else %}
                           <tr>
-                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                            <td class="text-center text-danger" colspan="12">No Data Found</td>
                           </tr>
                           {% endif %}
                         </tbody>
@@ -153,9 +143,9 @@
                       <!-- Pagination -->
              <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-circle pagination-outline justify-content-center" >
-                {% if jobs.has_previous %}
+                {% if applications.has_previous %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ jobs.previous_page_number }}">Previous</a>
+                  <a class="page-link" href="?page={{ applications.previous_page_number }}">Previous</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -163,30 +153,30 @@
                   </li>
                 {% endif %}
             
-                {% if jobs.number|add:'-4' > 1 %}
-                  <li class="page-item"><a class="page-link" href="?page={{ jobs.number|add:'-5' }}">&hellip;</a></li>
+                {% if applications.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ applications.number|add:'-5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% for i in jobs.paginator.page_range %}
-                  {% if jobs.number == i %}
+                {% for i in applications.paginator.page_range %}
+                  {% if applications.number == i %}
                     <li class="page-item active" aria-current="page">
                     <span class="page-link">
                     {{ i }}
                     <span class="sr-only">(current)</span>
                     </span>
                   </li>
-                  {% elif i > jobs.number|add:'-5' and i < jobs.number|add:'5' %}
+                  {% elif i > applications.number|add:'-5' and i < applications.number|add:'5' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                   {% endif %}
                 {% endfor %}
             
-                {% if jobs.paginator.num_pages > jobs.number|add:'4' %}
-                   <li class="page-item"><a class="page-link" href="?page={{ jobs.number|add:'5' }}">&hellip;</a></li>
+                {% if applications.paginator.num_pages > applications.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ applications.number|add:'5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% if jobs.has_next %}
+                {% if applications.has_next %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ jobs.next_page_number }}">Next</a>
+                  <a class="page-link" href="?page={{ applications.next_page_number }}">Next</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -200,7 +190,7 @@
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        {% include 'UserAdmin/include/footer.html' %}
+        {% include 'CompanyAdmin/include/footer.html' %}
     </div>
     <!-- end main content-->
 
@@ -336,7 +326,7 @@ $(document).ready(function(){
      //Event handler that handle on Click to delete
      $(".btn-delete").on('click', function(){
           const buttonData = $(this).data()
-          $("#deleteJobAnchor").attr("href", `/user-admin/delete-job_posting/${buttonData.id}`)
+          $("#deleteJobAnchor").attr("href", `/company-admin/job-posting-delete/${buttonData.id}`)
           $("#deleteJob").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
         })
 

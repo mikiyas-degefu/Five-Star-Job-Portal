@@ -59,12 +59,15 @@ def login_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email,password=password)
-        if (user is not None and user.is_superuser) or (user is not None and user.is_admin):
+        if (user is not None and user.is_superuser):
             login(request, user)
             return redirect('admin-dashboard')
         elif user is not None and user.is_interviewer:
             login(request, user)
             return redirect('interviewer-dashboard')
+        elif user is not None and user.is_admin:
+            login(request, user)
+            return redirect('company-admin-dashboard')
         elif user is not None and user.is_candidate:
             login(request, user)
             return redirect('index')
@@ -92,7 +95,10 @@ def registration_view(request):
             user.is_candidate = True
             user.save()
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
-            return redirect('/login')    
+            return redirect('/login') 
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Creating Account Please try again')
+
     context = {
         'form' : form
     }

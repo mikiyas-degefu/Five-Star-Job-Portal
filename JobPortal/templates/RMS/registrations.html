@@ -51,6 +51,14 @@
                                                     <form  method="post" class="auth-form"> {% csrf_token %}
                                                  
                                                       <div class="row">
+                                                        {% if form.non_field_errors %}
+<ul class="errorlist">
+  {% for error in form.non_field_errors %}
+    <li>{{ error|escape }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
                                                        
                                                       <div class=" col-md mb-3">
                                                         <label class="small"  for="{{form.first_name.id_for_label}}">First Name: {% for err in form.first_name.errors %} <small class="text-warning fw-bold "> {{err}}</small> {% endfor %}  </label>
