@@ -91,29 +91,7 @@
                               btn-sm" type="button">{{app.get_status_display}}</button> </td>
                             <td>
                                
-                            <button 
-                            type="button" 
-                            class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#detailJobs"
-                            data-bs-whatever="@mdo"
-                            data-company="{{app.company}}"
-                            data-title="{{app.title}}"
-                            data-sector="{{app.sector}}"
-                            data-description='{{app.description}}'
-                            data-vacancies="{{app.vacancies}}"
-                            data-experience="{{app.experience}}"
-                            data-skills="{{app.skills}}"
-                            data-location="{{app.location}}"
-                            data-salary_range_start="{{app.salary_range_start}}"
-                            data-salary_range_final="{{app.salary_range_final}}"
-                            data-type="{{app.type}}"
-                            data-compensation_type="{{app.compensation_type}}"
-                            data-date_posted="{{app.date_posted}}"
-                            data-date_closed="{{app.date_closed}}"
-                            >
-                            <i class="fa fa-eye"></i> 
-                            </button>
+                            <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-applicant-detail' app.user.id app.job.id %}"> <i class="fa fa-eye"></i> </a>
                             
                          <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-job-posting-detail' app.id %}"><i class="fa fa-pen"></i></a>
                              
