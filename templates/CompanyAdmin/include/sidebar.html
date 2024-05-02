@@ -6,20 +6,20 @@
             <div class="navbar-brand-box text-center">
                 <a href="{% url 'company-admin-dashboard'%}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img class="img-fluid"  src="{% static 'assets/images/logo/bag-logo-no-background.png' %}"  alt="logo-sm-light"> 
+                        <img style="border-radius:50%" class="img-fluid mt-5"  src="{% static 'assets/images/logo/bag-logo-no-background.png' %}"  alt="logo-sm-light"> 
                     </span>
                     <span class="logo-lg">
-                         <img class="img-fluid mt-3"  src="/media/{{request.user.company.logo}}"  alt="logo-light"> 
+                         <img style="border-radius:50%" class="img-fluid mt-5"  src="/media/{{request.user.company.logo}}"  alt="logo-light"> 
                     </span>
                 </a>
             </div>
             
 
-            <button style="margin-top:10px" type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+            <button style="margin-top:30px" type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
                 <i class="ri-menu-2-line align-middle"></i>
             </button>
 
-                <h2 style="margin-top:30px" class="h3 text-info ">{{request.user.company}}</h2>
+                <h2 style="margin-top:50px" class="h3 text-info ">{{request.user.company}}</h2>
           
 
         </div>

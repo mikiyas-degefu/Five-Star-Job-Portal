@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'CompanyAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'CompanyAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        {% include 'CompanyAdmin/include/messages.html' %}
+        <div class="page-content">
+            <div class="container-fluid">
+              <div class="row justify-content-center">
+                <div class="col-11">
+                  <div class="card p-4">
+                    <div class="card-body text-center">
+                      <h3 class="text-info">Edit Company Information</h3>
+                      <h4 class="text-info">{{company.name | capfirst}}  </h4>
+
+                    </div>
+                  </div>
+                </div>
+
+               
+
+               <div class="col-lg-8 card shadow p-5s">
+                
+                      <form  method="post" enctype="multipart/form-data">
+                        <div >
+                          {% csrf_token %}
+                          {{form.as_p}}
+                        </div>
+                        <div >
+                        
+                           <button type="submit" class="btn btn-primary">Save</button>
+                          
+                        </div>
+              
+                      </form>
+               </div>
+
+              </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'CompanyAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+</body>
+</html>

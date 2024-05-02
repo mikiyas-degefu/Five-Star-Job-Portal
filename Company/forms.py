@@ -48,6 +48,9 @@ class CompanyForm(forms.ModelForm):
             })
         }
 
+
+
+
 class CommentForm(forms.ModelForm):
     name = forms.CharField(max_length=40, error_messages={'required' : 'Can not be empty'})
     email = forms.EmailField(widget=forms.TextInput(), error_messages={'required' : 'Can not be empty'})

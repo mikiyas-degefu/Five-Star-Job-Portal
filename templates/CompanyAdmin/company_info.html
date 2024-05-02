@@ -1,0 +1,187 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'CompanyAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'CompanyAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+      {% include 'CompanyAdmin/include/messages.html' %}
+
+        <div class="page-content">
+            <div class="container-fluid">
+              <div class="row justify-content-center">
+                <div class="col-11">
+                  <div class="card p-4">
+                    <div class="card-body text-center">
+                      <h4>{{company.name | capfirst}}  </h4>
+                      <hr>
+                    </div>
+                  </div>
+                </div>
+
+               
+
+                <div class="col-4">
+                  <div class="card p-4">
+                    <div class="card-body text-center">
+                      <div class="text-center pb-4 border-bottom">
+                        <img src="/media/{{company.logo}}" alt=""
+                          class="avatar-lg img-thumbnail rounded-circle mb-4" />
+                        <h5 class="mb-0">{{company.name}}</h5>
+                       
+                        <hr>
+
+                        <div class="mt-4 text-start">
+                          <h5 class="fs-17 fw-bold mb-3">Information</h5>
+
+
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Email</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.email}}
+                            </p>
+                          </div>
+                          </div>
+
+
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Phone</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.phone1}}
+                            </p>
+                          </div>
+                          </div>
+
+
+
+
+                          
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Slogan</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.slogan}}
+                            </p>
+                          </div>
+                          </div>
+
+
+
+                          
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Since</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.since}}
+                            </p>
+                          </div>
+                          </div>
+
+
+
+                          
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Location</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.location}}
+                            </p>
+                          </div>
+                          </div>
+
+
+
+
+                          
+                          <div class="d-flex  p-2 justify-content-between">
+                            <label class="fw-normal text-muted h5 " for="">Website</label>
+                          <div>
+                            <p class="text-muted text-break mb-0">
+                              {{company.website}}
+                            </p>
+                          </div>
+                          </div>
+
+
+
+                          <div class="d-flex  p-2 justify-content-between">
+                            <div class="btn-group ">
+                              <a class="btn btn-primary" href="{% url "edit_company_info" company.id %}"> Edit Information </a>
+                            </div>
+                            
+                          </div>
+
+
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-7">
+                  <div class="card p-4">
+                    <div class="card-body  text-center">
+
+                      <ul class="profile-content-nav nav nav-pills border-bottom mb-4" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+
+                          <button class="nav-link fs-3">
+                            Overview
+                          </button>
+                        </li>
+                      </ul>
+
+                      <div class="text-start">
+                        <div class="h4">About</div>
+                        <p class="p-3 text-muted">{{company.about | safe}}</p>
+                      </div>
+
+                      <hr>
+
+                      
+
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'CompanyAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm)
 from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill)
@@ -6,6 +6,7 @@ from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
 from Company.models import Contact_Message , Company
+from Company.forms import CompanyForm
 from UserManagement.models import CustomUser 
 from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormCompanyAdmin , CompanyAdmin , CustomUserEditFormAdmin , ChangePasswordForm
 
@@ -370,3 +371,34 @@ def applicant_detail(request, id, job_id):
         'job' : job
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
+
+
+def company_info (request):
+    company = get_object_or_404(Company, id=request.user.company.id)
+    context = {
+        "company" : company
+    }
+    return render(request , 'CompanyAdmin/company_info.html' , context)
+
+
+
+def edit_company_info (request , id):
+    company = Company.objects.get(id=id)
+    form = CompanyForm(request.POST or None, request.FILES or None, instance=company)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, '&#128515 Successfully Updated')
+            return redirect('company_info')
+        else:
+            messages.error(request, '&#128532  An error occurred while updating Company')
+            return redirect('company_info')
+    context = {
+        "company" : company,
+        "form" : form
+    }
+    return render(request , 'CompanyAdmin/edit_company_info.html' , context)
+
+    
+
+

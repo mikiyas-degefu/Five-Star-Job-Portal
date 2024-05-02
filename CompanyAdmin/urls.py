@@ -17,4 +17,9 @@ urlpatterns = [
 
     path('applicant/', views.applicant, name='company-admin-applicant'),
     path('applicant/<str:id>/<str:job_id>', views.applicant_detail, name='company-admin-applicant-detail'),
+
+
+
+    path('company_info/', views.company_info, name='company_info'),
+    path('edit_company_info/<str:id>', views.edit_company_info, name='edit_company_info'),
 ]
