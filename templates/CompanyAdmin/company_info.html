@@ -29,12 +29,12 @@
     <!-- ============================================================== -->
     <div class="main-content">
 
-      {% include 'CompanyAdmin/include/messages.html' %}
 
         <div class="page-content">
             <div class="container-fluid">
               <div class="row justify-content-center">
                 <div class="col-11">
+                  {% include 'CompanyAdmin/include/messages.html' %}
                   <div class="card p-4">
                     <div class="card-body text-center">
                       <h4>{{company.name | capfirst}}  </h4>
