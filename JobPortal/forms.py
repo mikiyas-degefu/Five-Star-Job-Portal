@@ -399,15 +399,34 @@ class SectorForm(forms.ModelForm):
 
 
 class ApplicationForm(forms.ModelForm):
-    status = forms.ChoiceField(choices=application_status, required=False, widget=forms.Select(attrs={
-        'class' : 'form-select'
-    }))
     class Meta:
         model = Application
         fields = ('status',)
 
-class InterviewForm(forms.ModelForm):
+        widgets = {
+            'status' : forms.Select(attrs={
+                     'class' : 'form-select'
+                     })
+        }
+
+
+
+
+
+class AdminInterviewForm(forms.ModelForm):
+
+    def __init__(self, company, *args, **kwargs):
+        super(AdminInterviewForm, self).__init__(*args, **kwargs)
+        self.fields['interviewer'] = forms.ModelChoiceField(queryset=CustomUser.objects.filter(company = company, is_interviewer = True), widget=forms.Select(attrs={'class' : 'form-control'}))
+
+    class Meta:
+        model = Interviews
+        fields = ('interviewer',)
+
     
+        
+
+class InterviewForm(forms.ModelForm):
     class Meta:
         model = Interviews
         fields = '__all__'

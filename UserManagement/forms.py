@@ -129,6 +129,7 @@ class CompanyAdmin(UserCreationForm):
         'placeholder' : 'Enter your Email',
         'autocomplete': 'off'
     }))
+    
     password1 = forms.CharField( max_length=40, label='Password' ,widget=forms.PasswordInput(attrs={
         'class' : 'form-control',
         'placeholder' : 'Enter Your Password',
@@ -144,7 +145,7 @@ class CompanyAdmin(UserCreationForm):
         'placeholder' : 'Add Photo(Optional)',
    
     }))
-    date_of_birth = forms.DateField(label='End Date: ', widget=forms.DateInput(attrs={
+    date_of_birth = forms.DateField(label='Date of Birth: ', widget=forms.DateInput(attrs={
         'class' : 'form-control',
         'Placeholder' : 'mm/dd/yyyy (Required)',
         'type' : 'Date'
@@ -154,10 +155,11 @@ class CompanyAdmin(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields =  ('first_name', 'last_name', 'photo', 'gender', 'date_of_birth', 'email', 'phone', 'address', 'linked_in', 'country', 'city')
+        fields =  ('first_name', 'last_name', 'username', 'photo', 'gender', 'date_of_birth', 'email', 'phone', 'address', 'linked_in', 'country', 'city')
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
             'photo': forms.FileInput(attrs={'class': 'form-control-file'}),
             'gender': forms.Select(attrs={'class': 'form-select'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
