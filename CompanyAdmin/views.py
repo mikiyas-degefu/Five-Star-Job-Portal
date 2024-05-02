@@ -168,9 +168,9 @@ def company_admins(request):
 
 def company_user_detail(request, id):
     try:
-       company_admins  = CustomUser.objects.get(id=id)
+       company_admins  = CustomUser.objects.get(id=id , company=request.user.company)
     except:
-        company_admins = None
+        return HttpResponse('You are not authorized to access this page!')
     
     form = CustomUserEditFormCompanyAdmin(request.POST or None, request.FILES or None, instance=company_admins)
 
@@ -191,7 +191,10 @@ def company_user_detail(request, id):
 
 def company_user_delete(request, id):
     try:
-        user = CustomUser.objects.get(pk = id)
+        user = CustomUser.objects.get(pk = id, company=request.user.company)
+    except:
+        return HttpResponse('You are not authorized to access this page!')
+    try:
         user.delete()
         messages.success(request, '&#128515 Hello User, Successfully Deleted')
     except:
@@ -207,12 +210,10 @@ def change_status_user(request, id):
        if user.is_active:
            user.is_active = False
            user.save()
-           messages.success(request, 'Successfully Deactivated')
            return redirect('/') 
        else:
            user.is_active = True
            user.save()
-           messages.success(request, 'Successfully Activated')
            return redirect('/') 
     else :
         return error
@@ -224,6 +225,7 @@ def change_status_user(request, id):
 
 
 def company_admin_profile(request):
+    
     user = request.user
     form =  CustomUserEditFormAdmin(request.POST or None, request.POST or None, instance=user)
     if request.method == 'POST':
