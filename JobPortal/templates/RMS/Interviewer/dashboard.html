@@ -24,6 +24,7 @@
 					<div class="row">
 						<div class="colxl-12 col-lg-12 col-md-12">
 							<h1 class="ft-medium">Hello, {{user.first_name|capfirst}} {{user.last_name|capfirst}}</h1>
+							<img src="/media/{{user.image}}" alt="">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item text-muted"><a href="#">Home</a></li>
@@ -102,14 +103,22 @@
 
 				</div>
 
-				<!-- footer -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="py-3">© 2023 Workplex. Designd By ThemezHub.</div>
-					</div>
-				</div>
+				
+					
+	<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+		<div class="col-md-4 d-flex align-items-center" bis_skin_checked="1">
+		  <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+			<svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+		  </a>
+		  <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Seraye, Inc</span>
+		</div>
+	
+	  </footer>
+
 
 			</div>
+
+			
 
 		</div>
 		<!-- ======================= dashboard Detail End ======================== -->
@@ -118,6 +127,8 @@
 
 
 	</div>
+
+	
 	<!-- ============================================================== -->
 	<!-- End Wrapper -->
 	<!-- ============================================================== -->
