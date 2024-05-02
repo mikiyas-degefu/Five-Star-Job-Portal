@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm)
-from JobPortal.models import ( Job_Posting, Application)
+from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill)
+from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
 from Company.models import Contact_Message , Company
@@ -347,3 +348,25 @@ def applicant(request):
         'form' : form,
     }
     return render(request, 'CompanyAdmin/applicant.html', context=context)
+
+
+
+
+def applicant_detail(request, id, job_id):
+
+    try:
+        user = CustomUser.objects.get(pk = id)   
+        education = Education.objects.filter(candidate = user).select_related()
+        experience = Experience.objects.filter(candidate = user).select_related()
+        job = Job_Posting.objects.get(pk = job_id)
+    except:
+        return HttpResponse('You are not authorized to access this page!')
+
+
+    context = {
+        'user' : user,
+        'education' : education,
+        'experience' : experience,
+        'job' : job
+    }
+    return render(request, 'CompanyAdmin/applicant_detail.html', context=context)

@@ -1,0 +1,62 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'CompanyAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'CompanyAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <form method="post" enctype="multipart/form-data"enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row justify-content-center">
+                    <div class="col-8 card p-3">
+                        {% include 'CompanyAdmin/include/messages.html' %}
+                       <h2> Edit User</h2>
+                       <hr>
+                        {{ form.as_p }}
+                       <div class="btn-group gap-2">
+                        <a href="{% url 'company_user' %}" class="btn btn-secondary"  type="submit">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                       </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'CompanyAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+</div>
+<!-- END layout-wrapper -->
+
+
+</body>
+</html>
