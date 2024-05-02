@@ -28,9 +28,6 @@
                 <li class="{% if request.path == '/interview-scheduled/' %}active{% endif %}" >
                   <a href="{% url 'interview-scheduled' %}"><i class="lni lni-briefcase me-2"></i>Scheduled Interviews</a>
               </li>
-              <li class="{% if request.path == '/interview-job-status/' %}active{% endif %}" >
-                <a href="{% url 'interview-job-status' %}"><i class="fa-solid fa-user-tie me-2"></i>Candidate - Job Status</a>
-            </li>
             </ul>
             <ul data-submenu-title="My Accounts">
                 <li class="{% if request.path == '/interviewer-info/' %}active{% endif %}">
@@ -38,8 +35,8 @@
                     ><i class="lni lni-user me-2"></i>My Profile
                   </a>
                 </li>
-                <li class="{% if request.path == '/user-change-password/' %}active{% endif %}">
-                  <a href=""
+                <li class="{% if request.path == '/company_interviewer_change_password/' %}active{% endif %}">
+                  <a href="{% url "company_interviewer_change_password" %}"
                     ><i class="lni lni-lock-alt me-2"></i>Change Password</a
                   >
                 </li>

@@ -21,7 +21,7 @@ import requests
 import random
 from datetime import date
 import string
-from UserManagement.models import CustomUser
+from UserManagement.forms import ( ChangePasswordForm)
 from django.contrib.auth.hashers import make_password
 
 
@@ -843,3 +843,22 @@ def interview_applicant_category(request, slug):
         'applicants' : applicants
     }
     return render(request, 'RMS/interviewer/job-candidate-status.html', context)
+
+
+
+@login_required
+@interviewer_user_required
+def company_interviewer_change_password(request):
+    form = ChangePasswordForm(request.user)
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user,request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hello User,Password Successfully Updated')
+            logout(request)
+            return redirect('login')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Updating User Password! ')
+
+    
+    return render(request,'RMS/interviewer/change_password.html', {'form': form})  

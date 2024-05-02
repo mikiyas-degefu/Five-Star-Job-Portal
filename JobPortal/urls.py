@@ -41,5 +41,7 @@ urlpatterns = [
     path('today-interviews/', views.interview_today_interview_list, name='today-interviews'),
     path('interview-now/<slug:slug>', views.interview_individual_now, name="interviews-now"),
     path('interview-job-status/', views.interview_candidate_job_status, name="interview-job-status"),
-    path('interview-applicant-category/<slug:slug>', views.interview_applicant_category, name='interview_applicant_category')
+    path('interview-applicant-category/<slug:slug>', views.interview_applicant_category, name='interview_applicant_category'),
+    path('company_interviewer_change_password/', views.company_interviewer_change_password, name='company_interviewer_change_password')
+    
 ]
