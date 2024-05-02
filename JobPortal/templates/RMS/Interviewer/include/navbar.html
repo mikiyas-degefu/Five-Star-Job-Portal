@@ -1,3 +1,4 @@
+{% load static %}
 <script src="https://kit.fontawesome.com/47080b3c1e.js" crossorigin="anonymous"></script>
 <a class="mobNavigation" data-bs-toggle="collapse" href="#MobNav" role="button" aria-expanded="false"
     aria-controls="MobNav">
@@ -6,6 +7,11 @@
 <div class="collapse" id="MobNav">
     <div class="dashboard-nav">
         <div class="dashboard-inner">
+          <img style="width:60px;height:60px;" class="rounded-circle header-profile-user mx-auto d-block" {% if request.user.company.logo %} src="/media/{{request.user.company.logo}}" {% else %} src="{% static 'UserAdmin/images/users/avatar-2.jpg' %}" {% endif %}
+                            alt="Header Avatar">
+                            <br>
+                        <p class="text-center fw-bold">{{request.user.company.name |capfirst}}</p>
+        <hr>
             <ul data-submenu-title="Main Navigation">
                 <li class="{% if request.path == '/interviewer-dashboard/' %}active{% endif %}">
                     <a href="{% url 'interviewer-dashboard' %}"><i class="lni lni-dashboard me-2"></i>Dashboard</a>

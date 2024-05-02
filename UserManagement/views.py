@@ -51,7 +51,7 @@ def admin_user(request):
     }
     return render(request, 'UserAdmin/admin_users.html', context=context)
 
-admin_super_user_required
+@admin_super_user_required
 def admin_user_delete(request, id):
     try:
         admin_user = CustomUser.objects.get(pk = id)
@@ -63,7 +63,7 @@ def admin_user_delete(request, id):
     return redirect('admin_user')    
 
 
-admin_super_user_required
+@admin_super_user_required
 def admin_user_detail(request, id):
     try:
         user = CustomUser.objects.get(pk = id)
@@ -86,7 +86,7 @@ def admin_user_detail(request, id):
 
 
 
-admin_super_user_required
+@admin_super_user_required
 def company_user(request):
     form = CustomUserCreationForm(request.POST or None, request.FILES or None)
     company_user = CustomUser.objects.filter(is_admin=True)
@@ -130,7 +130,7 @@ def company_user(request):
     }
     return render(request, 'UserAdmin/company_users.html', context=context)
     
-admin_super_user_required
+@admin_super_user_required
 def company_user_delete(request, id):
     try:
         company_user = CustomUser.objects.get(pk = id)
@@ -141,7 +141,7 @@ def company_user_delete(request, id):
     
     return redirect('company_user')    
 
-admin_super_user_required
+@admin_super_user_required
 def company_user_detail(request, id):
     try:
         user = CustomUser.objects.get(pk = id)
@@ -163,7 +163,7 @@ def company_user_detail(request, id):
     return render(request, 'UserAdmin/company_user_detail.html', context=context)    
 
 
-admin_super_user_required
+@admin_super_user_required
 def candidate_user(request):
     form = CustomUserCreationForm(request.POST or None, request.FILES or None)
     candidate_user = CustomUser.objects.filter(is_candidate=True)
@@ -207,7 +207,7 @@ def candidate_user(request):
     }
     return render(request, 'UserAdmin/candidate_users.html', context=context)
     
-admin_super_user_required
+@admin_super_user_required
 def candidate_user_delete(request, id):
     try:
         candidate_user = CustomUser.objects.get(pk = id)
@@ -218,7 +218,7 @@ def candidate_user_delete(request, id):
     
     return redirect('candidate_user')    
 
-admin_super_user_required
+@admin_super_user_required
 def candidate_user_detail(request, id):
     try:
         user = CustomUser.objects.get(pk = id)
@@ -239,7 +239,7 @@ def candidate_user_detail(request, id):
     }
     return render(request, 'UserAdmin/candidate_user_detail.html', context=context) 
 
-admin_super_user_required
+
 def logout_view(request):
     logout(request)
     return redirect('login')

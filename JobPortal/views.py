@@ -525,8 +525,8 @@ def user_delete_bookmark(request, slug):
 @login_required
 @interviewer_user_required
 def interviewer_dashboard(request):
-    total_application = Application.objects.all().count()
-    total_jobs = Job_Posting.objects.all().count()
+    total_application = Application.objects.filter(user__company = request.user.company).count()
+    total_jobs = Job_Posting.objects.filter(company = request.user.company).count()
     total_interviews = Interviews.objects.filter(interviewer = request.user).count()
     now = datetime.datetime.now()
     date = now.strftime("%Y-%m-%d")
@@ -544,7 +544,7 @@ def interviewer_dashboard(request):
 @login_required
 @interviewer_user_required
 def interviewer_job_list(request):
-    job_lists = Job_Posting.objects.filter(job_status = True)
+    job_lists = Job_Posting.objects.filter(job_status = True , company = request.user.company)
     context = {
         'job_lists' : job_lists
     }

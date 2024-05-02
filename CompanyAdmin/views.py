@@ -9,9 +9,10 @@ from Company.models import Contact_Message , Company
 from Company.forms import CompanyForm
 from UserManagement.models import CustomUser 
 from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormCompanyAdmin , CompanyAdmin , CustomUserEditFormAdmin , ChangePasswordForm
-
+from UserManagement.decorators import (admin_user_required)
 # Create your views here.
 
+@admin_user_required
 def index(request):
     context = {
         
@@ -19,6 +20,7 @@ def index(request):
     return render(request, 'CompanyAdmin/index.html', context=context)
 
 
+@admin_user_required
 def job_posting(request):
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
     jobs = Job_Posting.objects.filter(company = request.user.company)
@@ -66,7 +68,7 @@ def job_posting(request):
 
 
 
-
+@admin_user_required
 def company_interviewer(request):
     user = request.user
     company = user.company
@@ -116,7 +118,7 @@ def company_interviewer(request):
     return render(request, 'CompanyAdmin/company_interviewer.html', context=context)
     
 
-
+@admin_user_required
 def company_admins(request):
     user = request.user
     company = user.company
@@ -167,7 +169,7 @@ def company_admins(request):
     
 
     
-
+@admin_user_required
 def company_user_detail(request, id):
     try:
        company_admins  = CustomUser.objects.get(id=id , company=request.user.company)
@@ -190,7 +192,7 @@ def company_user_detail(request, id):
     return render(request, 'CompanyAdmin/company_admin_user_detail.html', context=context)
 
 
-
+@admin_user_required
 def company_user_delete(request, id):
     try:
         user = CustomUser.objects.get(pk = id, company=request.user.company)
@@ -204,7 +206,7 @@ def company_user_delete(request, id):
     
     return redirect('company_admins')
 
-
+@admin_user_required
 def change_status_user(request, id):
     user = CustomUser.objects.get(id=id)
     current_user = request.user
@@ -225,7 +227,7 @@ def change_status_user(request, id):
     return redirect('/')   
 
 
-
+@admin_user_required
 def company_admin_profile(request):
     
     user = request.user
@@ -246,7 +248,7 @@ def company_admin_profile(request):
     return render(request, 'CompanyAdmin/profile.html', context=context)
 
 
-
+@admin_user_required
 def company_admin_change_password(request):
     form = ChangePasswordForm(request.user)
     if request.method == 'POST':
@@ -265,7 +267,7 @@ def company_admin_change_password(request):
 
     
 
-
+@admin_user_required
 def job_delete(request, id):
     try:
         job = Job_Posting.objects.get(pk = id, company=request.user.company)
@@ -280,6 +282,7 @@ def job_delete(request, id):
     
     return redirect('company-admin-job-posting')    
 
+@admin_user_required
 def job_detail(request, id):
     try:
         job = Job_Posting.objects.get(pk = id, company=request.user.company)
@@ -304,7 +307,7 @@ def job_detail(request, id):
 
 
 
-
+@admin_user_required
 def applicant(request):
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
     jobs = Application.objects.filter(job__company = request.user.company).select_related()
@@ -352,7 +355,7 @@ def applicant(request):
 
 
 
-
+@admin_user_required
 def applicant_detail(request, id, job_id):
 
     try:
@@ -372,7 +375,7 @@ def applicant_detail(request, id, job_id):
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 
-
+@admin_user_required
 def company_info (request):
     company = get_object_or_404(Company, id=request.user.company.id)
     context = {
@@ -381,7 +384,7 @@ def company_info (request):
     return render(request , 'CompanyAdmin/company_info.html' , context)
 
 
-
+@admin_user_required
 def edit_company_info (request , id):
     company = Company.objects.get(id=id)
     form = CompanyForm(request.POST or None, request.FILES or None, instance=company)
