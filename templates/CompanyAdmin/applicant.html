@@ -91,22 +91,9 @@
                               btn-sm" type="button">{{app.get_status_display}}</button> </td>
                             <td>
                                
-                            <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-applicant-detail' app.user.id app.job.id %}"> <i class="fa fa-eye"></i> </a>
+                            <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-applicant-detail' app.user.id app.job.id app.id%}"> <i class="fa fa-eye"></i> </a>
                             
-                         <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-job-posting-detail' app.id %}"><i class="fa fa-pen"></i></a>
-                             
-                        </button>
-                        </button>
-                              <button 
-                              class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
-                              data-bs-toggle="modal" 
-                              data-bs-target="#deleteJobModal"
-                              data-bs-whatever="@mdo"
-                              data-id = {{app.id}}
-                              data-name = {{app.title}}
-                              >
-                              <i class="fa fa-trash"></i> 
-                            </button>
+                
                         </td>
                           </tr>
                           {% endfor %}

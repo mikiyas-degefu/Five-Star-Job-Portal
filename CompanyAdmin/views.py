@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm)
-from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill)
+from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill, Interviews)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
@@ -356,18 +356,43 @@ def applicant(request):
 
 
 @admin_user_required
-def applicant_detail(request, id, job_id):
-    form = ApplicationForm(request.POST or None)
-    interview_form = AdminInterviewForm(request.user.company)
+def applicant_detail(request, id, job_id, app_id):
+   
     try:
         user = CustomUser.objects.get(pk = id)   
         education = Education.objects.filter(candidate = user).select_related()
         experience = Experience.objects.filter(candidate = user).select_related()
         job = Job_Posting.objects.get(pk = job_id)
+        app = Application.objects.get(pk = app_id)
+        interview = Interviews.objects.filter(application = app).first()
+        form = ApplicationForm(request.POST or None, instance=app)
+
+        try:
+            interview_form = AdminInterviewForm(request.user.company, request.POST or None, instance=interview)
+        except:
+            interview_form = AdminInterviewForm(request.user.company, request.POST or None)
+
     except:
         return HttpResponse('You are not authorized to access this page!')
+    
+    if request.method == "POST":
+        if 'status' in request.POST:
+            if form.is_valid():
+                form.save()
+                messages.success(request, '&#128515 Hello User, Status successfully  updated')
+        if 'interviewer' in request.POST:
+            if interview_form.is_valid():
+                obj = interview_form.save(commit=False)
+                obj.application = app
+                obj.save()
 
 
+                obj2 = form.save(commit=False)
+                obj2.status = 'in_review'
+                obj2.save()
+
+                messages.success(request, '&#128515 Hello User, Status successfully  updated')
+                
     context = {
         'user' : user,
         'education' : education,

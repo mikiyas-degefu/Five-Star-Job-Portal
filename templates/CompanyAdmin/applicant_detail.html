@@ -32,7 +32,8 @@
         <div class="page-content">
             <div class="container-fluid">
               <div class="row justify-content-center">
-                <div class="col-11">
+                <div class="col-md-11">
+                  {% include 'CompanyAdmin/include/messages.html' %}   
                   <div class="card p-4">
                     <div class="card-body text-center">
                       <h4>{{user.first_name | capfirst}} {{user.last_name | capfirst}}'s Resume Applyed for Job "{{job}}" </h4>
@@ -40,9 +41,15 @@
                       <form method="post">
 
 
-                        {{form.as_p}}
-                        {{interview_form.as_p}}
-
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-md-6">
+                            {{form.as_p}}
+                          </div>
+                          <div class="col-md-6">
+                            {{interview_form.as_p}}
+                          </div>
+                        </div>
                        <div class="text-end">
                         <button type="submit" class="btn btn-primary">Submit</button>
                        </div>
@@ -55,7 +62,7 @@
 
                
 
-                <div class="col-3">
+                <div class="col-xl-3">
                   <div class="card p-4">
                     <div class="card-body text-center">
                       <div class="text-center pb-4 border-bottom">
@@ -119,7 +126,7 @@
                   </div>
                 </div>
 
-                <div class="col-8">
+                <div class="col-xl-8">
                   <div class="card p-4">
                     <div class="card-body  text-center">
 

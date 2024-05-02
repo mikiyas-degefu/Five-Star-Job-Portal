@@ -5,9 +5,7 @@
             <!-- LOGO -->
             <div class="navbar-brand-box text-center">
                 <a href="{% url 'company-admin-dashboard'%}" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img style="border-radius:50%" class="img-fluid mt-5"  src="{% static 'assets/images/logo/bag-logo-no-background.png' %}"  alt="logo-sm-light"> 
-                    </span>
+                    
                     <span class="logo-lg">
                          <img style="border-radius:50%" class="img-fluid mt-5"  src="/media/{{request.user.company.logo}}"  alt="logo-light"> 
                     </span>
@@ -19,7 +17,7 @@
                 <i class="ri-menu-2-line align-middle"></i>
             </button>
 
-                <h2 style="margin-top:50px" class="h3 text-info ">{{request.user.company}}</h2>
+                <h2 style="margin-top:50px" class="h3 text-info d-none d-lg-block  ">{{request.user.company}}</h2>
           
 
         </div>

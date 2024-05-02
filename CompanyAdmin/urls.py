@@ -16,7 +16,7 @@ urlpatterns = [
     path('job-posting-delete/<str:id>', views.job_delete, name='company-admin-job-posting-delete'),
 
     path('applicant/', views.applicant, name='company-admin-applicant'),
-    path('applicant/<str:id>/<str:job_id>', views.applicant_detail, name='company-admin-applicant-detail'),
+    path('applicant/<str:id>/<str:job_id>/<str:app_id>/', views.applicant_detail, name='company-admin-applicant-detail'),
 
 
 
