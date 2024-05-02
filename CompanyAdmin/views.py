@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from JobPortal.forms import (JobPostingCompanyAdminForm)
+from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm)
 from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
@@ -357,7 +357,8 @@ def applicant(request):
 
 @admin_user_required
 def applicant_detail(request, id, job_id):
-
+    form = ApplicationForm(request.POST or None)
+    interview_form = AdminInterviewForm(request.user.company)
     try:
         user = CustomUser.objects.get(pk = id)   
         education = Education.objects.filter(candidate = user).select_related()
@@ -371,7 +372,9 @@ def applicant_detail(request, id, job_id):
         'user' : user,
         'education' : education,
         'experience' : experience,
-        'job' : job
+        'job' : job,
+        'form' : form,
+        'interview_form' : interview_form
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 
