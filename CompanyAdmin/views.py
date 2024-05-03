@@ -316,7 +316,7 @@ def applicant(request):
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Application.objects.filter( job__company = request.user.company)
+        jobs = Application.objects.filter(job__company = request.user.company).filter(Q(user__first_name__contains=q) | Q(user__last_name__contains=q) | Q(user__phone__contains=q) | Q(user__email__contains=q) | Q(job__title__contains=q) | Q(date_applied__contains=q) | Q(status__contains=q)).select_related()
     
     paginator = Paginator(jobs, 30) 
     page_number = request.GET.get('page')
@@ -389,7 +389,8 @@ def applicant_detail(request, id, job_id, app_id):
                 if interview_form.cleaned_data['interviewer'] is not None:
                     obj2.status = 'in_review'  
                 else:
-                    obj2.status = 'pending'           
+                    obj2.status = 'pending' 
+
                 obj2.save()
                 obj.application = app
                 obj.save()
