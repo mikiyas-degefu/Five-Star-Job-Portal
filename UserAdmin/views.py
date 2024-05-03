@@ -5,7 +5,7 @@ from django.contrib import messages
 from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
-from JobPortal.models import (Sector, Skill , Job_Posting)
+from JobPortal.models import (Sector, Skill , Job_Posting, Application)
 from UserManagement.models import CustomUser
 from django.db.models import Q
 from UserManagement.decorators import (admin_super_user_required)
@@ -17,8 +17,16 @@ from django.contrib.auth import logout
 
 @admin_super_user_required
 def index(request):
+    total_users = CustomUser.objects.all().count()
+    total_companies = Company.objects.all().count()
+    total_jobs = Job_Posting.objects.all().count()
+    total_application = Application.objects.all().count()
     context = {
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'total_user' : total_users,
+        'total_companies' : total_companies,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'total_jobs' : total_jobs,
+        'total_application' : total_application
     }
     return render(request, 'UserAdmin/index.html', context=context)
 
