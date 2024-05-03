@@ -380,18 +380,22 @@ def applicant_detail(request, id, job_id, app_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, '&#128515 Hello User, Status successfully  updated')
+                
+
         if 'interviewer' in request.POST:
             if interview_form.is_valid():
                 obj = interview_form.save(commit=False)
+                obj2 = form.save(commit=False)
+                if interview_form.cleaned_data['interviewer'] is not None:
+                    obj2.status = 'in_review'  
+                else:
+                    obj2.status = 'pending'           
+                obj2.save()
                 obj.application = app
                 obj.save()
-
-
-                obj2 = form.save(commit=False)
-                obj2.status = 'in_review'
-                obj2.save()
-
-                messages.success(request, '&#128515 Hello User, Status successfully  updated')
+                messages.success(request, '&#128515 Hello User,  successfully  updated')
+                return redirect('company-admin-applicant')
+                
                 
     context = {
         'user' : user,
