@@ -34,11 +34,7 @@
                 <div class="table-responsive">
                     <table class="table table-sm table-hover caption-top ">
                       {% include 'CompanyAdmin/include/messages.html' %}                    
-                      <caption>Jobs</caption>
-                        <button class="btn btn-primary float-end" 
-                        data-bs-toggle="modal"
-                        data-bs-target="#AddJob"
-                        data-bs-whatever="@mdo">Post Job</button>
+                      <caption>Applicant</caption>
                       <div class="row">
 
                         <form>
@@ -61,6 +57,7 @@
                             <th scope="col">Email</th>
                             <th scope="col">For Job</th>
                             <th scope="col">Date of Applied</th>
+                            <th scope="col">Interviewer</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                           </tr>
@@ -76,6 +73,7 @@
                             <td>{{app.user.email}}</td>
                             <td>{{app.job}}</td>
                             <td>{{app.date_applied}}</td>
+                            <td> {% if app.interviews %} <span class="text-muted">{{app.interviews.interviewer.first_name}} {{app.interviews.interviewer.last_name}}</span> {% else %} <span class="text-danger">None</span>  {% endif%}</td>
                             <td> <button class="btn 
                               {% if app.status == 'pending' %} 
                                     btn-secondary  
@@ -86,9 +84,29 @@
                               {% elif app.status == 'hired' %} 
                                      btn-success 
                               {% endif %}
+
                               
                               
-                              btn-sm" type="button">{{app.get_status_display}}</button> </td>
+                              
+                              btn-sm" type="button">{{app.get_status_display}}</button> 
+                            
+                              <svg 
+                              class="
+                              {% if app.status == 'pending' %} 
+                                    text-secondary  
+                              {% elif app.status == 'rejected' %} 
+                                     text-danger 
+                              {% elif app.status == 'in_review' %} 
+                                     text-info 
+                              {% elif app.status == 'hired' %} 
+                                     text-success 
+                              {% endif %}
+                              "
+                              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                                <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                              </svg>
+                            
+                            </td>
                             <td>
                                
                             <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-applicant-detail' app.user.id app.job.id app.id%}"> <i class="fa fa-eye"></i> </a>

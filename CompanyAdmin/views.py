@@ -310,12 +310,13 @@ def job_detail(request, id):
 @admin_user_required
 def applicant(request):
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
-    jobs = Application.objects.filter(job__company = request.user.company).select_related()
+
+    jobs = Application.objects.filter( job__company = request.user.company).select_related()
     count = 30
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Application.objects.filter( job__company = request.user.company).select_related()
+        jobs = Application.objects.filter( job__company = request.user.company)
     
     paginator = Paginator(jobs, 30) 
     page_number = request.GET.get('page')

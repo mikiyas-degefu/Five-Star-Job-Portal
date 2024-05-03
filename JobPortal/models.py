@@ -254,7 +254,7 @@ interview_type = [
 ]
 
 class Interviews(models.Model):
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True)
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, null=True, blank=True)
     interviewer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)  # Related with User
     date_schedule = models.DateField(null=True, blank=True)
     time_schedule = models.TimeField(null=True, blank=True)
