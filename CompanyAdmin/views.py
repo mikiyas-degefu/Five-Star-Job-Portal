@@ -345,8 +345,7 @@ def applicant(request):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
             return redirect('company-admin-job-posting')
-    
-    
+
     context = {
         'applications' : page,
         'count' : count,
@@ -400,7 +399,7 @@ def applicant_detail(request, id, job_id, app_id):
         'experience' : experience,
         'job' : job,
         'form' : form,
-        'interview_form' : interview_form
+        'interview_form' : interview_form,
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 
