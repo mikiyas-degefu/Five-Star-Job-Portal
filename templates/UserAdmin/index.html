@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="mb-1">Total Applications</p>
-                                        <h2 class="mb-3">{{total_user}}</h2>
+                                        <h2 class="mb-3 Single1">{{total_user}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="mb-1">Total Companies</p>
-                                        <h2 class="mb-3">{{total_companies}}</h2>
+                                        <h2 class="mb-3 Single2">{{total_companies}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="mb-1">Total Jobs</p>
-                                        <h2 class="mb-3">{{total_jobs}}</h2>
+                                        <h2 class="mb-3 Single3">{{total_jobs}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="mb-1">Total Applications</p>
-                                        <h2 class="mb-3">{{total_application}}</h2>
+                                        <h2 class="mb-3 Single4">{{total_application}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -529,15 +529,34 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>02 Nov, 2019</td>
-                                                <td>$ 1,234</td>
-                                                <td>$ 1,234</td>
-                                                <td>02 Nov, 2019</td>
-                                                <td>$ 1,234</td>                                              
-                                            </tr>
+                                            {% for entry in auditlog_entries %}
+                            <tr>
+                                <td>{{ entry.timestamp }}</td>
+                                <td>
+                                    {% if entry.actor.get_full_name %}
+                                        {{ entry.actor.get_full_name }} ({{ entry.actor.username }})
+                                    {% else %}
+                                        System
+                                    {% endif %}
+                                </td>
+                                {% if entry.action == 0 %}
+                                    <td class="fw-bold text-success">Created</td>
+                                {% elif entry.action == 1 %}
+                                    <td class="fw-bold text-warning">Updated</td>
+                                {% elif entry.action == 2 %}
+                                    <td class="fw-bold text-danger">Deleted</td>
+                                {% else %}
+                                    <td class="fw-bold text-primary">Other</td>
+                                {% endif %}
+                                <td>{{ entry.object_repr }}</td>
+                                <td>{{ entry.content_type.name }}</td>
+                            </tr>
+                        {% endfor %}
 
                                         </tbody>
+                                       
+
+
                                     </table>
                                 </div>
                             </div>
@@ -557,6 +576,51 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script>
+    $({ Counter: 0 }).animate({
+        Counter: $('.Single1').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single1').text(Math.ceil(this.Counter));
+  }
+});
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single2').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single2').text(Math.ceil(this.Counter));
+  }
+});
+
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single3').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single3').text(Math.ceil(this.Counter));
+  }
+});
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single4').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single4').text(Math.ceil(this.Counter));
+  }
+});
+
+
+</script>
 <script>
     Highcharts.chart('container', {
     chart: {

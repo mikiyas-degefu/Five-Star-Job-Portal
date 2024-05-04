@@ -5,6 +5,7 @@ from unidecode import unidecode
 import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 from fontawesome_5.fields import IconField
+from auditlog.registry import auditlog
 
 # Create your models here.
 
@@ -120,6 +121,14 @@ class Contact_Message(models.Model):
     
     class Meta:
         ordering = ['-created_at'] #New's First
+
+
+
+
+auditlog.register(CompanyCatagory)
+auditlog.register(Blog_Categories)
+auditlog.register(Blog)
+auditlog.register(Social_Media)
 
 
 

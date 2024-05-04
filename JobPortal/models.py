@@ -6,6 +6,8 @@ from django.utils.text import slugify
 from unidecode import unidecode
 from Company.models import Company
 import datetime
+from auditlog.registry import auditlog
+
 #Candidate
 gender_list = [
     ('male', 'Male'),
@@ -276,5 +278,10 @@ class Interviews(models.Model):
 
 
 
+
+auditlog.register(Candidate)
+auditlog.register(Skill)
+auditlog.register(Sector)
+auditlog.register(Job_Posting)
     
 

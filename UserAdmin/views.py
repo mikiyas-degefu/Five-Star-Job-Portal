@@ -12,6 +12,7 @@ from UserManagement.decorators import (admin_super_user_required)
 from UserManagement.forms import (CustomUserEditFormAdmin, ChangePasswordForm)
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
+from auditlog.models import LogEntry
 # Create your views here.
 
 
@@ -21,12 +22,16 @@ def index(request):
     total_companies = Company.objects.all().count()
     total_jobs = Job_Posting.objects.all().count()
     total_application = Application.objects.all().count()
+    auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
+
+
     context = {
         'total_user' : total_users,
         'total_companies' : total_companies,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
         'total_jobs' : total_jobs,
-        'total_application' : total_application
+        'total_application' : total_application,
+        'auditlog_entries': auditlog_entries
     }
     return render(request, 'UserAdmin/index.html', context=context)
 
