@@ -177,7 +177,7 @@
                                 <div class="row">
 
                                     {% for company in company_views%}
-                                    <div class="col-4">
+                                    <div class="col-4 fadeIn">
                                         <div class="social-source text-center mt-3">
                                             <div class="avatar-xs mx-auto mb-3">
                                                 <span class="avatar-title rounded-circle bg-primary font-size-18">
@@ -455,6 +455,10 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
+    $(document).ready(function() {
+        $(".fadeIn").fadeIn(2000); // Fade in over 2 seconds
+      });
+
     $({ Counter: 0 }).animate({
         Counter: $('.Single1').text()
     }, {
