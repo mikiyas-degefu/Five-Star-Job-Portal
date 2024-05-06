@@ -146,6 +146,7 @@ class Sector(models.Model):
 
     def __str__(self) -> str:
         return self.name
+        
 
 
 job_type = [
@@ -193,7 +194,7 @@ class Job_Posting(models.Model):
         super().save(*args, **kwargs)
   
     class Meta:
-        ordering = ['-date_posted','-date_closed']
+        ordering = ['sector', '-date_posted','-date_closed']
 
     def count_applicant(self) -> int:
         applicant = Application.objects.filter(job__id = self.id).count()

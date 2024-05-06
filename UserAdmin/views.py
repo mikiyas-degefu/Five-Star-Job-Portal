@@ -13,6 +13,7 @@ from UserManagement.forms import (CustomUserEditFormAdmin, ChangePasswordForm)
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
 from auditlog.models import LogEntry
+from django.db.models import Count,Subquery,OuterRef, Func, F
 # Create your views here.
 
 
@@ -24,6 +25,11 @@ def index(request):
     total_application = Application.objects.all().count()
     auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
     company_views = Company.objects.filter().order_by('-views')[:3]
+    sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
+
+    
+    
+    
 
 
 
@@ -35,7 +41,8 @@ def index(request):
         'total_jobs' : total_jobs,
         'total_application' : total_application,
         'auditlog_entries': auditlog_entries,
-        'company_views' : company_views
+        'company_views' : company_views,
+        'sectors_with_job_counts' : sectors_with_job_counts
     }
     return render(request, 'UserAdmin/index.html', context=context)
 

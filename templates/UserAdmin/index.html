@@ -206,56 +206,7 @@
                                 </div>
                                 <div class="row">
 
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="mdi mdi-account-hard-hat"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Technology</h5>
-                                            <p class="text-muted mb-0">125 Jobs</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="mdi mdi-account-hard-hat"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Technology</h5>
-                                            <p class="text-muted mb-0">125 Jobs</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="mdi mdi-account-hard-hat"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Technology</h5>
-                                            <p class="text-muted mb-0">125 Jobs</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="mdi mdi-account-hard-hat"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Technology</h5>
-                                            <p class="text-muted mb-0">125 Jobs</p>
-                                        </div>
-                                    </div>
-
-
+                                    {% for sector in sectors_with_job_counts%}
                                     <div class="col-4">
                                         <div class="social-source text-center mt-3">
                                             <div class="avatar-xs mx-auto mb-3">
@@ -263,24 +214,12 @@
                                                     <i class="mdi mdi-account-hard-hat"></i>
                                                 </span>
                                             </div>
-                                            <h5 class="font-size-15">Account and Finance</h5>
-                                            <p class="text-muted mb-0">50 Jobs</p>
+                                            <h5 class="font-size-15">{{sector.name}}</h5>
+                                            <p class="text-muted mb-0">{{sector.job_posting_count}} Jobs</p>
                                         </div>
                                     </div>
 
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-danger font-size-18">
-                                                    <i class="mdi mdi-account-hard-hat"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Marketing</h5>
-                                            <p class="text-muted mb-0">47 Jobs</p>
-                                        </div>
-                                    </div>
-
+                                    {% endfor %}
 
                                 </div>
                             </div>
