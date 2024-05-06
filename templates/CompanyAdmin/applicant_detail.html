@@ -32,19 +32,18 @@
         <div class="page-content">
             <div class="container-fluid">
               <div class="row justify-content-center">
-                <div class="col-md-11">
-                  {% include 'CompanyAdmin/include/messages.html' %}   
+                <div class="col-11">
+                  {% include 'CompanyAdmin/include/messages.html' %}        
                   <div class="card p-4">
                     <div class="card-body text-center">
                       <h4>{{user.first_name | capfirst}} {{user.last_name | capfirst}}'s Resume Applyed for Job "{{job}}" </h4>
 
                       <form method="post">
-
-
                         {% csrf_token %}
                         <div class="row">
                           <div class="col-md-6">
-                            {{form.as_p}}
+
+                        {{form.as_p}}
                           </div>
                           <div class="col-md-6">
                             {{interview_form.as_p}}

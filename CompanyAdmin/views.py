@@ -310,12 +310,13 @@ def job_detail(request, id):
 @admin_user_required
 def applicant(request):
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
-    jobs = Application.objects.filter(job__company = request.user.company).select_related()
+
+    jobs = Application.objects.filter( job__company = request.user.company).select_related()
     count = 30
    
     if 'q' in request.GET:
         q = request.GET['q']
-        jobs = Application.objects.filter( job__company = request.user.company).select_related()
+        jobs = Application.objects.filter(job__company = request.user.company).filter(Q(user__first_name__contains=q) | Q(user__last_name__contains=q) | Q(user__phone__contains=q) | Q(user__email__contains=q) | Q(job__title__contains=q) | Q(date_applied__contains=q) | Q(status__contains=q)).select_related()
     
     paginator = Paginator(jobs, 30) 
     page_number = request.GET.get('page')
@@ -344,8 +345,7 @@ def applicant(request):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
             return redirect('company-admin-job-posting')
-    
-    
+
     context = {
         'applications' : page,
         'count' : count,
@@ -380,18 +380,23 @@ def applicant_detail(request, id, job_id, app_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, '&#128515 Hello User, Status successfully  updated')
+                
+
         if 'interviewer' in request.POST:
             if interview_form.is_valid():
                 obj = interview_form.save(commit=False)
+                obj2 = form.save(commit=False)
+                if interview_form.cleaned_data['interviewer'] is not None:
+                    obj2.status = 'in_review'  
+                else:
+                    obj2.status = 'pending' 
+
+                obj2.save()
                 obj.application = app
                 obj.save()
-
-
-                obj2 = form.save(commit=False)
-                obj2.status = 'in_review'
-                obj2.save()
-
-                messages.success(request, '&#128515 Hello User, Status successfully  updated')
+                messages.success(request, '&#128515 Hello User,  successfully  updated')
+                return redirect('company-admin-applicant')
+                
                 
     context = {
         'user' : user,
@@ -399,7 +404,7 @@ def applicant_detail(request, id, job_id, app_id):
         'experience' : experience,
         'job' : job,
         'form' : form,
-        'interview_form' : interview_form
+        'interview_form' : interview_form,
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 

@@ -12,8 +12,7 @@
 
                 <li>
                     <a href="{% url 'admin-dashboard' %}" class="waves-effect">
-                        <i class="mdi mdi-home-variant-outline"></i><span
-                            class="badge rounded-pill bg-primary float-end">3</span>
+                        <i class="mdi mdi-home-variant-outline"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
@@ -68,6 +67,8 @@
 
                         <li><a href="{% url 'admin-contact-message'%}">Contact Messages <span
                             class="badge rounded-pill bg-primary float-end">{{count_messages}}</span></a></li>
+
+                        <li><a href="{% url 'admin-audit'%}">Audit</a></li>
                     </ul>
                 </li>
             </ul>

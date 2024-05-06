@@ -5,20 +5,65 @@ from django.contrib import messages
 from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
-from JobPortal.models import (Sector, Skill , Job_Posting)
+from JobPortal.models import (Sector, Skill , Job_Posting, Application)
 from UserManagement.models import CustomUser
 from django.db.models import Q
 from UserManagement.decorators import (admin_super_user_required)
 from UserManagement.forms import (CustomUserEditFormAdmin, ChangePasswordForm)
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
+from auditlog.models import LogEntry
+from django.db.models import Count,Subquery,OuterRef, Func, F
 # Create your views here.
 
 
 @admin_super_user_required
 def index(request):
+    total_users = CustomUser.objects.all().count()
+    total_companies = Company.objects.all().count()
+    total_jobs = Job_Posting.objects.all().count()
+    total_application = Application.objects.all().count()
+    auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
+    company_views = Company.objects.filter().order_by('-views')[:3]
+
+    sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
+    
+    contact_messages = Contact_Message.objects.all()[:5]
+    blogs = Blog.objects.all()[:5]
+    job_posting = Job_Posting.objects.all()[:10]
+    companies = Company.objects.all()[:10]
+
+    companies_with_job_count = Company.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
+
+
+
+    companies_graph_name = []
+    companies_graph_jobs = []
+    companies_graph_views = []
+
+    for i in companies_with_job_count:
+        companies_graph_name.append(i.name)
+        companies_graph_jobs.append(i.job_posting_count)
+        companies_graph_views.append(i.views)
+
+
+
     context = {
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'total_user' : total_users,
+        'total_companies' : total_companies,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'total_jobs' : total_jobs,
+        'total_application' : total_application,
+        'auditlog_entries': auditlog_entries,
+        'company_views' : company_views,
+        'sectors_with_job_counts' : sectors_with_job_counts,
+        'contact_messages' : contact_messages,
+        'blogs' : blogs,
+        'job_posting':job_posting,
+        'companies' : companies,
+        'companies_graph_name' : companies_graph_name,
+        'companies_graph_jobs': companies_graph_jobs,
+        'companies_graph_views' : companies_graph_views,
     }
     return render(request, 'UserAdmin/index.html', context=context)
 
@@ -687,3 +732,36 @@ def contact_messages_detail(request, id):
     }
     return render(request, 'UserAdmin/contact_messages.html', context=context)
     
+
+@admin_super_user_required
+def audit(request):
+    log = LogEntry.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        log = LogEntry.objects.filter()
+    
+    paginator = Paginator(log, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+    
+
+    
+    context = {
+        'auditlog_entries' : page,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/log.html', context=context)

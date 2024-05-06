@@ -6,6 +6,8 @@ from django.utils.text import slugify
 from unidecode import unidecode
 from Company.models import Company
 import datetime
+from auditlog.registry import auditlog
+
 #Candidate
 gender_list = [
     ('male', 'Male'),
@@ -144,6 +146,7 @@ class Sector(models.Model):
 
     def __str__(self) -> str:
         return self.name
+        
 
 
 job_type = [
@@ -191,7 +194,7 @@ class Job_Posting(models.Model):
         super().save(*args, **kwargs)
   
     class Meta:
-        ordering = ['-date_posted','-date_closed']
+        ordering = ['sector', '-date_posted','-date_closed']
 
     def count_applicant(self) -> int:
         applicant = Application.objects.filter(job__id = self.id).count()
@@ -207,6 +210,9 @@ class Job_Posting(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    class Meta:
+        ordering = ['-date_posted']
 
 application_status = [
     ('pending', 'Pending'),
@@ -254,7 +260,7 @@ interview_type = [
 ]
 
 class Interviews(models.Model):
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True)
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, null=True, blank=True)
     interviewer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)  # Related with User
     date_schedule = models.DateField(null=True, blank=True)
     time_schedule = models.TimeField(null=True, blank=True)
@@ -276,5 +282,10 @@ class Interviews(models.Model):
 
 
 
+
+auditlog.register(Candidate)
+auditlog.register(Skill)
+auditlog.register(Sector)
+auditlog.register(Job_Posting)
     
 

@@ -417,7 +417,7 @@ class AdminInterviewForm(forms.ModelForm):
 
     def __init__(self, company, *args, **kwargs):
         super(AdminInterviewForm, self).__init__(*args, **kwargs)
-        self.fields['interviewer'] = forms.ModelChoiceField(queryset=CustomUser.objects.filter(company = company, is_interviewer = True), widget=forms.Select(attrs={'class' : 'form-select'}))
+        self.fields['interviewer'] = forms.ModelChoiceField(required=False ,queryset=CustomUser.objects.filter(company = company, is_interviewer = True), widget=forms.Select(attrs={'class' : 'form-select'}))
 
     class Meta:
         model = Interviews
