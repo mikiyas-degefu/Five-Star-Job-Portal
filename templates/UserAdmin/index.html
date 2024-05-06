@@ -504,30 +504,15 @@ $({ Counter: 0 }).animate({
         type: 'column'
     },
     title: {
-        text: 'Corn vs wheat estimated production for 2020',
-        align: 'left'
-    },
-    subtitle: {
-        text:
-            'Source: <a target="_blank" ' +
-            'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+        text: 'Number of Jobs vs Views of companies',
         align: 'left'
     },
     xAxis: {
-        categories: ['USA', 'China', 'Brazil', 'EU', 'India', 'Russia'],
+        categories: {{companies_graph_name | safe }},
         crosshair: true,
         accessibility: {
             description: 'Countries'
         }
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: '1000 metric tons (MT)'
-        }
-    },
-    tooltip: {
-        valueSuffix: ' (1000 MT)'
     },
     plotOptions: {
         column: {
@@ -537,12 +522,12 @@ $({ Counter: 0 }).animate({
     },
     series: [
         {
-            name: 'Corn',
-            data: [406292, 260000, 107000, 68300, 27500, 14500]
+            name: "Job's",
+            data: {{companies_graph_jobs | safe}}
         },
         {
-            name: 'Wheat',
-            data: [51086, 136000, 5500, 141000, 107180, 77000]
+            name: 'Views',
+            data: {{companies_graph_views | safe }}
         }
     ]
 });

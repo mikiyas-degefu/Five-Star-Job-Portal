@@ -25,15 +25,26 @@ def index(request):
     total_application = Application.objects.all().count()
     auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
     company_views = Company.objects.filter().order_by('-views')[:3]
+
     sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
+    
     contact_messages = Contact_Message.objects.all()[:5]
     blogs = Blog.objects.all()[:5]
     job_posting = Job_Posting.objects.all()[:10]
     companies = Company.objects.all()[:10]
-    
-    
-    
 
+    companies_with_job_count = Company.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
+
+
+
+    companies_graph_name = []
+    companies_graph_jobs = []
+    companies_graph_views = []
+
+    for i in companies_with_job_count:
+        companies_graph_name.append(i.name)
+        companies_graph_jobs.append(i.job_posting_count)
+        companies_graph_views.append(i.views)
 
 
 
@@ -49,7 +60,10 @@ def index(request):
         'contact_messages' : contact_messages,
         'blogs' : blogs,
         'job_posting':job_posting,
-        'companies' : companies
+        'companies' : companies,
+        'companies_graph_name' : companies_graph_name,
+        'companies_graph_jobs': companies_graph_jobs,
+        'companies_graph_views' : companies_graph_views,
     }
     return render(request, 'UserAdmin/index.html', context=context)
 
