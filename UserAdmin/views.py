@@ -26,7 +26,10 @@ def index(request):
     auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
     company_views = Company.objects.filter().order_by('-views')[:3]
     sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting')).order_by('-job_posting_count')[:6]
-
+    contact_messages = Contact_Message.objects.all()[:5]
+    blogs = Blog.objects.all()[:5]
+    job_posting = Job_Posting.objects.all()[:10]
+    companies = Company.objects.all()[:10]
     
     
     
@@ -42,7 +45,11 @@ def index(request):
         'total_application' : total_application,
         'auditlog_entries': auditlog_entries,
         'company_views' : company_views,
-        'sectors_with_job_counts' : sectors_with_job_counts
+        'sectors_with_job_counts' : sectors_with_job_counts,
+        'contact_messages' : contact_messages,
+        'blogs' : blogs,
+        'job_posting':job_posting,
+        'companies' : companies
     }
     return render(request, 'UserAdmin/index.html', context=context)
 

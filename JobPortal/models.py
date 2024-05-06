@@ -210,6 +210,9 @@ class Job_Posting(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    class Meta:
+        ordering = ['-date_posted']
 
 application_status = [
     ('pending', 'Pending'),

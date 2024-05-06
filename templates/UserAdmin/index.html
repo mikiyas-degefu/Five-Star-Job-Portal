@@ -238,104 +238,29 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Contact Messages</h4>
+                                <h4 class="card-title">Recent Messages</h4>
 
                                 <div class="pe-3" data-simplebar style="max-height: 287px;">
-                                    <a href="#" class="text-body d-block">
+
+                                    {% for msg in contact_messages %}
+                                    <a href="{% url 'admin-contact-message-detail' msg.id%}" class="text-body  d-block">
                                         <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-2.jpg">
-                                            </div>
+                                            
 
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Scott Elliott</h5>
+                                                <h5 class="font-size-14 mb-1 text-primary">{{ forloop.counter }} {{msg.name}}</h5>
                                                 <p class="text-truncate mb-0">
-                                                    If several languages coalesce
+                                                   {{msg.subject}}
                                                 </p>
                                             </div>
                                             <div class="flex-shrink-0 font-size-13">
-                                                20 min ago
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <div class="avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  rounded-circle text-primary">
-                                                        <i class="mdi mdi-account-supervisor"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Team A</h5>
-                                                <p class="text-truncate mb-0">
-                                                    Team A Meeting 9:15 AM
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                9:00 am
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-3.jpg">
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Frank Martin</h5>
-                                                <p class="text-truncate mb-0">
-                                                    Neque porro quisquam est
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                8:54 am
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <div class="avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  rounded-circle text-primary">
-                                                        <i class="mdi mdi-email-outline"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Updates</h5>
-                                                <p class="text-truncate mb-0">
-                                                    It will be as simple as fact
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                27-03-2020
+                                                {{msg.created_at | timesince}} ago
                                             </div>
                                         </div>
                                     </a>
 
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-4.jpg">
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Terry Garrick</h5>
-                                                <p class="text-truncate mb-0">
-                                                    At vero eos et accusamus et
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                27-03-2020
-                                            </div>
-                                        </div>
-                                    </a>
+                                    {% endfor %}
+
 
                                 </div>
                             </div>
@@ -352,101 +277,24 @@
                                 <h4 class="card-title">Latest Blogs</h4>
 
                                 <div class="pe-3" data-simplebar style="max-height: 287px;">
-                                    <a href="#" class="text-body d-block">
+                                    {% for blog in blogs %}
+                                    
+                                    <a href="{% url 'user-admin-blog-detail' blog.id %}" class="text-body d-block">
                                         <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-2.jpg">
-                                            </div>
-
+                                        
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Scott Elliott</h5>
+                                                <h5 class="font-size-14 mb-1"> {{ forloop.counter }}  {{blog.title}}</h5>
                                                 <p class="text-truncate mb-0">
-                                                    If several languages coalesce
+                                                   {{blog.description}}
                                                 </p>
                                             </div>
                                             <div class="flex-shrink-0 font-size-13">
-                                                20 min ago
+                                                {{blog.created_at | timesince}} ago
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <div class="avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  rounded-circle text-primary">
-                                                        <i class="mdi mdi-account-supervisor"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Team A</h5>
-                                                <p class="text-truncate mb-0">
-                                                    Team A Meeting 9:15 AM
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                9:00 am
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-3.jpg">
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Frank Martin</h5>
-                                                <p class="text-truncate mb-0">
-                                                    Neque porro quisquam est
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                8:54 am
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <div class="avatar-xs">
-                                                    <span
-                                                        class="avatar-title bg-primary-subtle  rounded-circle text-primary">
-                                                        <i class="mdi mdi-email-outline"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Updates</h5>
-                                                <p class="text-truncate mb-0">
-                                                    It will be as simple as fact
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                27-03-2020
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="text-body d-block">
-                                        <div class="d-flex py-3">
-                                            <div class="flex-shrink-0 me-3 align-self-center">
-                                                <img class="rounded-circle avatar-xs" alt=""
-                                                    src="assets/images/users/avatar-4.jpg">
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-14 mb-1">Terry Garrick</h5>
-                                                <p class="text-truncate mb-0">
-                                                    At vero eos et accusamus et
-                                                </p>
-                                            </div>
-                                            <div class="flex-shrink-0 font-size-13">
-                                                27-03-2020
-                                            </div>
-                                        </div>
-                                    </a>
+                                    {% endfor %}
+                     
 
                                 </div>
                             </div>
@@ -470,6 +318,7 @@
                                     <table class="table table-centered table-nowrap mb-0">
                                         <thead>
                                             <tr>
+                                                <th scope="col">#</th>
                                                 <th scope="col">Timestamp</th>
                                                 <th scope="col">User</th>
                                                 <th scope="col">Action</th>
@@ -480,6 +329,7 @@
                                         <tbody>
                                             {% for entry in auditlog_entries %}
                             <tr>
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{ entry.timestamp }}</td>
                                 <td>
                                     {% if entry.actor.get_full_name %}
@@ -524,35 +374,21 @@
                                     <table class="table table-centered table-nowrap mb-0">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Timestamp</th>
-                                                <th scope="col">User</th>
-                                                <th scope="col">Action</th>
-                                                <th scope="col">Object</th>
-                                                <th scope="col">Database</th>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Company</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Sector</th>
+                                                <th scope="col">Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for entry in auditlog_entries %}
+                                            {% for job in job_posting %}
                             <tr>
-                                <td>{{ entry.timestamp }}</td>
-                                <td>
-                                    {% if entry.actor.get_full_name %}
-                                        {{ entry.actor.get_full_name }} ({{ entry.actor.username }})
-                                    {% else %}
-                                        System
-                                    {% endif %}
-                                </td>
-                                {% if entry.action == 0 %}
-                                    <td class="fw-bold text-success">Created</td>
-                                {% elif entry.action == 1 %}
-                                    <td class="fw-bold text-warning">Updated</td>
-                                {% elif entry.action == 2 %}
-                                    <td class="fw-bold text-danger">Deleted</td>
-                                {% else %}
-                                    <td class="fw-bold text-primary">Other</td>
-                                {% endif %}
-                                <td>{{ entry.object_repr }}</td>
-                                <td>{{ entry.content_type.name }}</td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ job.company }}</td>
+                                <td>{{job.title}}</td>
+                                <td>{{ job.sector }}</td>
+                                <td>{{ job.date_posted | timesince}}</td>
                             </tr>
                         {% endfor %}
 
@@ -572,41 +408,23 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-4">New Companies</h4>
+                                <h4 class="card-title mb-4">Latest Companies</h4>
 
                                 <div class="table-responsive">
                                     <table class="table table-centered table-nowrap mb-0">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Timestamp</th>
-                                                <th scope="col">User</th>
-                                                <th scope="col">Action</th>
-                                                <th scope="col">Object</th>
-                                                <th scope="col">Database</th>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Logo</th>
+                                                <th scope="col">name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for entry in auditlog_entries %}
+                                            {% for company in companies %}
                             <tr>
-                                <td>{{ entry.timestamp }}</td>
-                                <td>
-                                    {% if entry.actor.get_full_name %}
-                                        {{ entry.actor.get_full_name }} ({{ entry.actor.username }})
-                                    {% else %}
-                                        System
-                                    {% endif %}
-                                </td>
-                                {% if entry.action == 0 %}
-                                    <td class="fw-bold text-success">Created</td>
-                                {% elif entry.action == 1 %}
-                                    <td class="fw-bold text-warning">Updated</td>
-                                {% elif entry.action == 2 %}
-                                    <td class="fw-bold text-danger">Deleted</td>
-                                {% else %}
-                                    <td class="fw-bold text-primary">Other</td>
-                                {% endif %}
-                                <td>{{ entry.object_repr }}</td>
-                                <td>{{ entry.content_type.name }}</td>
+                                <td>{{ forloop.counter }}</td>
+                                <td><img src="/media/{{company.logo}}" class="img-fluid" style="height: 20px; width: 20px;" alt=""></td>
+                                <td>{{company.name}}</td>
                             </tr>
                         {% endfor %}
 
@@ -622,6 +440,8 @@
                         <!-- end card -->
                     </div>
                     <!-- end col -->
+
+
                 </div>
                 <!-- end row -->
             </div>

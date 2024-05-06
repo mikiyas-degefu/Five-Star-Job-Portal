@@ -31,9 +31,13 @@ class Company(models.Model):
     total_jobs = models.IntegerField(default=0)
     location = models.CharField(max_length=100) 
     website = models.URLField(max_length=200,null=True , blank=True)
+    date_created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ['-date_created']
 
     
     
