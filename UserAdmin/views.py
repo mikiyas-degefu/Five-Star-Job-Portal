@@ -23,6 +23,9 @@ def index(request):
     total_jobs = Job_Posting.objects.all().count()
     total_application = Application.objects.all().count()
     auditlog_entries = LogEntry.objects.select_related('content_type', 'actor')[:10]
+    company_views = Company.objects.filter().order_by('-views')[:3]
+
+
 
 
     context = {
@@ -31,7 +34,8 @@ def index(request):
         'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
         'total_jobs' : total_jobs,
         'total_application' : total_application,
-        'auditlog_entries': auditlog_entries
+        'auditlog_entries': auditlog_entries,
+        'company_views' : company_views
     }
     return render(request, 'UserAdmin/index.html', context=context)
 

@@ -176,45 +176,19 @@
                                 </div>
                                 <div class="row">
 
-
+                                    {% for company in company_views%}
                                     <div class="col-4">
                                         <div class="social-source text-center mt-3">
                                             <div class="avatar-xs mx-auto mb-3">
                                                 <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="ri  ri-facebook-circle-fill text-white"></i>
+                                                    <img  class="img-fluid" src="/media/{{company.logo}}" alt="">
                                                 </span>
                                             </div>
-                                            <h5 class="font-size-15">MoPD</h5>
-                                            <p class="text-muted mb-0">125 Views</p>
+                                            <h5 class="font-size-15">{{company.name}}</h5>
+                                            <p class="text-muted mb-0">{{company.views}} Views</p>
                                         </div>
                                     </div>
-
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-info font-size-18">
-                                                    <i class="ri  ri-twitter-fill text-white"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">ACT</h5>
-                                            <p class="text-muted mb-0">50 Views</p>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-danger font-size-18">
-                                                    <i class="ri ri-instagram-line text-white"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">MMCY</h5>
-                                            <p class="text-muted mb-0">47 Views</p>
-                                        </div>
-                                    </div>
-
+                                    {% endfor %}
 
                                 </div>
                             </div>

@@ -228,6 +228,10 @@ def job_sector_categories(request, slug):
 
 def job_detail(request, slug):
     job = Job_Posting.objects.get(slug=slug)
+    company = job.company
+    company.views = company.views + 1
+    company.save()
+    
     company_info = Contact.objects.all().first()
     social_media = Social_Media.objects.all().first()
 
