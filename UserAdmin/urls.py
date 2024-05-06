@@ -43,4 +43,6 @@ urlpatterns = [
     path('contact-messages/', views.contact_messages, name="admin-contact-message"),
     path('contact-messages/<str:id>/', views.contact_messages_detail, name="admin-contact-message-detail"),
 
+    path('log/', views.audit, name="admin-audit"),
+
    ]

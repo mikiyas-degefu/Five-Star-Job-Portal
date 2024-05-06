@@ -1,0 +1,254 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'UserAdmin/include/head.html' %}
+{{ form.media }}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'UserAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'UserAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'UserAdmin/include/messages.html' %}                    
+                      <caption>Audit's</caption>
+                        
+                        <thead  class="table-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Timestamp</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Object</th>
+                            <th scope="col">Database</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if auditlog_entries %}
+                            {% for entry in auditlog_entries %}
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ entry.timestamp }}</td>
+                            <td>
+                                {% if entry.actor.get_full_name %}
+                                    {{ entry.actor.get_full_name }} ({{ entry.actor.username }})
+                                {% else %}
+                                    System
+                                {% endif %}
+                            </td>
+                            {% if entry.action == 0 %}
+                                <td class="fw-bold text-success">Created</td>
+                            {% elif entry.action == 1 %}
+                                <td class="fw-bold text-warning">Updated</td>
+                            {% elif entry.action == 2 %}
+                                <td class="fw-bold text-danger">Deleted</td>
+                            {% else %}
+                                <td class="fw-bold text-primary">Other</td>
+                            {% endif %}
+                            <td>{{ entry.object_repr }}</td>
+                            <td>{{ entry.content_type.name }}</td>
+                        </tr>
+                          {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+
+
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+              {% if auditlog_entries.has_previous %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ auditlog_entries.previous_page_number }}">Previous</a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                </li>
+              {% endif %}
+          
+              {% if auditlog_entries.number|add:'-4' > 1 %}
+                <li class="page-item"><a class="page-link" href="?page={{ auditlog_entries.number|add:'-5' }}">&hellip;</a></li>
+              {% endif %}
+          
+              {% for i in auditlog_entries.paginator.page_range %}
+                {% if auditlog_entries.number == i %}
+                  <li class="page-item active" aria-current="page">
+                  <span class="page-link">
+                  {{ i }}
+                  <span class="sr-only">(current)</span>
+                  </span>
+                </li>
+                {% elif i > auditlog_entries.number|add:'-5' and i < auditlog_entries.number|add:'5' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+              {% endfor %}
+          
+              {% if auditlog_entries.paginator.num_pages > auditlog_entries.number|add:'4' %}
+                 <li class="page-item"><a class="page-link" href="?page={{ auditlog_entries.number|add:'5' }}">&hellip;</a></li>
+              {% endif %}
+          
+              {% if auditlog_entries.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ auditlog_entries.next_page_number }}">Next</a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                </li>
+              {% endif %}
+              </ul>
+            </nav>
+
+                     
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'UserAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+
+
+<script>
+$(document).ready(function(){
+
+     // Function to show toast messages
+     showToast = (title, body, cssClass)=> {
+      $.toast({
+              heading: title,
+              text: body,
+              showHideTransition: 'slide',
+              icon: cssClass,
+              position: 'top-right',
+              })
+        }
+
+    //Event handler that handle button on Click
+    $(".btn-edit").on('click', function(){
+          const buttonData = $(this).data()
+          //Open Modal
+          handleEditModalSector(buttonData.name, buttonData.id)
+    });
+
+
+    handleEditModalSector = (name, id)=>{
+      $('#id_name').val(name)
+      $('#id_id').val(id)
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteSocialMediaAnchor").attr("href", `/user-admin/social-media-delete/${buttonData.id}`)
+          $("#deleteMessageSocialMedia").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+        })
+
+
+      
+
+
+    
+         // Edit Data Detail 
+
+
+      $('#editSectorForm').on('submit', function(e){
+        e.preventDefault()
+        let id = $('#id_id').val()
+        let name = $('#id_name').val()
+
+       
+
+
+        $.ajax({
+          type: 'POST',
+          url : '{% url "user-admin-update-sector" %}',
+          data: {
+              'id' : id,
+              'name' : name,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            beforeSend: function() {
+              $('#saveSector').hide()
+               $("#btnLoadding").show();
+             },
+             // hides the loader after completion of request, whether successfull or failor.             
+             complete: function() {
+              //Show save button finished 
+               $('#saveSector').show()
+               $("#btnLoadding").hide();
+             },
+          success: function(response){
+            if(response.success){
+
+              //show succuss message
+              showToast('&#128515 Hello, User', 'Successfully Updated', 'success' )
+              $('#EditSector').modal('hide'); //Hide Modal
+              let htmlName = $('#sector'+id)
+              let buttonHtml = $('#sectorButton_'+id) 
+              //Update Table Value
+              htmlName.text(name)
+
+              //update Button Value
+              buttonHtml.data("name", name)
+
+
+
+            }else{
+               //show succuss message
+               showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
+            }
+          },
+          error: function(){
+            //show succuss message
+            showToast('&#128532 Hello User', 'Failed to update Sector.', 'error' )
+          }
+        })
+      })
+
+    })
+
+</script>
+
+</body>
+</html>
