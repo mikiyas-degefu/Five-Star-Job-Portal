@@ -1,7 +1,7 @@
 import telebot, os
 from import_export import resources
 from Company.models import Company
-from .models import (Sector, Job_Posting, Skill)
+from .models import (Sector, Job_Posting, Skill, Application)
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget  # For foreignkey
@@ -78,6 +78,24 @@ class JobResource(resources.ModelResource):
         )
     class Meta:
         model = Job_Posting
+        exclude = ('id', 'slug')
+
+
+class ApplicationResource(resources.ModelResource):
+    user = fields.Field(
+        column_name='user',
+        attribute='user',
+        widget=ForeignKeyWidget(CustomUser, field='first_name'),
+        saves_null_values = True,
+        )
+    job = fields.Field(
+        column_name='job',
+        attribute='job',
+        widget=ForeignKeyWidget(Job_Posting, field='title'),
+        saves_null_values = True,
+        )
+    class Meta:
+        model = Application
         exclude = ('id', 'slug')
 
 

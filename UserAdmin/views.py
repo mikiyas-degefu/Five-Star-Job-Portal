@@ -855,7 +855,7 @@ def export_skill(request):
     return response
 
 
-
+@admin_super_user_required
 def export_superusers(request):
     active_year = CustomUser.objects.filter(is_superuser = True)
     annual = UserResource()
@@ -864,6 +864,7 @@ def export_superusers(request):
     response['Content-Disposition'] = 'attachment; filename="superusers.csv"'
     return response
 
+@admin_super_user_required
 def export_company_admin(request):
     active_year = CustomUser.objects.filter(is_admin = True)
     annual = UserResource()
@@ -872,7 +873,7 @@ def export_company_admin(request):
     response['Content-Disposition'] = 'attachment; filename="admins.csv"'
     return response
 
-
+@admin_super_user_required
 def export_candidates(request):
     active_year = CustomUser.objects.filter(is_candidate = True)
     annual = UserResource()

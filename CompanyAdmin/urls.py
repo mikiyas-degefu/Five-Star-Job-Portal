@@ -18,8 +18,12 @@ urlpatterns = [
     path('applicant/', views.applicant, name='company-admin-applicant'),
     path('applicant/<str:id>/<str:job_id>/<str:app_id>/', views.applicant_detail, name='company-admin-applicant-detail'),
 
-
-
     path('company_info/', views.company_info, name='company_info'),
     path('edit_company_info/<str:id>', views.edit_company_info, name='edit_company_info'),
+
+
+    path('job-download/', views.export_job, name='company-export-job'),
+    path('application-download/', views.export_application, name='company-export-application'),
+    path('admin-download/', views.export_admins, name='company-export-admin'),
+    path('interviewer-download/', views.export_interviewers, name='company-export-interviewers'),
 ]
