@@ -14,6 +14,9 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
 from auditlog.models import LogEntry
 from django.db.models import Count
+import threading
+from JobPortal.resource import handle_telegram_post
+from bs4 import BeautifulSoup
 # Create your views here.
 
 
@@ -259,6 +262,30 @@ def job_posting(request):
             obj = form.save(commit=False)
             obj.save()
             form.save_m2m()
+
+            slug = obj.slug
+            title = obj.title
+            sector = obj.sector
+            description = BeautifulSoup(obj.description, 'html.parser').text
+            experience = obj.experience
+            vacancies = obj.vacancies
+            location = obj.location 
+            salary_range_start = obj.salary_range_start
+            salary_range_final  = obj.salary_range_final
+            type = obj.type
+            date_closed = obj.date_closed
+            skills = obj.skills.all()
+            skill_names = [str(skill) for skill in skills]
+            skills = ', '.join(skill_names)
+
+            if obj.job_status:
+                stop_event = threading.Event()
+                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,request.user.company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
+                background_thread.start()
+                stop_event.set()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
+
+
             messages.success(request, '&#128515 Hello User, Successfully Updated')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
@@ -299,6 +326,30 @@ def job_detail(request, id):
             obj = form.save(commit=False)
             obj.save()
             form.save_m2m()
+
+            slug = obj.slug
+            title = obj.title
+            sector = obj.sector
+            description = BeautifulSoup(obj.description, 'html.parser').text
+            experience = obj.experience
+            vacancies = obj.vacancies
+            location = obj.location 
+            salary_range_start = obj.salary_range_start
+            salary_range_final  = obj.salary_range_final
+            type = obj.type
+            date_closed = obj.date_closed
+            skills = obj.skills.all()
+            skill_names = [str(skill) for skill in skills]
+            skills = ', '.join(skill_names)
+
+            if obj.job_status:
+                stop_event = threading.Event()
+                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,request.user.company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
+                background_thread.start()
+                stop_event.set()
+            messages.success(request, '&#128515 Hello User, Successfully Updated')
+
+
             messages.success(request, '&#128515 Hello User, Successfully Updated')
             return redirect('user-admin-job-posting')
         else:
