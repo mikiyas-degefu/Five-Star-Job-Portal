@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm)
-from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill, Interviews)
+from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Sector, Interviews)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
 from Company.models import Contact_Message , Company
 from Company.forms import CompanyForm
 from UserManagement.models import CustomUser 
+from django.db.models import Count, Subquery
 from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormCompanyAdmin , CompanyAdmin , CustomUserEditFormAdmin , ChangePasswordForm
 from UserManagement.decorators import (admin_user_required)
 # Create your views here.
@@ -18,11 +19,17 @@ def index(request):
     total_views = request.user.company.views
     total_jobs = Job_Posting.objects.filter(company = request.user.company).count()
     total_applicant = Application.objects.filter(job__company = request.user.company).count()
+    sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting', filter=Q(job_posting__company=request.user.company))).order_by('-job_posting_count').values_list('name', 'job_posting_count')[:15]
+    sectors_with_job_counts_lists = [list(ele) for ele in sectors_with_job_counts]
+
+
+
     context = {
         'total_users' : total_users,
         'total_views' : total_views,
         'total_jobs' : total_jobs,
-        'total_applicant' : total_applicant
+        'total_applicant' : total_applicant,
+        'sectors_with_job_counts_lists' : sectors_with_job_counts_lists
     }
     return render(request, 'CompanyAdmin/index.html', context=context)
 
