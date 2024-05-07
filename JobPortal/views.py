@@ -174,10 +174,22 @@ def index(request):
     except: application = None
     try: count_skill = candidate.skill.all()
     except: count_skill = 0
-    print(count_skill)
     sector = Sector.objects.all()
     sector_popular = Sector.objects.all()[0:12]
-    job = Job_Posting.objects.filter(job_status = True)[0:5]
+    job = None
+    user = request.user
+    if request.user :
+        try:
+            candidate = Candidate.objects.get(user=request.user)
+            ser_skills = candidate.skill.all()
+            job = Job_Posting.objects.filter(job_status=True, skills__in=ser_skills).distinct()[0:5]
+           
+        except:
+            job = Job_Posting.objects.filter(job_status = True)[0:5]  
+           
+       
+    else :
+       job = Job_Posting.objects.filter(job_status = True)[0:5]
     job_number = Job_Posting.objects.filter(job_status = True)
     company = Company.objects.all()
     
@@ -221,7 +233,7 @@ def job_list(request):
     if 'q' in request.GET:
         q = request.GET['q']
         job = Job_Posting.objects.filter( job_status= True).filter(Q(title=q) | Q(sector__name=q) | Q(company__name=q))
-        print(list(job))
+       
 
     paginator = Paginator(job,5)
     page_number = request.GET.get('page')
@@ -441,7 +453,6 @@ def detail_user_education(request, slug):
     return render(request, 'RMS/user/dashboard-education-detail.html', context)
 
 
-
 #Experience 
 @login_required
 def user_add_experience(request):
@@ -558,13 +569,14 @@ def user_bookmark(request):
 @login_required
 def user_add_bookmark(request, slug):
     try:
-        check_job = Bookmarks.objects.get(job_slug = slug, user = request.user)
+        check_job = Bookmarks.objects.get(job__slug = slug, user = request.user)
+        check_job = True
     except: 
         check_job = False
     job = Job_Posting.objects.get(slug = slug)
 
     if check_job:
-        messages.error(request, 'You are already Bookmarked')
+        messages.error(request, 'You already Bookmarked this job')
         return redirect(request.META.get('HTTP_REFERER'))    
     else:
         user = request.user

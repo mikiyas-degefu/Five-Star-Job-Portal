@@ -34,7 +34,7 @@ class Candidate(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.first_name + " " + self.last_name
+        return self.user.first_name + " " + self.user.last_name
     
     def age(self):
         date = datetime.datetime.now()

@@ -196,7 +196,16 @@
               <div class="row justify-content-center">
                 <div class="col-lg-6">
                   <div class="section-title text-center ">
+
+                    {% if request.user %}
+
+                    <h4 class="title">Job's For You</h4>
+
+                    {% else %}
+
                     <h4 class="title">Recent Job's</h4>
+
+                    {% endif %}
                     <hr>
                   </div>
                 </div>
@@ -218,11 +227,12 @@
                     <div class="row d-flex justify-content-center">
                  
                        <div class="col">
-                      {% if job_list%}
+                     
+                      
 
-                         {% for job in job_list%}
+                         {% for job in job_list %}
                         
-                      <div class="job-box shadow
+                      <div class="job-box shadow  border-3 border-primary
 
                         {% if user.is_authenticated and job.id in bookmark %}
                                bookmark-post
@@ -295,38 +305,26 @@
                               <div>
                                 <p class="text-muted mb-0">
                                   <span class="text-dark">Experience :</span> {{job.experience}} <br>
+                                  <hr>
+                                  <span class="text-dark">Company  :</span> {{job.company}}
                                 </p>
                               </div>
                             </div>
-                            <!--end col-->
+                           
                             <div class="col-lg-2 col-md-3">
                               <span class="text-dark">Vacancies  :</span> {{job.vacancies}}
-                              <!--Apply JOB-->
-                              <!-- <div class="text-start text-md-end">
-                                
-                                {% if user.is_authenticated and job.id in application %}
-                                   <a
-                                   href="{% url 'user-cancel-job' job.id %}"
-                                   class="text-danger border-0 bg-light" type="submit">
-                                   Cancel<i class="mdi mdi-chevron-double-right"></i>
-                                 </a>
-                                {% else %}
-                                <a
-                                   href="{% url 'user-apply-job' job.id %}"
-                                   class="primary-link border-0 bg-light" type="submit">
-                                   Apply Now<i class="mdi mdi-chevron-double-right"></i>
-                                   </a>
-                                {% endif %}
-                              </div> -->
+                              
                             </div>
-                            <!--end col-->
+                           
                           </div>
-                          <!--end row-->
+                          
                         </div>
                       </div>
-                      <!--end job-box-->
+                     
                          {% endfor %}
-                      {% endif %}
+                     
+                         
+                       
                       
 
                     </div>
@@ -828,14 +826,18 @@
                 <div class="col-lg-2">
                   <div class="text-center p-3">
                     <a
-                      href="javascript:void(0)"
+                      href="{% url "job_sector_categories" i.id %}"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       title=""
                       data-bs-original-title="Woocommerce"
                     >
                       <img
+                        {% if i.logo %}
                         src="/media/{{i.logo}}"
+                        {% else %}
+                        src="{% static "assets/images/logo/default-company-logo.png" %}"
+                        {% endif %}
                         alt=""
                         class="img-fluid"
                         style="width: 70px;height: 70px;"
