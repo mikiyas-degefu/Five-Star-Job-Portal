@@ -212,12 +212,6 @@ def job_sector(request):
     return render(request, 'UserAdmin/sector.html', context=context)
     
 
-
-
-
-    ########### Save Data
-
-
 @admin_super_user_required
 def update_sector(request):
     id = request.POST['id']
