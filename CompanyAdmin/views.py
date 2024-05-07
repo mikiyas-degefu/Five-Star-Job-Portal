@@ -1,21 +1,52 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm)
-from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Skill, Interviews)
+from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Sector, Interviews)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
 from Company.models import Contact_Message , Company
 from Company.forms import CompanyForm
 from UserManagement.models import CustomUser 
+from django.db.models import Count, Subquery
 from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormCompanyAdmin , CompanyAdmin , CustomUserEditFormAdmin , ChangePasswordForm
 from UserManagement.decorators import (admin_user_required)
 # Create your views here.
 
 @admin_user_required
 def index(request):
+    total_users = CustomUser.objects.filter(company = request.user.company).count()
+    total_views = request.user.company.views
+    total_jobs = Job_Posting.objects.filter(company = request.user.company).count()
+    total_applicant = Application.objects.filter(job__company = request.user.company).count()
+    sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting', filter=Q(job_posting__company=request.user.company))).order_by('-job_posting_count').values_list('name', 'job_posting_count')[:15]
+    sectors_with_job_counts_lists = [list(ele) for ele in sectors_with_job_counts]
+
+    application_status_pending = Application.objects.filter(job__company = request.user.company, status = 'pending').count()
+    application_status_in_review = Application.objects.filter(job__company = request.user.company, status = 'in_review').count()
+    application_status_hired = Application.objects.filter(job__company = request.user.company, status = 'hired').count()
+    application_status_rejected = Application.objects.filter(job__company = request.user.company, status = 'rejected').count()
+
+    company_admins = CustomUser.objects.filter(company = request.user.company, is_admin = True).count()
+    company_interviewers = CustomUser.objects.filter(company = request.user.company, is_interviewer = True).count()
+
+    recent_jobs = Job_Posting.objects.filter(company = request.user.company)[:6]
+
+
+
     context = {
-        
+        'total_users' : total_users,
+        'total_views' : total_views,
+        'total_jobs' : total_jobs,
+        'total_applicant' : total_applicant,
+        'sectors_with_job_counts_lists' : sectors_with_job_counts_lists,
+        'application_status_pending' : application_status_pending,
+        'application_status_in_review' : application_status_in_review,
+        'application_status_hired' : application_status_hired,
+        'application_status_rejected' : application_status_rejected,
+        'company_admins' : company_admins,
+        'company_interviewers' : company_interviewers,
+        'recent_jobs' : recent_jobs
     }
     return render(request, 'CompanyAdmin/index.html', context=context)
 
