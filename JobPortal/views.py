@@ -23,6 +23,32 @@ from datetime import date
 import string
 from UserManagement.forms import ( ChangePasswordForm)
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+import threading
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
+
+
+
+
+def send_reg_email(request,email,first_name,last_name,password, stop_event):
+    while not stop_event.is_set():
+        subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
+        text_content = "Registration Successful"
+        context = {
+            'first_name': first_name,
+            'last_name' : last_name,
+            'email' : email,
+            'password' : password
+        }
+        html_content = render_to_string('success-email-company.html',context)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            print('Email sent')
+
+
 
 
 def scrap_skill():
@@ -111,11 +137,20 @@ def register_company_front(request):
         company_form = CompanyFormFront(request.POST)
         user_form = CustomUserFormFront(request.POST)
         if company_form.is_valid() and user_form.is_valid():
+            obj = user_form.save(commit=False)
+            email = user_form.cleaned_data['email']
+            first_name = user_form.cleaned_data['first_name']
+            last_name = user_form.cleaned_data['last_name']
+            password = user_form.cleaned_data['password1']
             company = company_form.save()
-            user = user_form.save(commit=False)
-            user.is_admin = True
-            user.company = company
-            user.save()
+            obj.is_admin = True
+            obj.active = False
+            obj.company = company
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=send_reg_email, args=(request,email,first_name,last_name,password, stop_event), daemon=True)
+            background_thread.start()
+            stop_event.set()
+            obj.save()
             messages.success(request, 'Your company is successusfuly registerd log in to see details!')
             return redirect('login')
     else:
@@ -175,12 +210,24 @@ def job_list(request):
         if i.count_job_post() > 0:
             sector_new.append(i)
 
+          
+
 
     sector_popular = Sector.objects.all()[0:5]
     job = Job_Posting.objects.filter(job_status = True)
+    
+
+    
+    if 'q' in request.GET:
+        q = request.GET['q']
+        job = Job_Posting.objects.filter( job_status= True).filter(Q(title=q) | Q(sector__name=q) | Q(company__name=q))
+        print(list(job))
+
     paginator = Paginator(job,5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    company = Company.objects.all()    
+   
 
     context = {
         'social_medias' : social_medias,
@@ -189,6 +236,7 @@ def job_list(request):
         'candidate' : candidate,
         'application' : application,
         'sector' : sector_new,
+        'company':company,
         'sector_popular' : sector_popular
     }
     return render(request, 'RMS/job-list.html', context)
@@ -206,9 +254,23 @@ def job_sector_categories(request, slug):
     
  
     sector_popular = Sector.objects.all()[0:5]
-    sector1 = Sector.objects.get(slug = slug)
+    sector1 = None
+    company1 = None
+    try:
+      company1 = Company.objects.get(id = slug)
+      q = company1
+    except :
+      sector1 = Sector.objects.get(slug = slug)
+      q = sector1
     sector = Sector.objects.all()
-    job = Job_Posting.objects.filter(job_status = True, sector = sector1)
+    company = Company.objects.all()
+    job = Job_Posting.objects.filter(job_status = True).filter(Q(sector=sector1) | Q(company=company1))
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        job = Job_Posting.objects.filter( job_status= True).filter(Q(title=q) | Q(sector__name=q) | Q(company__name=q))
+   
+    
 
     paginator = Paginator(job,5)
     page_number = request.GET.get('page')
@@ -221,6 +283,7 @@ def job_sector_categories(request, slug):
         'candidate' : candidate,
         'application' : application,
         'sector' : sector,
+        'company' : company,
         'sector_popular' : sector_popular
     }
     return render(request, 'RMS/job-list.html', context)

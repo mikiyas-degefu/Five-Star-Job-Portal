@@ -102,10 +102,16 @@
                     <div class="job-list-header">
                       <form action="#">
                         <div class="row g-2">
-                          <div class="col-lg-4 col-md-6" >
+                          <div class="col-lg-4 col-md-6">
                             <div class="filler-job-form">
-                              
-                              <a class="btn btn-primary" href="">Click for Related Job's</a>
+                              <form class="form-inline my-2 my-lg-0">
+                                <div class="input-group">
+                                  <input name="q" class="form-control" type="search" placeholder="Search any thing" aria-label="Search">
+                                  <div class="input-group-append">
+                                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                                  </div>
+                                </div>
+                              </form>
                             </div>
                           </div>
                           <!--end col-->
@@ -138,13 +144,13 @@
                     </div>
                     <!--end wedget-popular-title-->
                     <!-- Job-list -->
-                    <div class="row d-flex justify-content-center">
+                    <div class="row d-flex justify-content-center ">
                  
                        <div class="col">
                       {% if job_list%}
                          {% for job in job_list%}
                         
-                      <div class="job-box
+                      <div class="job-box shadow-lg
 
                         {% if user.is_authenticated and job.id in bookmark %}
                                bookmark-post
@@ -217,30 +223,17 @@
                               <div>
                                 <p class="text-muted mb-0">
                                   <span class="text-dark">Experience :</span> {{job.experience}} <br>
+                                  <hr>
+                                  <span class="text-dark">Company  :</span> {{job.company}}
                                 </p>
                               </div>
                             </div>
+                           
                             <!--end col-->
                             <div class="col-lg-2 col-md-3">
                               <span class="text-dark">Vacancies  :</span> {{job.vacancies}}
-                              <!--Apply JOB-->
-                              <!-- <div class="text-start text-md-end">
-                                
-                                {% if user.is_authenticated and job.id in application %}
-                                   <a
-                                   href="{% url 'user-cancel-job' job.id %}"
-                                   class="text-danger border-0 bg-light" type="submit">
-                                   Cancel<i class="mdi mdi-chevron-double-right"></i>
-                                 </a>
-                                {% else %}
-                                <a
-                                   href="{% url 'user-apply-job' job.id %}"
-                                   class="primary-link border-0 bg-light" type="submit">
-                                   Apply Now<i class="mdi mdi-chevron-double-right"></i>
-                                   </a>
-                                {% endif %}
-                              </div> -->
                             </div>
+                            
                             <!--end col-->
                           </div>
                           <!--end row-->
@@ -311,42 +304,68 @@
                 <!--end col-->
 
                  <!-- START SIDE-BAR -->
-                <div class="col-lg-3">
+                 <div class="col-lg-3">
                   <div class="side-bar mt-5 mt-lg-0">
                     <div class="accordion" id="accordionExample">
-
+                
                       <div class="accordion-item mt-4 border">
                         <h2 class="accordion-header" id="experienceOne">
                           <button
                             class="accordion-button"
                             type="button"
                             data-bs-toggle="collapse"
-                            data-bs-target="#experience"
+                            data-bs-target="#experienceSectors"
                             aria-expanded="true"
-                            aria-controls="experience"
+                            aria-controls="experienceSectors"
                           >
-                           Sectors
+                            Sectors
                           </button>
                         </h2>
                         <div
-                          id="experience"
-                          class="accordion-collapse collapse show"
+                          id="experienceSectors"
+                          class="accordion-collapse collapse"
                           aria-labelledby="experienceOne"
                         >
                           <div class="accordion-body">
                             <div class="side-title" style="overflow-y: scroll; max-height: 300px; width: 240px;">
                               {% for i in sector %}
-                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.slug%}">{{i.name}} ({{i.count_job_post}})</a></div>
+                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.slug %}">{{ i.name }} ({{ i.count_job_post }})</a></div>
                               {% endfor %}
                             </div>
                           </div>
                         </div>
                       </div>
-                      <!-- end accordion-item -->
+                
+                      <div class="accordion-item mt-4 border">
+                        <h2 class="accordion-header" id="experienceTwo">
+                          <button
+                            class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#experienceCompanies"
+                            aria-expanded="true"
+                            aria-controls="experienceCompanies"
+                          >
+                            Companies
+                          </button>
+                        </h2>
+                        <div
+                          id="experienceCompanies"
+                          class="accordion-collapse collapse"
+                          aria-labelledby="experienceTwo"
+                        >
+                          <div class="accordion-body">
+                            <div class="side-title" style="overflow-y: scroll; max-height: 300px; width: 240px;">
+                              {% for i in company %}
+                              <div class="mt-2"><a href="{% url 'job_sector_categories' i.id %}">{{ i.name }} </a></div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                
                     </div>
-                    <!--end accordion-->
                   </div>
-                  <!--end side-bar-->
                 </div>
                 <!--end col--> 
                 <!-- END SIDE-BAR -->
