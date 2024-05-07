@@ -14,8 +14,15 @@ from UserManagement.decorators import (admin_user_required)
 
 @admin_user_required
 def index(request):
+    total_users = CustomUser.objects.filter(company = request.user.company).count()
+    total_views = request.user.company.views
+    total_jobs = Job_Posting.objects.filter(company = request.user.company).count()
+    total_applicant = Application.objects.filter(job__company = request.user.company).count()
     context = {
-        
+        'total_users' : total_users,
+        'total_views' : total_views,
+        'total_jobs' : total_jobs,
+        'total_applicant' : total_applicant
     }
     return render(request, 'CompanyAdmin/index.html', context=context)
 

@@ -35,14 +35,6 @@
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h4 class="mb-sm-0">Dashboard</h4>
-
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Upzet</a></li>
-                                    <li class="breadcrumb-item active">Dashboard</li>
-                                </ol>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -50,19 +42,21 @@
 
 
                 <div class="row">
+                    
                     <div class="col-xl-3 col-sm-6">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex text-muted">
-                                    <div class="flex-shrink-0 me-3 align-self-center">
-                                        <div id="radialchart-1" class="apex-charts" dir="ltr"></div>
+                                    <div class="flex-shrink-0  me-3 align-self-center">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary font-size-20">
+                                                <i class="ri-group-line"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
                                         <p class="mb-1">Users</p>
-                                        <h5 class="mb-3">2.2k</h5>
-                                        <p class="text-truncate mb-0"><span class="text-success me-2"> 0.02% <i
-                                                    class="ri-arrow-right-up-line align-bottom ms-1"></i></span> From
-                                            previous</p>
+                                        <h5 class="mb-3 Single1">{{total_users}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -76,37 +70,16 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3 align-self-center">
-                                        <div id="radialchart-2" class="apex-charts" dir="ltr"></div>
+                                    <div class="flex-shrink-0  me-3 align-self-center">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary font-size-20">
+                                                <i class="mdi mdi-eye-outline"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
-                                        <p class="mb-1">Views per minute</p>
-                                        <h5 class="mb-3">50</h5>
-                                        <p class="text-truncate mb-0"><span class="text-success me-2"> 1.7% <i
-                                                    class="ri-arrow-right-up-line align-bottom ms-1"></i></span> From
-                                            previous</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end card-body -->
-                        </div>
-                        <!-- end card -->
-                    </div>
-                    <!-- end col -->
-
-                    <div class="col-xl-3 col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex text-muted">
-                                    <div class="flex-shrink-0 me-3 align-self-center">
-                                        <div id="radialchart-3" class="apex-charts" dir="ltr"></div>
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="mb-1">Bounce Rate</p>
-                                        <h5 class="mb-3">24.03 %</h5>
-                                        <p class="text-truncate mb-0"><span class="text-danger me-2"> 0.01% <i
-                                                    class="ri-arrow-right-down-line align-bottom ms-1"></i></span> From
-                                            previous</p>
+                                        <p class="mb-1">Views</p>
+                                        <h5 class="mb-3 Single2">{{total_views}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -123,16 +96,36 @@
                                     <div class="flex-shrink-0  me-3 align-self-center">
                                         <div class="avatar-sm">
                                             <div class="avatar-title bg-light rounded-circle text-primary font-size-20">
-                                                <i class="ri-group-line"></i>
+                                                <i class="mdi mdi-briefcase-variant-outline"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 overflow-hidden">
-                                        <p class="mb-1">New Visitors</p>
-                                        <h5 class="mb-3">435</h5>
-                                        <p class="text-truncate mb-0"><span class="text-success me-2"> 0.01% <i
-                                                    class="ri-arrow-right-up-line align-bottom ms-1"></i></span> From
-                                            previous</p>
+                                        <p class="mb-1">Total Job's</p>
+                                        <h5 class="mb-3 Single3">{{total_jobs}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex text-muted">
+                                    <div class="flex-shrink-0  me-3 align-self-center">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary font-size-20">
+                                                <i class="mdi mdi-pencil-outline"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="mb-1">Total Applicant</p>
+                                        <h5 class="mb-3 Single4">{{total_applicant}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -155,9 +148,7 @@
                                     <figure class="highcharts-figure">
                                         <div id="container"></div>
                                         <p class="highcharts-description">
-                                            Chart showing use of rotated axis labels and data labels. This can be a
-                                            way to include more labels in the chart, but note that more labels can
-                                            sometimes make charts harder to read.
+                                            An Exquisite Visualization: A Comprehensive Chart Exhibiting the Utilization of Rotated Axis Labels and Data Labels to Present Precise Sector-wise Job Counts                                           
                                         </p>
                                     </figure>
                                 </div>
@@ -167,68 +158,17 @@
                                 </div>
                             </div>
                             <!-- end card-body -->
-
-                            <div class="card-body border-top">
-                                <div class="text-muted text-center">
-                                    <div class="row">
-                                        <div class="col-4 border-end">
-                                            <div>
-                                                <p class="mb-2"><i
-                                                        class="mdi mdi-circle font-size-12 text-primary me-1"></i>
-                                                    Expenses</p>
-                                                <h5 class="font-size-16 mb-0">$ 8,524 <span
-                                                        class="text-success font-size-12"><i
-                                                            class="mdi mdi-menu-up font-size-14 me-1"></i>1.2 %</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                        <div class="col-4 border-end">
-                                            <div>
-                                                <p class="mb-2"><i
-                                                        class="mdi mdi-circle font-size-12 text-light me-1"></i>
-                                                    Maintenance</p>
-                                                <h5 class="font-size-16 mb-0">$ 8,524 <span
-                                                        class="text-success font-size-12"><i
-                                                            class="mdi mdi-menu-up font-size-14 me-1"></i>2.0 %</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div>
-                                                <p class="mb-2"><i
-                                                        class="mdi mdi-circle font-size-12 text-danger me-1"></i> Profit
-                                                </p>
-                                                <h5 class="font-size-16 mb-0">$ 8,524 <span
-                                                        class="text-success font-size-12"><i
-                                                            class="mdi mdi-menu-up font-size-14 me-1"></i>0.4 %</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end card-body -->
                         </div>
                         <!-- end card -->
                     </div>
                     <!-- end col -->
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-4 ">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex  align-items-center">
                                     <div class="flex-grow-1">
-                                        <h5 class="card-title">Social Source</h5>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <select class="form-select form-select-sm mb-0 my-n1">
-                                            <option value="MAY" selected="">May</option>
-                                            <option value="AP">April</option>
-                                            <option value="MA">March</option>
-                                            <option value="FE">February</option>
-                                            <option value="JA">January</option>
-                                            <option value="DE">December</option>
-                                        </select>
+                                        <h5 class="card-title">Applications Status</h5>
                                     </div>
                                 </div>
 
@@ -236,47 +176,95 @@
                                     <div id="radialBar-chart" class="apex-charts" dir="ltr"></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-4">
+                                <div class="row  pt-4 pb-4 justify-content-center">
+
+                                    <div class="col-6">
                                         <div class="social-source text-center mt-3">
                                             <div class="avatar-xs mx-auto mb-3">
                                                 <span class="avatar-title rounded-circle bg-primary font-size-18">
-                                                    <i class="ri  ri-facebook-circle-fill text-white"></i>
+                                                    <i class="mdi mdi-check-bold"></i>
                                                 </span>
                                             </div>
-                                            <h5 class="font-size-15">Facebook</h5>
-                                            <p class="text-muted mb-0">125 sales</p>
+                                            <h5 class="font-size-15">Hired</h5>
+                                            <p class="text-muted mb-0">125</p>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="social-source text-center mt-3">
-                                            <div class="avatar-xs mx-auto mb-3">
-                                                <span class="avatar-title rounded-circle bg-info font-size-18">
-                                                    <i class="ri  ri-twitter-fill text-white"></i>
-                                                </span>
-                                            </div>
-                                            <h5 class="font-size-15">Twitter</h5>
-                                            <p class="text-muted mb-0">112 sales</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
+
+
+                                    <div class="col-6">
                                         <div class="social-source text-center mt-3">
                                             <div class="avatar-xs mx-auto mb-3">
                                                 <span class="avatar-title rounded-circle bg-danger font-size-18">
-                                                    <i class="ri ri-instagram-line text-white"></i>
+                                                    <i class="mdi mdi-close-thick"></i>
                                                 </span>
                                             </div>
-                                            <h5 class="font-size-15">Instagram</h5>
-                                            <p class="text-muted mb-0">104 sales</p>
+                                            <h5 class="font-size-15">Rejected</h5>
+                                            <p class="text-muted mb-0">12</p>
                                         </div>
                                     </div>
+
                                 </div>
+
+                                
                             </div>
                             <!-- end card-body -->
                         </div>
                         <!-- end card -->
+
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex  align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title">Accounts</h5>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div id="radialBar-chart" class="apex-charts" dir="ltr"></div>
+                                </div>
+
+                                <div class="row  pt-4 pb-5 justify-content-center">
+
+                                    <div class="col-6">
+                                        <div class="social-source text-center mt-3">
+                                            <div class="avatar-xs mx-auto mb-3">
+                                                <span class="avatar-title rounded-circle bg-primary font-size-18">
+                                                    <i class="mdi mdi-account-star"></i>
+                                                </span>
+                                            </div>
+                                            <h5 class="font-size-15">Admin's</h5>
+                                            <p class="text-muted mb-0">125</p>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-6">
+                                        <div class="social-source text-center mt-3">
+                                            <div class="avatar-xs mx-auto mb-3">
+                                                <span class="avatar-title rounded-circle bg-secondary font-size-18">
+                                                    <i class="mdi mdi-account-voice"></i>
+                                                </span>
+                                            </div>
+                                            <h5 class="font-size-15">Interviewer's</h5>
+                                            <p class="text-muted mb-0">12</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+
+
                     </div>
                     <!-- end col -->
+
+
+                    
                 </div>
                 <!-- end row -->
 
@@ -374,6 +362,7 @@
                         <!-- end card -->
                     </div>
                     <!-- end col -->
+                    
 
                     <div class="col-lg-4">
                         <div class="card">
@@ -740,16 +729,65 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $(".fadeIn").fadeIn(2000); // Fade in over 2 seconds
+      });
+
+    $({ Counter: 0 }).animate({
+        Counter: $('.Single1').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single1').text(Math.ceil(this.Counter));
+  }
+});
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single2').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single2').text(Math.ceil(this.Counter));
+  }
+});
+
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single3').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single3').text(Math.ceil(this.Counter));
+  }
+});
+
+$({ Counter: 0 }).animate({
+        Counter: $('.Single4').text()
+    }, {
+       duration: 1000,
+       easing: 'swing',
+       step: function() {
+         $('.Single4').text(Math.ceil(this.Counter));
+  }
+});
+
+
+</script>
+
+
 <script>
     Highcharts.chart('container', {
     chart: {
-        type: 'column'
+        type: 'column',
+        height: 400
     },
     title: {
-        text: 'World\'s largest cities per 2021'
-    },
-    subtitle: {
-        text: 'Source: <a href="https://worldpopulationreview.com/world-cities" target="_blank">World Population Review</a>'
+        text: 'Overview of Sector and Jobs'
     },
     xAxis: {
         type: 'category',
@@ -763,24 +801,12 @@
     },
     yAxis: {
         min: 0,
-        title: {
-            text: 'Population (millions)'
-        }
     },
     legend: {
         enabled: false
     },
-    tooltip: {
-        pointFormat: 'Population in 2021: <b>{point.y:.1f} millions</b>'
-    },
     series: [{
         name: 'Population',
-        colors: [
-            '#9b20d9', '#9215ac', '#861ec9', '#7a17e6', '#7010f9', '#691af3',
-            '#6225ed', '#5b30e7', '#533be1', '#4c46db', '#4551d5', '#3e5ccf',
-            '#3667c9', '#2f72c3', '#277dbd', '#1f88b7', '#1693b1', '#0a9eaa',
-            '#03c69b',  '#00f194'
-        ],
         colorByPoint: true,
         groupPadding: 0,
         data: [
