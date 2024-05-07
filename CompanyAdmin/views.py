@@ -22,6 +22,16 @@ def index(request):
     sectors_with_job_counts = Sector.objects.annotate(job_posting_count=Count('job_posting', filter=Q(job_posting__company=request.user.company))).order_by('-job_posting_count').values_list('name', 'job_posting_count')[:15]
     sectors_with_job_counts_lists = [list(ele) for ele in sectors_with_job_counts]
 
+    application_status_pending = Application.objects.filter(job__company = request.user.company, status = 'pending').count()
+    application_status_in_review = Application.objects.filter(job__company = request.user.company, status = 'in_review').count()
+    application_status_hired = Application.objects.filter(job__company = request.user.company, status = 'hired').count()
+    application_status_rejected = Application.objects.filter(job__company = request.user.company, status = 'rejected').count()
+
+    company_admins = CustomUser.objects.filter(company = request.user.company, is_admin = True).count()
+    company_interviewers = CustomUser.objects.filter(company = request.user.company, is_interviewer = True).count()
+
+    recent_jobs = Job_Posting.objects.filter(company = request.user.company)[:6]
+
 
 
     context = {
@@ -29,7 +39,14 @@ def index(request):
         'total_views' : total_views,
         'total_jobs' : total_jobs,
         'total_applicant' : total_applicant,
-        'sectors_with_job_counts_lists' : sectors_with_job_counts_lists
+        'sectors_with_job_counts_lists' : sectors_with_job_counts_lists,
+        'application_status_pending' : application_status_pending,
+        'application_status_in_review' : application_status_in_review,
+        'application_status_hired' : application_status_hired,
+        'application_status_rejected' : application_status_rejected,
+        'company_admins' : company_admins,
+        'company_interviewers' : company_interviewers,
+        'recent_jobs' : recent_jobs
     }
     return render(request, 'CompanyAdmin/index.html', context=context)
 

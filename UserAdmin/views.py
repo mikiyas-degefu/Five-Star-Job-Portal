@@ -13,7 +13,7 @@ from UserManagement.forms import (CustomUserEditFormAdmin, ChangePasswordForm)
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import logout
 from auditlog.models import LogEntry
-from django.db.models import Count,Subquery,OuterRef, Func, F
+from django.db.models import Count
 # Create your views here.
 
 
