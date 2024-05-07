@@ -1,0 +1,1 @@
+var slider1=document.getElementById("slider1"),slider1Value=(noUiSlider.create(slider1,{start:[9],step:1,range:{min:[1],max:[15]}}),document.getElementById("slider1-span"));slider1.noUiSlider.on("update",function(e,d){slider1Value.innerHTML=e[d]});

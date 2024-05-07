@@ -1,6 +1,11 @@
 import telebot, os
-import threading
-
+from import_export import resources
+from Company.models import Company
+from .models import (Sector, Job_Posting, Skill)
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from import_export import resources, fields
+from import_export.widgets import ForeignKeyWidget  # For foreignkey
+from UserManagement.models import CustomUser
 
 BOT_TOKEN = os.environ.get('6195701188:AAGYJvuebbXWUatD4MtOwJ8NNASCdMlXjwE')
 bot = telebot.TeleBot('6195701188:AAGYJvuebbXWUatD4MtOwJ8NNASCdMlXjwE')
@@ -27,6 +32,59 @@ SERAYE - JOB PORTAL\n
         try: bot.send_message(chat_id=channel_name, text=text)
         except Exception as e:
             None
+
+
+
+
+######
+## IMPORT EXPORT ##
+
+
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = CustomUser
+        exclude = ('id', 'password')
+
+
+class CompanyResource(resources.ModelResource):
+    class Meta:
+        model = Company
+        exclude = ('id', 'logo')
+
+
+class SkillResource(resources.ModelResource):
+    class Meta:
+        model = Skill
+        exclude = ('id', 'slug')
+
+
+class SectorResource(resources.ModelResource):
+    class Meta:
+        model = Sector
+        exclude = ('id', 'slug')
+
+class JobResource(resources.ModelResource):
+    company = fields.Field(
+        column_name='company',
+        attribute='company',
+        widget=ForeignKeyWidget(Company, field='name'),
+        saves_null_values = True,
+        )
+    sector = fields.Field(
+        column_name='sector',
+        attribute='sector',
+        widget=ForeignKeyWidget(Sector, field='name'),
+        saves_null_values = True,
+        )
+    class Meta:
+        model = Job_Posting
+        exclude = ('id', 'slug')
+
+
+
+
+
+
 
 
         

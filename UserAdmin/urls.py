@@ -45,4 +45,12 @@ urlpatterns = [
 
     path('log/', views.audit, name="admin-audit"),
 
+    path('companies-download/', views.export_companies, name="download-companies"),
+    path('sectors-download/', views.export_job_sector, name="download-sector"),
+    path('job-download/', views.export_job, name="download-job"),
+    path('skill-download/', views.export_skill, name="download-skill"),
+    path('superuser-download/', views.export_superusers, name="download-superuser"),
+    path('company-admin-download/', views.export_company_admin, name="download-company-admin"),
+    path('candidate-download/', views.export_company_admin, name="download-candidate"),
+
    ]

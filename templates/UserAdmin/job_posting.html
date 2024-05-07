@@ -39,6 +39,9 @@
                         data-bs-toggle="modal"
                         data-bs-target="#AddJob"
                         data-bs-whatever="@mdo">Post Job</button>
+                        <a type="button"  href="{% url 'download-job' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                          <i class="fa fa-download"></i>
+                       </a>
                       <div class="row">
 
                         <form>
@@ -59,7 +62,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Sector</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Compensation Type</th>
+                            <th scope="col">CompType</th>
                             <th scope="col">Salary Start</th>
                             <th scope="col">Salary Finall</th>
                             <th scope="col">Post Date</th>

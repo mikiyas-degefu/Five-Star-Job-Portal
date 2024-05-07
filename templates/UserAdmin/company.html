@@ -44,7 +44,11 @@
                         data-bs-toggle="modal"
                         data-bs-target="#AddCompany"
                         data-bs-whatever="@mdo">Add New Company</button>
+                        <a type="button"  href="{% url 'download-companies' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                          <i class="fa fa-download"></i>
+                       </a>
                       <div class="row">
+
 
                         <form>
                           <div class="col-8 col-md-4 m-1">
@@ -54,6 +58,8 @@
                             <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
                           </div>        
                         </form>    
+
+                      
                                 
                       </div>
 

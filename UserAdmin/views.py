@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -17,6 +17,7 @@ from django.db.models import Count
 import threading
 from JobPortal.resource import handle_telegram_post
 from bs4 import BeautifulSoup
+from JobPortal.resource import (CompanyResource, SectorResource, JobResource, SkillResource, UserResource)
 # Create your views here.
 
 
@@ -810,3 +811,72 @@ def audit(request):
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/log.html', context=context)
+
+
+
+
+
+
+
+
+######EXPORT
+
+@admin_super_user_required
+def export_companies(request):
+    companies = CompanyResource()
+    dataset = companies.export()
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="companies.csv"'
+    return response
+
+
+@admin_super_user_required
+def export_job_sector(request):
+    sectors = SectorResource()
+    dataset = sectors.export()
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="sectors.csv"'
+    return response
+
+@admin_super_user_required
+def export_job(request):
+    jobs = JobResource()
+    dataset = jobs.export()
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="job.csv"'
+    return response
+
+@admin_super_user_required
+def export_skill(request):
+    skills = SkillResource()
+    dataset = skills.export()
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="skill.csv"'
+    return response
+
+
+
+def export_superusers(request):
+    active_year = CustomUser.objects.filter(is_superuser = True)
+    annual = UserResource()
+    dataset = annual.export(active_year)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="superusers.csv"'
+    return response
+
+def export_company_admin(request):
+    active_year = CustomUser.objects.filter(is_admin = True)
+    annual = UserResource()
+    dataset = annual.export(active_year)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="admins.csv"'
+    return response
+
+
+def export_candidates(request):
+    active_year = CustomUser.objects.filter(is_candidate = True)
+    annual = UserResource()
+    dataset = annual.export(active_year)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="candidates.csv"'
+    return response
