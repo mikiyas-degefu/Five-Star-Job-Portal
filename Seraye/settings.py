@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'CompanyAdmin',
     'auditlog',
     'import_export',
-    
 ]
 
 MIDDLEWARE = [

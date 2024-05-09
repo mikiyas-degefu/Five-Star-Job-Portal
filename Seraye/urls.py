@@ -28,6 +28,5 @@ urlpatterns = [
     path('user-admin/', include('UserAdmin.urls')),
     path('company-admin/', include('CompanyAdmin.urls')),
     path('froala_editor/', include('froala_editor.urls')),
-
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

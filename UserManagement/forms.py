@@ -4,6 +4,32 @@ from django.contrib.auth.views import PasswordChangeView
 from .models import CustomUser
 from Company.models import Company
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import SetPasswordForm
+
+
+
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(UserPasswordResetForm, self).__init__(*args, **kwargs)
+
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder' : 'Enter your email',
+        }))
+
+
+class UserPasswordConfirmForm(SetPasswordForm):
+    new_password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={
+        'class': 'form-control w-100',
+        'placeholder': 'Password',
+    }))
+    new_password2 = forms.CharField(label='Conform Password', widget=forms.PasswordInput(attrs={
+        'class': 'form-control w-100',
+        'placeholder': 'Confirm Password',
+    }))
 
 class Login_Form(forms.Form):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={

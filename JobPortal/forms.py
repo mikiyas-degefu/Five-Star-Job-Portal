@@ -5,8 +5,10 @@ from datetime import date
 from django.forms import formset_factory
 from phonenumber_field.formfields import PhoneNumberField
 from froala_editor.widgets import FroalaEditor
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from UserManagement.models import CustomUser
+
+
 
 
 
