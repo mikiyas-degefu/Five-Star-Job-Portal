@@ -81,7 +81,10 @@ class CompanyResource(resources.ModelResource):
 class SkillResource(resources.ModelResource):
     class Meta:
         model = Skill
+        skip_unchanged = True
+        report_skipped = True
         exclude = ('id', 'slug')
+        import_id_fields = ('title', 'validable')
 
 
 class SectorResource(resources.ModelResource):

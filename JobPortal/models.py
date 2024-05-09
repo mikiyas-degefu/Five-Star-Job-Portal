@@ -30,6 +30,7 @@ class Candidate(models.Model):
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     photo = models.ImageField(upload_to='Candidate/photo', null=True, blank=True)
     about = models.TextField() 
+    skill = models.ManyToManyField("Skill", blank=False) 
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -120,7 +121,7 @@ class Project(models.Model):
 class Skill(models.Model):
     title = models.CharField(unique=True, max_length=30)
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
-    validable = models.BooleanField(default=True)
+    validable = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:

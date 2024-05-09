@@ -60,7 +60,7 @@ class CandidateForm(forms.ModelForm):
     phone1 = forms.CharField(max_length=15, widget=forms.TextInput({
         'class' : 'form-control',
         'type': 'tel',
-        'placeholder' : 'Phone 1 (Required)'
+        'placeholder' : '+251910203040'
     }))
     phone2 = forms.CharField(max_length=15, required=False,widget=forms.TextInput({
         'class' : 'form-control',
@@ -92,7 +92,7 @@ class CandidateForm(forms.ModelForm):
         'accept':'image/*',
     }))
     
-    
+
     
     class Meta:
         model = Candidate
@@ -105,7 +105,7 @@ class CandidateForm(forms.ModelForm):
             })
         }
     
-    skill = forms.ModelMultipleChoiceField(required=True,queryset=Skill.objects.all())
+    skill = forms.ModelMultipleChoiceField(required=False,queryset=Skill.objects.all())
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         if not first_name or len(first_name) < 2:
