@@ -74,6 +74,7 @@ class Education(models.Model):
     field_of_study = models.CharField(max_length=40)
     education_period_start = models.DateField()
     education_period_end = models.DateField()
+    gpa = models.FloatField(null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, max_length=200)
 
     def save(self, *args, **kwargs):
@@ -84,6 +85,7 @@ class Education(models.Model):
 
     def __str__(self) -> str:
         return self.institution_name
+    
 
 class Experience(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
@@ -106,6 +108,14 @@ class Experience(models.Model):
 
     def __str__(self) -> str:
         return self.company_name
+    
+class Project(models.Model):
+    candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    project_type = models.CharField(max_length=40)
+    detail = FroalaField()
+
+    def __str__(self) -> str:
+        return self.project_type
 
 class Skill(models.Model):
     title = models.CharField(unique=True, max_length=30)
@@ -122,6 +132,31 @@ class Skill(models.Model):
    
     def __str__(self) -> str:
         return self.title
+    
+
+language_proficient = [
+    ('basic', 'Basic'),
+    ('limited_working_proficiency', 'Limited Working Proficiency'),
+    ('professional_working_proficiency', 'Professional Working Proficiency'),
+    ('native_proficiency', "Native Proficiency"),
+]
+
+class Language(models.Model):
+    candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    language = models.CharField(unique=True, max_length=30)
+    proficient = models.CharField(max_length=40, choices=language_proficient)
+    slug = models.SlugField(unique=True, blank=True,  max_length=200)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(unidecode(self.language))
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['language']
+   
+    def __str__(self) -> str:
+        return self.language
     
 class Bookmarks(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

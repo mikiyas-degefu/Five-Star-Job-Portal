@@ -35,6 +35,9 @@
                     <table class="table table-sm table-hover caption-top ">
                       {% include 'CompanyAdmin/include/messages.html' %}                    
                       <caption>Applicant</caption>
+                      <a type="button"  href="{% url 'company-export-application' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                        <i class="fa fa-download"></i>
+                     </a>
                       <div class="row">
 
                         <form>
@@ -43,6 +46,7 @@
                           </div>
                           <div class="col-3 col-md-1 m-1">
                             <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                            
                           </div>        
                         </form>    
                                 

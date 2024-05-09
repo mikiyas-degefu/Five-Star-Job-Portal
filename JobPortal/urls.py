@@ -10,6 +10,7 @@ urlpatterns = [
     path('job-list/', views.job_list, name='job-list'),
     path('job-sector/<slug:slug>', views.job_sector_categories, name='job_sector_categories'),
     path('job-detail/<slug:slug>', views.job_detail, name='Job-detail'),
+
     #User
     path('user-add-bookmark/<slug:slug>', views.user_add_bookmark, name="user-add-bookmark"),
     path('user-remove-bookmark/<slug:slug>', views.user_delete_bookmark, name='user-delete-bookmark'),
@@ -26,9 +27,16 @@ urlpatterns = [
     path('user-add-experience/', views.user_add_experience, name='user-add-experience'),
     path('user-experience/<slug:slug>/',views.detail_user_experience, name='detail-user-experience'),
     path('user-delete-experience/<slug:slug>',views.user_delete_experience, name='user-delete-experience'),
+    path('user-add-project/', views.user_add_project, name='user-add-project'),
+    path('user-project/<int:id>/',views.detail_user_project, name='detail-user-project'),
+    path('user-delete-project/<int:id>',views.user_delete_project, name='user-delete-project'),
+    path('user-add-language/', views.user_add_language, name='user-add-language'),
+    path('user-language/<int:id>/',views.detail_user_language, name='detail-user-language'),
+    path('user-delete-language/<int:id>',views.user_delete_language, name='user-delete-language'),
     path('user-applied-job/', views.user_applied_jobs, name='user-applied-job'),
     path('user-bookmark/', views.user_bookmark, name='user-bookmark'),
     path('user-change-password/', views.user_change_password, name='user-change-password'),
+
     #Interviewer
     path('interviewer-dashboard/', views.interviewer_dashboard, name='interviewer-dashboard'),
     path('interviewer-info/', views.interviewer_personal_info, name='interviewer-personal-info'),

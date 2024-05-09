@@ -14,6 +14,7 @@ from UserManagement.decorators import (admin_user_required)
 import threading
 from bs4 import BeautifulSoup
 from JobPortal.resource import handle_telegram_post
+from JobPortal.resource import ( JobResource, ApplicationResource, UserResource)
 # Create your views here.
 
 
@@ -516,6 +517,45 @@ def edit_company_info (request , id):
     }
     return render(request , 'CompanyAdmin/edit_company_info.html' , context)
 
+
+@admin_user_required
+def export_job(request):
+    jobs = Job_Posting.objects.filter(company = request.user.company)
+    resource = JobResource()
+    dataset = resource.export(jobs)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="job-list.csv"'
+    return response
+
+
+@admin_user_required
+def export_application(request):
+    applicant = Application.objects.filter(job__company = request.user.company)
+    resource = ApplicationResource()
+    dataset = resource.export(applicant)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="applicant.csv"'
+    return response
+
+
+@admin_user_required
+def export_admins(request):
+    users = CustomUser.objects.filter(is_admin = True, company = request.user.company)
+    resource = UserResource()
+    dataset = resource.export(users)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="admins.csv"'
+    return response
+
+
+@admin_user_required
+def export_interviewers(request):
+    users = CustomUser.objects.filter(is_interviewer = True, company = request.user.company)
+    resource = UserResource()
+    dataset = resource.export(users)
+    response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="interviewers.csv"'
+    return response
     
 
 

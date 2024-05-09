@@ -1,12 +1,14 @@
 from django import forms
-from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, application_status
+from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, Language, Project
 from Company.models import Company
 from datetime import date
 from django.forms import formset_factory
 from phonenumber_field.formfields import PhoneNumberField
 from froala_editor.widgets import FroalaEditor
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from UserManagement.models import CustomUser
+
+
 
 
 
@@ -144,6 +146,36 @@ class CandidateForm(forms.ModelForm):
         if not about or len(about) < 10:
          raise forms.ValidationError('Enter a Valid Resume Content')
         return about
+    
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        exclude = ('candidate',)
+
+        widgets = {
+            'project_type' : forms.TextInput(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'Internship, Personal, Contractual', 
+            }),
+            'detail' : FroalaEditor()
+        }
+
+class LanguageForm(forms.ModelForm):
+    class Meta:
+        model = Language
+        exclude = ('id','slug', 'candidate')
+
+        widgets = {
+            'language' : forms.TextInput(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'English, Amharic ...', 
+            }),
+           'proficient' : forms.Select(attrs={
+               'class' : 'form-select bg-white'
+           })
+        }
+
 
 class EducationForm(forms.ModelForm):
     education_status_list = [

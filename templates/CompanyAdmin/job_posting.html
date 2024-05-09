@@ -39,6 +39,9 @@
                         data-bs-toggle="modal"
                         data-bs-target="#AddJob"
                         data-bs-whatever="@mdo">Post Job</button>
+                        <a type="button"  href="{% url 'company-export-job' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                          <i class="fa fa-download"></i>
+                       </a>
                       <div class="row">
 
                         <form>
@@ -58,13 +61,13 @@
                             <th scope="col">Title</th>
                             <th scope="col">Sector</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Compensation Type</th>
-                            <th scope="col">Vacancies</th>
+                            <th scope="col">Comp Type</th>
+                            <th scope="col">Vac</th>
                             <th scope="col">Salary Start</th>
                             <th scope="col">Salary Final</th>
                             <th scope="col">Post Date</th>
                             <th scope="col">Close Date</th>
-                            <th scope="col">Published</th>
+                            <th scope="col">Pub</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -81,7 +84,7 @@
                             <td>{{job.salary_range_start}}</td>
                             <td>{{job.salary_range_final}}</td>
                             <td>{{job.date_posted | timesince}} Ago</td>
-                            <td>{{job.date_closed | date:'F d, Y' }}</td>
+                            <td>{{job.date_closed | date:'M-d-y' }}</td>
                             <td>
 
                               {% if job.job_status %}

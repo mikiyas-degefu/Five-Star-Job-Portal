@@ -1,12 +1,18 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from Company.forms import CompanyForm
+=======
+from django.shortcuts import render, redirect
+from Company.models import Social_Media, Contact,Company
+from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
+>>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
 from django.contrib import messages
 import csv
-from django.shortcuts import render, redirect
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from UserManagement.forms import CustomUserCreationForm, Login_Form, InterviewerForm
@@ -16,20 +22,15 @@ import datetime
 from UserManagement.decorators import interviewer_user_required
 from UserManagement.models import CustomUser 
 from django.core.mail import send_mail, EmailMultiAlternatives
-import os
-import telebot
 import requests
-import random
-from datetime import date
-import string
 from UserManagement.forms import ( ChangePasswordForm)
-from django.contrib.auth.hashers import make_password
-from django.core.mail import send_mail
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from .resource import (handle_registration_email)
 
 
+<<<<<<< HEAD
 
 
 
@@ -75,6 +76,8 @@ def csv_file_reader():
             for j in i:
                     Skill.objects.create(title = j)
 
+=======
+>>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
 social_medias = Social_Media.objects.all()
 
 #Session
@@ -85,16 +88,18 @@ def login_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email,password=password)
-        if (user is not None and user.is_superuser):
+        if (user is not None and user.is_superuser and user.is_active):
             login(request, user)
             return redirect('admin-dashboard')
-        elif user is not None and user.is_interviewer:
+        elif user is not None and user.is_interviewer and user.is_active:
             login(request, user)
             return redirect('interviewer-dashboard')
-        elif user is not None and user.is_admin:
+        elif user is not None and not user.is_active:
+            messages.error(request, 'Your account is in review please try again later!')
+        elif user is not None and user.is_admin and user.is_active:
             login(request, user)
             return redirect('company-admin-dashboard')
-        elif user is not None and user.is_candidate:
+        elif user is not None and user.is_candidate :
             login(request, user)
             return redirect('index')
         else:
@@ -118,8 +123,15 @@ def registration_view(request):
     if request.method == 'POST':
         if form.is_valid():
             user = form.save(commit=False)
+            email = form.cleaned_data['email']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
             user.is_candidate = True
             user.save()
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'candidate',stop_event), daemon=True)
+            background_thread.start()
+            stop_event.set()
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
             return redirect('/login') 
         else:
@@ -141,17 +153,16 @@ def register_company_front(request):
             email = user_form.cleaned_data['email']
             first_name = user_form.cleaned_data['first_name']
             last_name = user_form.cleaned_data['last_name']
-            password = user_form.cleaned_data['password1']
             company = company_form.save()
             obj.is_admin = True
-            obj.active = False
+            obj.is_active = False
             obj.company = company
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=send_reg_email, args=(request,email,first_name,last_name,password, stop_event), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event), daemon=True)
             background_thread.start()
             stop_event.set()
             obj.save()
-            messages.success(request, 'Your company is successusfuly registerd log in to see details!')
+            messages.success(request, "Welcome user! Your company is successfully registered. We're excited to review your information and get you started! We'll be in touch within 48 hours to confirm approval")
             return redirect('login')
     else:
         company_form = CompanyFormFront()
@@ -356,16 +367,21 @@ def user_profile(request):
         candidate = Candidate.objects.get(user = request.user)
         education = Education.objects.filter(candidate = request.user)
         experience = Experience.objects.filter(candidate = request.user)
+        project = Project.objects.filter(candidate = request.user)
+        language = Language.objects.filter(candidate = request.user)
     except:
         candidate = None 
         education = None
         experience = None
+        project = None
     
     context = {
         'candidate' : candidate,
         'social_medias' : social_medias,
         'education' : education,
-        'experience': experience
+        'experience': experience,
+        'projects' : project,
+        'language' : language
         
     }
     return render(request, 'RMS/user/dashboard-my-profile.html', context)
@@ -451,6 +467,118 @@ def detail_user_education(request, slug):
         'user_education':education_list,
     }
     return render(request, 'RMS/user/dashboard-education-detail.html', context)
+
+
+#Education
+@login_required
+def user_add_project(request):
+    project = Project.objects.filter(candidate = request.user)
+    form_project = ProjectForm(request.POST or None)
+    if request.method == 'POST':
+        if form_project.is_valid():
+            obj = form_project.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Project Status has been successfully Updated!')
+            form_project = ProjectForm()
+        else:
+             messages.error(request, 'Hello User , An error occurred while Adding Project')
+
+    context = {
+        'form' : form_project,
+        'user_project' : project
+        }
+    return render(request, 'RMS/user/dashboard-add-project.html', context)
+
+@login_required
+def detail_user_project(request, id):
+    project =  Project.objects.get(id = id)
+    form = ProjectForm(request.POST or None, instance=project)
+    project_list = Project.objects.filter(candidate = request.user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Project Status has been successfully Updated!')
+            redirect('user-add-project')
+        else:
+            messages.error(request, 'Hello User , An error occurred while Updating Project')
+    context = {
+        'form' : form,
+        'project': project,
+        'user_project':project_list,
+    }
+    return render(request, 'RMS/user/dashboard-project-detail.html', context)
+
+
+@login_required
+def user_delete_project(request, id):
+    project = Project.objects.get(id = id)
+
+    if project.delete():
+        messages.success(request, 'Successfully Deleted!')
+        return redirect('user-add-project')
+    else:
+        messages.error(request,'Your request has not been Unsuccessful Please try again!')
+        return redirect('user-add-project')
+    
+
+
+#Education
+@login_required
+def user_add_language(request):
+    language = Language.objects.filter(candidate = request.user)
+    form_language = LanguageForm(request.POST or None)
+    if request.method == 'POST':
+        if form_language.is_valid():
+            obj = form_language.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Language Status has been successfully Updated!')
+            form_language = LanguageForm()
+        else:
+             messages.error(request, 'Hello User , An error occurred while Adding Language')
+
+    context = {
+        'form' : form_language,
+        'user_language' : language
+        }
+    return render(request, 'RMS/user/dashboard-add-language.html', context)
+
+@login_required
+def detail_user_language(request, id):
+    language =  Language.objects.get(id = id)
+    form = LanguageForm(request.POST or None, instance=language)
+    language_list = Language.objects.filter(candidate = request.user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Language Status has been successfully Updated!')
+            redirect('user-add-project')
+        else:
+            messages.error(request, 'Hello User , An error occurred while Updating Language')
+    context = {
+        'form' : form,
+        'language': language,
+        'user_language':language_list,
+    }
+    return render(request, 'RMS/user/dashboard-language-detail.html', context)
+
+@login_required
+def user_delete_language(request, id):
+    language = Language.objects.get(id = id)
+
+    if language.delete():
+        messages.success(request, 'Successfully Deleted!')
+        return redirect('user-add-language')
+    else:
+        messages.error(request,'Your request has not been Unsuccessful Please try again!')
+        return redirect('user-add-language')
 
 
 #Experience 

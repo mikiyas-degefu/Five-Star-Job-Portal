@@ -72,7 +72,7 @@
               <!-- START PROFILE -->
              
               <section class="section">
-                <div class="container">
+                <div class="container-fluid">
                   <div class="row">
                     <div class="col-lg-4">
                       <div class="card profile-sidebar me-lg-4">
@@ -129,6 +129,30 @@
                                 </li>
                               </ul>
                             </div>
+
+
+                            {% if language %}
+                            <h5 class="fs-17 fw-bold mb-3 mt-5">Language</h5>
+                            <div class="profile-contact">
+                              <ul class="list-unstyled mb-0">
+                                {% for lan in language %}
+                                <li>
+                                  <div class="d-flex">
+                                    <label>{{lan.language | capfirst}}</label>
+                                    <div>
+                                      <p class="text-muted text-break mb-0">
+                                        {{lan.get_proficient_display}}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </li>
+                                {% endfor %}
+
+                              </ul>
+                            </div>
+                            {% endif %}
+
+
                           </div>
                           <!--end contact-details-->
                         </div>
@@ -214,6 +238,27 @@
                                       <p class="text-muted">
                                         Reference Email: {{exper.reference_email}}
                                       </p>
+                                    </div>
+                                  </div>
+                                  {% endfor %}
+
+                                  {% endif %}
+
+
+                                  {% if projects %}
+                                <div class="candidate-education-details mt-5 pt-3">
+                                  <h6 class="fs-18 fw-bold mb-0">Project</h6>
+
+                                  {% for project in projects %}
+                                  <div class="candidate-education-content mt-4 d-flex">
+                                    <div class="circle flex-shrink-0 primary-bg-subtle">
+                                      <i class="fa-solid fa-briefcase"></i>
+                                    </div>
+                                    <div class="ms-4">
+                                      <h6 class="fs-16 mb-1">
+                                        {{project.project_type}}
+                                      </h6>
+                                      {{project.detail | safe}}
                                     </div>
                                   </div>
                                   {% endfor %}

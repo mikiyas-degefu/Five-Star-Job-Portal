@@ -39,6 +39,9 @@
                         data-bs-toggle="modal"
                         data-bs-target="#AddCompanyInterviewerUser"
                         data-bs-whatever="@mdo">Add New Company Interviewer</button>
+                        <a type="button"  href="{% url 'company-export-interviewers' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                          <i class="fa fa-download"></i>
+                       </a>
                       <div class="row">
 
                         <form>
@@ -145,9 +148,9 @@
                       <!-- Pagination -->
              <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-circle pagination-outline justify-content-center" >
-                {% if admin_user.has_previous %}
+                {% if company_interviewer.has_previous %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ admin_user.previous_page_number }}">Previous</a>
+                  <a class="page-link" href="?page={{ company_interviewer.previous_page_number }}">Previous</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
@@ -155,30 +158,30 @@
                   </li>
                 {% endif %}
             
-                {% if admin_user.number|add:'-4' > 1 %}
-                  <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'-5' }}">&hellip;</a></li>
+                {% if company_interviewer.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ company_interviewer.number|add:'-5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% for i in admin_user.paginator.page_range %}
-                  {% if admin_user.number == i %}
+                {% for i in company_interviewer.paginator.page_range %}
+                  {% if company_interviewer.number == i %}
                     <li class="page-item active" aria-current="page">
                     <span class="page-link">
                     {{ i }}
                     <span class="sr-only">(current)</span>
                     </span>
                   </li>
-                  {% elif i > admin_user.number|add:'-5' and i < admin_user.number|add:'5' %}
+                  {% elif i > company_interviewer.number|add:'-5' and i < company_interviewer.number|add:'5' %}
                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                   {% endif %}
                 {% endfor %}
             
-                {% if admin_user.paginator.num_pages > admin_user.number|add:'4' %}
-                   <li class="page-item"><a class="page-link" href="?page={{ admin_user.number|add:'5' }}">&hellip;</a></li>
+                {% if company_interviewer.paginator.num_pages > company_interviewer.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ company_interviewer.number|add:'5' }}">&hellip;</a></li>
                 {% endif %}
             
-                {% if admin_user.has_next %}
+                {% if company_interviewer.has_next %}
                   <li class="page-item">
-                  <a class="page-link" href="?page={{ admin_user.next_page_number }}">Next</a>
+                  <a class="page-link" href="?page={{ company_interviewer.next_page_number }}">Next</a>
                   </li>
                 {% else %}
                   <li class="page-item disabled">
