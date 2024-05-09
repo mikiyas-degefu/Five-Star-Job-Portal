@@ -1,5 +1,5 @@
 from django import forms
-from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, application_status
+from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, Language, Project
 from Company.models import Company
 from datetime import date
 from django.forms import formset_factory
@@ -144,6 +144,21 @@ class CandidateForm(forms.ModelForm):
         if not about or len(about) < 10:
          raise forms.ValidationError('Enter a Valid Resume Content')
         return about
+    
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        exclude = ('candidate',)
+
+        widgets = {
+            'project_type' : forms.TextInput(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'Internship, Personal, Contractual', 
+            }),
+            'detail' : FroalaEditor()
+        }
+
 
 class EducationForm(forms.ModelForm):
     education_status_list = [

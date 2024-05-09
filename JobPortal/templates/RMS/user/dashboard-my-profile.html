@@ -221,6 +221,27 @@
                                   {% endif %}
 
 
+                                  {% if projects %}
+                                <div class="candidate-education-details mt-5 pt-3">
+                                  <h6 class="fs-18 fw-bold mb-0">Project</h6>
+
+                                  {% for project in projects %}
+                                  <div class="candidate-education-content mt-4 d-flex">
+                                    <div class="circle flex-shrink-0 primary-bg-subtle">
+                                      <i class="fa-solid fa-briefcase"></i>
+                                    </div>
+                                    <div class="ms-4">
+                                      <h6 class="fs-16 mb-1">
+                                        {{project.project_type}}
+                                      </h6>
+                                      {{project.detail | safe}}
+                                    </div>
+                                  </div>
+                                  {% endfor %}
+
+                                  {% endif %}
+
+
 
                                   <div class="mt-4">
                                     <h5 class="fs-18 fw-bold">Skills</h5>

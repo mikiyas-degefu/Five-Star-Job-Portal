@@ -1,12 +1,9 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from Company.models import Social_Media, Contact
-from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
-from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews
-from Company.models import Company
-from Company.forms import CompanyForm
+from django.shortcuts import render, redirect
+from Company.models import Social_Media, Contact,Company
+from .forms import ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
 import csv
-from django.shortcuts import render, redirect
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from UserManagement.forms import CustomUserCreationForm, Login_Form, InterviewerForm
@@ -15,15 +12,8 @@ from django.db.models import Q
 import datetime
 from UserManagement.decorators import interviewer_user_required
 from django.core.mail import send_mail, EmailMultiAlternatives
-import os
-import telebot
 import requests
-import random
-from datetime import date
-import string
 from UserManagement.forms import ( ChangePasswordForm)
-from django.contrib.auth.hashers import make_password
-from django.core.mail import send_mail
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -356,16 +346,19 @@ def user_profile(request):
         candidate = Candidate.objects.get(user = request.user)
         education = Education.objects.filter(candidate = request.user)
         experience = Experience.objects.filter(candidate = request.user)
+        project = Project.objects.filter(candidate = request.user)
     except:
         candidate = None 
         education = None
         experience = None
+        project = None
     
     context = {
         'candidate' : candidate,
         'social_medias' : social_medias,
         'education' : education,
-        'experience': experience
+        'experience': experience,
+        'projects' : project
         
     }
     return render(request, 'RMS/user/dashboard-my-profile.html', context)
@@ -451,6 +444,63 @@ def detail_user_education(request, slug):
         'user_education':education_list,
     }
     return render(request, 'RMS/user/dashboard-education-detail.html', context)
+
+
+#Education
+@login_required
+def user_add_project(request):
+    project = Project.objects.filter(candidate = request.user)
+    form_project = ProjectForm(request.POST or None)
+    if request.method == 'POST':
+        if form_project.is_valid():
+            obj = form_project.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Project Status has been successfully Updated!')
+            form_project = ProjectForm()
+        else:
+             messages.error(request, 'Hello User , An error occurred while Adding Project')
+
+    context = {
+        'form' : form_project,
+        'user_project' : project
+        }
+    return render(request, 'RMS/user/dashboard-add-project.html', context)
+
+@login_required
+def detail_user_project(request, id):
+    project =  Project.objects.get(id = id)
+    form = ProjectForm(request.POST or None, instance=project)
+    project_list = Project.objects.filter(candidate = request.user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Project Status has been successfully Updated!')
+            redirect('user-add-project')
+        else:
+            messages.error(request, 'Hello User , An error occurred while Updating Project')
+    context = {
+        'form' : form,
+        'project': project,
+        'user_project':project_list,
+    }
+    return render(request, 'RMS/user/dashboard-project-detail.html', context)
+
+
+@login_required
+def user_delete_project(request, id):
+    project = Project.objects.get(id = id)
+
+    if project.delete():
+        messages.success(request, 'Successfully Deleted!')
+        return redirect('user-add-project')
+    else:
+        messages.error(request,'Your request has not been Unsuccessful Please try again!')
+        return redirect('user-add-project')
+    
 
 
 #Experience 

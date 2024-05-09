@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Resume | Seraye Job Portal</title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    {% include 'include/head.html' %}
+    {{form.media}}
+  </head>
+
+  <body>
+  <!-- Modal -->
+  <div class="modal mt-5 pt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are You Sure You want to delete?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{project.project_type}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <a href="{% url 'user-delete-project' project.id %}" type="button" class="btn btn-danger">Yes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="mt-5">{% include 'include/navbar.html'%}</div>
+    <!-- ======================= dashboard Detail ======================== -->
+    <div class="dashboard-wrap bg-light mt-5">
+      <!--Left Navbar-->
+      {% include 'RMS/user/include/user-dashboard.html'%}
+
+      <div class="dashboard-content">
+        <div class="dashboard-tlbar d-block mb-5">
+          <div class="row">
+            <div class="colxl-12 col-lg-12 col-md-12">
+              <!-- Start home -->
+              <section class="page-title-box" style="height: 0px">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      <div class="text-center text-white">
+                        <h3 class="mb-4">Resume</h3>
+                        <div class="page-next">
+                          <nav
+                            class="d-inline-block"
+                            aria-label="breadcrumb text-center"
+                          >
+                            <ol class="breadcrumb justify-content-center">
+                              <li class="breadcrumb-item">
+                                <a href="{% url 'index' %}">Home</a>
+                              </li>
+                              <li class="breadcrumb-item">
+                                <a href="javascript:void(0)">Dashboard</a>
+                              </li>
+                              <li
+                                class="breadcrumb-item active"
+                                aria-current="page"
+                              >
+                                Edit Resume
+                              </li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </div>
+                <!--end container-->
+              </section>
+              <!-- end home -->
+            </div>
+          </div>
+        </div>
+        <div class="_dashboard_content_body py-3 px-3">
+            <!-- From -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                   {{message}}
+                </div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+
+
+          <!-- Add Education -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="_dashboard_content bg-white rounded mb-4">
+                <div class="_dashboard_content_header br-bottom py-3 px-3">
+                  <div class="_dashboard__header_flex">
+                    <h4 class="mb-0 ft-medium fs-md">
+                      <i class="fas fa-graduation-cap me-1 theme-cl fs-sm"></i
+                      > {{form.institution_name.value}} Education Details
+                    </h4>
+                  </div>
+                </div>
+
+                <div class="_dashboard_content_body py-3 px-3">
+                  <form action="" method="post">{% csrf_token %}                    
+                    </p>
+                    <div class="col-xl-12 col-lg-12">
+                      <div class="gray rounded p-3 mb-3 position-relative">
+                       <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="fas fa-times"></i>
+                      </button>
+                       </div>
+
+                       {{form.as_p}}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12">
+                      <div class="form-group">
+                        <a
+                          type="button"
+                          class="btn gray ft-medium apply-btn fs-sm rounded"
+                          href="{% url 'user-add-project'%}"
+                        >
+                          <i class="fas fa-plus me-1"></i>Add Project
+                        </a>
+                      </div>
+                    </div>
+                   <!-- Save -->
+                   <div class="row mb-5 ms-2">
+                    <div class="col-lg-12 col-md-12">
+                      <button
+                        type="submit"
+                        class="btn btn-md ft-medium text-light rounded theme-bg"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  </form>
+                  
+                  <div class="ms-4">
+                    {% if user_project%}
+                  <div class="h3">Education history's</div>
+                  <hr> 
+                  {% for project in user_project %}
+                      <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-project' project.id %}">{{project.project_type}}</a>
+                  {% endfor %}
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% include 'include/footer.html' %}
+    {% include 'include/footerjs.html' %}
+  </body>
+</html>
