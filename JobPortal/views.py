@@ -17,53 +17,8 @@ from UserManagement.forms import ( ChangePasswordForm)
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from .resource import (handle_registration_email)
 
-
-
-
-
-def send_reg_email(request,email,first_name,last_name,password, stop_event):
-    while not stop_event.is_set():
-        subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
-        text_content = "Registration Successful"
-        context = {
-            'first_name': first_name,
-            'last_name' : last_name,
-            'email' : email,
-            'password' : password
-        }
-        html_content = render_to_string('success-email-company.html',context)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        if msg.send():
-            print('Email sent')
-
-
-
-
-def scrap_skill():
-    url = 'https://www.freelancer.com/job/'
-    
-    response = requests.get(url)
-    content = response.content
-    soup = BeautifulSoup(content, 'html.parser')
-    
-    skill = soup.find_all('a', {'class': 'PageJob-category-link PageJob-category-link--contest'})#.attrs.get('title')
-    skill2 = soup.find_all('a', {'class' : 'PageJob-category-link'})
-    for i in skill2:
-        k = i.attrs.get('title')
-        skill_list = k.replace('Contests', "")
-        obj = Sector()
-        obj.name = skill_list
-        try: obj.save()
-        except: pass
-
-def csv_file_reader():
-    with open('skill_data.csv', 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for i in csv_reader:
-            for j in i:
-                    Skill.objects.create(title = j)
 
 social_medias = Social_Media.objects.all()
 
@@ -75,16 +30,18 @@ def login_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email,password=password)
-        if (user is not None and user.is_superuser):
+        if (user is not None and user.is_superuser and user.is_active):
             login(request, user)
             return redirect('admin-dashboard')
-        elif user is not None and user.is_interviewer:
+        elif user is not None and user.is_interviewer and user.is_active:
             login(request, user)
             return redirect('interviewer-dashboard')
-        elif user is not None and user.is_admin:
+        elif user is not None and not user.is_active:
+            messages.error(request, 'Your account is in review please try again later!')
+        elif user is not None and user.is_admin and user.is_active:
             login(request, user)
             return redirect('company-admin-dashboard')
-        elif user is not None and user.is_candidate:
+        elif user is not None and user.is_candidate :
             login(request, user)
             return redirect('index')
         else:
@@ -131,17 +88,16 @@ def register_company_front(request):
             email = user_form.cleaned_data['email']
             first_name = user_form.cleaned_data['first_name']
             last_name = user_form.cleaned_data['last_name']
-            password = user_form.cleaned_data['password1']
             company = company_form.save()
             obj.is_admin = True
-            obj.active = False
+            obj.is_active = False
             obj.company = company
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=send_reg_email, args=(request,email,first_name,last_name,password, stop_event), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, stop_event), daemon=True)
             background_thread.start()
             stop_event.set()
             obj.save()
-            messages.success(request, 'Your company is successusfuly registerd log in to see details!')
+            messages.success(request, "Welcome user! Your company is successfully registered. We're excited to review your information and get you started! We'll be in touch within 48 hours to confirm approval")
             return redirect('login')
     else:
         company_form = CompanyFormFront()

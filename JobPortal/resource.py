@@ -2,10 +2,19 @@ import telebot, os
 from import_export import resources
 from Company.models import Company
 from .models import (Sector, Job_Posting, Skill, Application)
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget  # For foreignkey
 from UserManagement.models import CustomUser
+
+import threading
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
+
+
+######
+####TELEGRAM  
+
 
 BOT_TOKEN = os.environ.get('6195701188:AAGYJvuebbXWUatD4MtOwJ8NNASCdMlXjwE')
 bot = telebot.TeleBot('6195701188:AAGYJvuebbXWUatD4MtOwJ8NNASCdMlXjwE')
@@ -35,6 +44,22 @@ SERAYE - JOB PORTAL\n
 
 
 
+######
+#### EMAIL
+def handle_registration_email(request,email,first_name,last_name,stop_event):
+    while not stop_event.is_set():
+        subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
+        text_content = "Registration Successful"
+        context = {
+            'first_name': first_name,
+            'last_name' : last_name,
+            'email' : email,
+        }
+        html_content = render_to_string('success-email-company.html',context)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            print('Email sent')
 
 ######
 ## IMPORT EXPORT ##

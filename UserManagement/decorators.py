@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 
 def admin_user_required(view_func):
     def wrapper_func(request, *args, **kwargs):
-        if request.user.is_admin:            
+        if request.user.is_admin and request.user.is_active:            
             return view_func(request, *args, **kwargs)
         else:
             return HttpResponse('You are not authorized to access this content.')
@@ -11,7 +11,7 @@ def admin_user_required(view_func):
 
 def interviewer_user_required(view_func):
     def wrapper_func(request, *args, **kwargs):
-        if request.user.is_interviewer:
+        if request.user.is_interviewer and request.user.is_active:
             return view_func(request, *args, **kwargs)
         else:
              return HttpResponse('You are not authorized to access this content.')
