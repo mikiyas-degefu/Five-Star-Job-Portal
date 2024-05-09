@@ -26,11 +26,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          {{project.project_type}}
+          {{language.language}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          <a href="{% url 'user-delete-project' project.id %}" type="button" class="btn btn-danger">Yes</a>
+          <a href="{% url 'user-delete-language' language.id%}" type="button" class="btn btn-danger">Yes</a>
         </div>
       </div>
     </div>
@@ -110,7 +110,7 @@
                   <div class="_dashboard__header_flex">
                     <h4 class="mb-0 ft-medium fs-md">
                       <i class="fas fa-graduation-cap me-1 theme-cl fs-sm"></i
-                      > {{form.institution_name.value}} Project Details
+                      > Language Details
                     </h4>
                   </div>
                 </div>
@@ -135,9 +135,9 @@
                         <a
                           type="button"
                           class="btn gray ft-medium apply-btn fs-sm rounded"
-                          href="{% url 'user-add-project'%}"
+                          href="{% url 'user-add-language'%}"
                         >
-                          <i class="fas fa-plus me-1"></i>Add Project
+                          <i class="fas fa-plus me-1"></i>Add Language
                         </a>
                       </div>
                     </div>
@@ -155,11 +155,11 @@
                   </form>
                   
                   <div class="ms-4">
-                    {% if user_project%}
-                  <div class="h3">Education history's</div>
+                    {% if user_language%}
+                  <div class="h3">Language history's</div>
                   <hr> 
-                  {% for project in user_project %}
-                      <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-project' project.id %}">{{project.project_type}}</a>
+                  {% for language in user_language %}
+                      <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-language' language.id %}">{{language.language}}</a>
                   {% endfor %}
                   {% endif %}
                   </div>

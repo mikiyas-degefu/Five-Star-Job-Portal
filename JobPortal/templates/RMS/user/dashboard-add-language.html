@@ -11,33 +11,15 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+    
     {% include 'include/head.html' %}
     {{form.media}}
   </head>
 
   <body>
-  <!-- Modal -->
-  <div class="modal mt-5 pt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are You Sure You want to delete?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          {{project.project_type}}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-          <a href="{% url 'user-delete-project' project.id %}" type="button" class="btn btn-danger">Yes</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-<div class="mt-5">{% include 'include/navbar.html'%}</div>
+    <div class="mt-5">{% include 'include/navbar.html'%}</div>
     <!-- ======================= dashboard Detail ======================== -->
     <div class="dashboard-wrap bg-light mt-5">
       <!--Left Navbar-->
@@ -92,7 +74,7 @@
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                <div class="alert alert-success alert-dismissible">
+                <div class="alert {% if message.tags == 'success' %} alert-success {% else %} alert-danger {% endif %}  alert-dismissible">
                   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                    {{message}}
                 </div>
@@ -100,7 +82,6 @@
             </ul>
             {% endif %}
           </div>
-
 
           <!-- Add Education -->
           <div class="row">
@@ -110,7 +91,7 @@
                   <div class="_dashboard__header_flex">
                     <h4 class="mb-0 ft-medium fs-md">
                       <i class="fas fa-graduation-cap me-1 theme-cl fs-sm"></i
-                      > {{form.institution_name.value}} Project Details
+                      >Add Language Details
                     </h4>
                   </div>
                 </div>
@@ -120,29 +101,12 @@
                     </p>
                     <div class="col-xl-12 col-lg-12">
                       <div class="gray rounded p-3 mb-3 position-relative">
-                       <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            <i class="fas fa-times"></i>
-                      </button>
-                       </div>
-
-                       {{form.as_p}}
+                        {{form.as_p}}
                         </div>
                       </div>
                     </div>
-                    <div class="col-xl-12 col-lg-12">
-                      <div class="form-group">
-                        <a
-                          type="button"
-                          class="btn gray ft-medium apply-btn fs-sm rounded"
-                          href="{% url 'user-add-project'%}"
-                        >
-                          <i class="fas fa-plus me-1"></i>Add Project
-                        </a>
-                      </div>
-                    </div>
                    <!-- Save -->
-                   <div class="row mb-5 ms-2">
+                   <div class="row ms-2 mb-5">
                     <div class="col-lg-12 col-md-12">
                       <button
                         type="submit"
@@ -154,20 +118,21 @@
                   </div>
                   </form>
                   
-                  <div class="ms-4">
-                    {% if user_project%}
-                  <div class="h3">Education history's</div>
+                  <div class="ms-2 mb-4">
+                    {% if user_language%}
+                  <div class="h3">Language history's</div>
                   <hr> 
-                  {% for project in user_project %}
-                      <a class="btn btn-secondary mt-3 ms-2" href="{% url 'detail-user-project' project.id %}">{{project.project_type}}</a>
+                  {% for language in user_language %}
+                      <a class="btn btn-secondary mt-3 ms-2 mb-2" href="{% url 'detail-user-language' language.id %}">{{language.language}}</a>
                   {% endfor %}
                   {% endif %}
+
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

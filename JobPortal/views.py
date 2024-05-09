@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact,Company
-from .forms import ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
 import csv
@@ -347,6 +347,7 @@ def user_profile(request):
         education = Education.objects.filter(candidate = request.user)
         experience = Experience.objects.filter(candidate = request.user)
         project = Project.objects.filter(candidate = request.user)
+        language = Language.objects.filter(candidate = request.user)
     except:
         candidate = None 
         education = None
@@ -358,7 +359,8 @@ def user_profile(request):
         'social_medias' : social_medias,
         'education' : education,
         'experience': experience,
-        'projects' : project
+        'projects' : project,
+        'language' : language
         
     }
     return render(request, 'RMS/user/dashboard-my-profile.html', context)
@@ -501,6 +503,61 @@ def user_delete_project(request, id):
         messages.error(request,'Your request has not been Unsuccessful Please try again!')
         return redirect('user-add-project')
     
+
+
+#Education
+@login_required
+def user_add_language(request):
+    language = Language.objects.filter(candidate = request.user)
+    form_language = LanguageForm(request.POST or None)
+    if request.method == 'POST':
+        if form_language.is_valid():
+            obj = form_language.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Language Status has been successfully Updated!')
+            form_language = LanguageForm()
+        else:
+             messages.error(request, 'Hello User , An error occurred while Adding Language')
+
+    context = {
+        'form' : form_language,
+        'user_language' : language
+        }
+    return render(request, 'RMS/user/dashboard-add-language.html', context)
+
+@login_required
+def detail_user_language(request, id):
+    language =  Language.objects.get(id = id)
+    form = LanguageForm(request.POST or None, instance=language)
+    language_list = Language.objects.filter(candidate = request.user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Language Status has been successfully Updated!')
+            redirect('user-add-project')
+        else:
+            messages.error(request, 'Hello User , An error occurred while Updating Language')
+    context = {
+        'form' : form,
+        'language': language,
+        'user_language':language_list,
+    }
+    return render(request, 'RMS/user/dashboard-language-detail.html', context)
+
+@login_required
+def user_delete_language(request, id):
+    language = Language.objects.get(id = id)
+
+    if language.delete():
+        messages.success(request, 'Successfully Deleted!')
+        return redirect('user-add-language')
+    else:
+        messages.error(request,'Your request has not been Unsuccessful Please try again!')
+        return redirect('user-add-language')
 
 
 #Experience 

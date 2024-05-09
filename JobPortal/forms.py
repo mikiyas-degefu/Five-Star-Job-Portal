@@ -159,6 +159,21 @@ class ProjectForm(forms.ModelForm):
             'detail' : FroalaEditor()
         }
 
+class LanguageForm(forms.ModelForm):
+    class Meta:
+        model = Language
+        exclude = ('id','slug', 'candidate')
+
+        widgets = {
+            'language' : forms.TextInput(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'English, Amharic ...', 
+            }),
+           'proficient' : forms.Select(attrs={
+               'class' : 'form-select bg-white'
+           })
+        }
+
 
 class EducationForm(forms.ModelForm):
     education_status_list = [
