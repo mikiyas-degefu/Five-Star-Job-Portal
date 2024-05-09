@@ -50,7 +50,6 @@ def send_reg_email(request,email,first_name,last_name,password, stop_event):
 
 
 
-
 def scrap_skill():
     url = 'https://www.freelancer.com/job/'
     
@@ -675,6 +674,10 @@ def interview_detail(request, slug):
     if request.method == 'POST':
         if interview_form.is_valid():
             obj = interview_form.save(commit=False)
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=send_reg_email, args=(request,interview.application.user.email,interview.application.user.first_name,interview.application.user.last_name, stop_event), daemon=True)
+            background_thread.start()
+            stop_event.set()
             obj.status = 'scheduled'
             obj.save()
             time = str(interview.time_schedule.strftime('%I:%M %p'))
