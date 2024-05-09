@@ -17,11 +17,8 @@ from django.db.models import Count
 import threading
 from JobPortal.resource import handle_telegram_post
 from bs4 import BeautifulSoup
-<<<<<<< HEAD
 import random
-=======
 from JobPortal.resource import (CompanyResource, SectorResource, JobResource, SkillResource, UserResource)
->>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
 # Create your views here.
 
 
@@ -815,12 +812,10 @@ def audit(request):
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/log.html', context=context)
-<<<<<<< HEAD
     
 
 
 
-=======
 
 
 
@@ -891,4 +886,3 @@ def export_candidates(request):
     response = HttpResponse(dataset.csv, content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="candidates.csv"'
     return response
->>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7

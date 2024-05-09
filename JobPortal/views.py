@@ -1,16 +1,13 @@
-<<<<<<< HEAD
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from Company.forms import CompanyForm
-=======
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact,Company
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
->>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
 from django.contrib import messages
 import csv
 from django.contrib.auth import login,authenticate,logout
@@ -30,54 +27,6 @@ from django.core.mail import EmailMultiAlternatives
 from .resource import (handle_registration_email)
 
 
-<<<<<<< HEAD
-
-
-
-def send_reg_email(request,email,first_name,last_name,password, stop_event):
-    while not stop_event.is_set():
-        subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
-        text_content = "Registration Successful"
-        context = {
-            'first_name': first_name,
-            'last_name' : last_name,
-            'email' : email,
-            'password' : password
-        }
-        html_content = render_to_string('success-email-company.html',context)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        if msg.send():
-            print('Email sent')
-
-
-
-def scrap_skill():
-    url = 'https://www.freelancer.com/job/'
-    
-    response = requests.get(url)
-    content = response.content
-    soup = BeautifulSoup(content, 'html.parser')
-    
-    skill = soup.find_all('a', {'class': 'PageJob-category-link PageJob-category-link--contest'})#.attrs.get('title')
-    skill2 = soup.find_all('a', {'class' : 'PageJob-category-link'})
-    for i in skill2:
-        k = i.attrs.get('title')
-        skill_list = k.replace('Contests', "")
-        obj = Sector()
-        obj.name = skill_list
-        try: obj.save()
-        except: pass
-
-def csv_file_reader():
-    with open('skill_data.csv', 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for i in csv_reader:
-            for j in i:
-                    Skill.objects.create(title = j)
-
-=======
->>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
 social_medias = Social_Media.objects.all()
 
 #Session

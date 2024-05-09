@@ -17,11 +17,9 @@ admin.site.register(models.Experience)
 admin.site.register(models.Bookmarks)
 admin.site.register(models.Application)
 admin.site.register(models.Interviews)
-<<<<<<< HEAD
 admin.site.register(models.Question)
 admin.site.register(models.Choice)
 admin.site.register(models.UserSkill)
-=======
 admin.site.register(models.Language)
 admin.site.register(models.Project)
 
@@ -42,4 +40,3 @@ class SkillAdmin(ImportExportModelAdmin):
     resource_classes = [SkillResource]
 
 admin.site.register(models.Skill, SkillAdmin)
->>>>>>> 69c72478d577c5cb7ee679a2e902bf9bea82e8b7
