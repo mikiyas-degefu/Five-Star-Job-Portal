@@ -17,6 +17,8 @@ admin.site.register(models.Experience)
 admin.site.register(models.Bookmarks)
 admin.site.register(models.Application)
 admin.site.register(models.Interviews)
+admin.site.register(models.Language)
+admin.site.register(models.Project)
 
 
 class SectorAdmin(ImportExportModelAdmin):
