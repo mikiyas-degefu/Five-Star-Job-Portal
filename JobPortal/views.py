@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
-from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews
+from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from Company.forms import CompanyForm
 from django.contrib import messages
@@ -14,6 +14,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 import datetime
 from UserManagement.decorators import interviewer_user_required
+from UserManagement.models import CustomUser 
 from django.core.mail import send_mail, EmailMultiAlternatives
 import os
 import telebot
@@ -944,3 +945,70 @@ def company_interviewer_change_password(request):
 
     
     return render(request,'RMS/interviewer/change_password.html', {'form': form})  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def validate_skill_list(request):
+    candidate = Candidate.objects.get(user=request.user)
+    user_skills = UserSkill.objects.filter(candidate=candidate)
+
+
+    context = {
+       "user_skills" : user_skills, 
+    }
+    
+
+    
+    return render(request , 'RMS/user/skill_validate_list.html', context)
+
+
+
+def instruction(request , slug):
+    candidate = Candidate.objects.get(user=request.user)
+    skill = Skill.objects.get(slug=slug)
+    user_skills = UserSkill.objects.filter(candidate=candidate)
+    questions = Question.objects.filter(for_skill=skill).count
+
+
+    context = {
+       "questions" : questions, 
+       "skill" : skill,
+    }
+    
+
+    
+    return render(request , 'RMS/user/question_instruction.html', context)
+
+
+
+def validate_skill(request , slug):
+    user = request.user
+    skill = Skill.objects.get(slug=slug)
+    userskill = UserSkill.objects.get(skill=skill)
+    questions = Question.objects.filter(for_skill=skill)
+    
+
+
+    context = {
+       "questions" : questions,
+       'choices' : Choice.objects.all() ,
+       "skill" : skill
+    }
+    
+
+    
+    return render(request , 'RMS/user/question.html', context)
+

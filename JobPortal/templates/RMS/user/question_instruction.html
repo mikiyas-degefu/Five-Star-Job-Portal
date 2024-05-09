@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Dashboard | Seraye Job Portal </title>
+	  <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+
+	<div class="mt-5">{% include 'include/navbar.html'%}</div>
+      <div class="dashboard-wrap bg-light">
+		 <!--Left Navbar-->
+		 {% include 'RMS/user/include/user-dashboard.html'%}
+
+        <div class="dashboard-content ">
+          <div class="dashboard-tlbar d-block mb-5">
+            <div class="row">
+              <div class="colxl-12 col-lg-12 col-md-12">
+                <h1 class="ft-medium">Hello, {{user.first_name}} {{user.last_name}}</h1>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="#" class="theme-cl">Validate Your Skills {{skill}}</a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          <div class="container card p-4 shadow">
+            <div class="row">
+              <div class="col-md-12">
+                
+                  <p class="text-danger">Please read the following instructions carefully before going to the questions:</p>
+               
+              </div>
+            </div>
+            <div class="container card p-2 shadow">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="alert alert-warning">
+                      <p>This test has  {{questions}} questions. You will have 1 min to answer each questions. Read each question carefully before selecting your answer. Ensure that you understand the question fully before proceeding. For each question, you will find multiple choices. Choose the best answer that you think is correct based on your understanding of the question. Remember, select only one answer for each question.
+                        To select an answer, click on the radio button next to your chosen option. <br> This will indicate your choice for that particular question. Once you have answered all the questions, click the "Submit" button located at the end of the exam. This will submit your answers for evaluation.
+                        <br> After submission, you will be redirected to the exam result page. On this page, you will be able to view your score and any feedback provided. </p>
+                    </div>
+                  </div>
+                </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="alert alert-success">
+                  <p>Good luck with your exam! Take your time and do your best to answer each question accurately. If you encounter any technical difficulties or have any questions during the exam, please reach out to us after the exam.</p>
+                </div>
+              </div>
+            </div>
+            <a class="btn btn-primary" href="{% url "validate_skill" skill.slug %}">Procced to questions</a> 
+        
+        </div>
+
+        </div>
+      </div>
+   
+      <a id="back2Top" class="top-scroll" title="Back to top" href="#"
+        ><i class="ti-arrow-up"></i
+      ></a>
+    </div>
+	{% include 'include/footer.html' %}
+  {% include 'include/footerjs.html' %}
+
+  </body>
+  </html>

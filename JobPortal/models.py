@@ -14,6 +14,8 @@ gender_list = [
     ('female', 'Female'),
 ]
 
+
+
 class Candidate(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True)
     gender = models.CharField(max_length=10, choices=gender_list)
@@ -27,8 +29,7 @@ class Candidate(models.Model):
     city = models.CharField(max_length=20)
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     photo = models.ImageField(upload_to='Candidate/photo', null=True, blank=True)
-    about = models.TextField()
-    skill = models.ManyToManyField("Skill", blank=False) 
+    about = models.TextField() 
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -55,6 +56,16 @@ education_status_list = [
     ('doctorate', "Doctorate"),
     ('other', 'Other')
 ]
+
+
+class UserSkill(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    skill = models.ForeignKey("Skill" ,  on_delete=models.CASCADE)
+    validated = models.BooleanField(null=True , blank=True)
+   
+
+    def __str__(self) -> str:
+        return self.candidate.user.first_name + "" + self.skill.title
 
 class Education(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -99,6 +110,7 @@ class Experience(models.Model):
 class Skill(models.Model):
     title = models.CharField(unique=True, max_length=30)
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
+    validable = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -288,4 +300,34 @@ auditlog.register(Skill)
 auditlog.register(Sector)
 auditlog.register(Job_Posting)
     
+
+
+
+question_level = [
+    ('beginner', 'Beginner'),
+    ('intermediate', 'Intermediate'),
+    ('expert', 'Expert'),
+]
+
+
+
+class Choice(models.Model):
+    text = models.CharField(max_length=150)
+    for_question = models.ForeignKey("Question" ,on_delete=models.SET_NULL , null=True)
+
+    
+    def __str__(self) -> str:
+        return str(self.text)
+
+class Question(models.Model):
+    text = models.CharField(max_length=200)
+    level = models.CharField(max_length=15, choices=question_level)
+    for_skill = models.ForeignKey(Skill , on_delete=models.SET_NULL , null=True)
+    answer = models.ForeignKey(Choice , on_delete=models.SET_NULL , null=True)
+
+    def __str__(self) -> str:
+        return str(self.text)
+
+
+
 

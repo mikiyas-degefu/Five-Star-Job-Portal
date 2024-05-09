@@ -5,7 +5,7 @@ from django.contrib import messages
 from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
 from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
-from JobPortal.models import (Sector, Skill , Job_Posting, Application)
+from JobPortal.models import (Sector, Skill , Job_Posting, Application , Question , Choice)
 from UserManagement.models import CustomUser
 from django.db.models import Q
 from UserManagement.decorators import (admin_super_user_required)
@@ -17,6 +17,7 @@ from django.db.models import Count
 import threading
 from JobPortal.resource import handle_telegram_post
 from bs4 import BeautifulSoup
+import random
 # Create your views here.
 
 
@@ -810,3 +811,7 @@ def audit(request):
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/log.html', context=context)
+    
+
+
+

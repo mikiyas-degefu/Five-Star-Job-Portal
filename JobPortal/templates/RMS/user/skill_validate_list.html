@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Themezhub" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Dashboard | Seraye Job Portal </title>
+	  <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet" />
+    {% include 'include/head.html' %}
+  </head>
+
+  <body>
+
+	<div class="mt-5">{% include 'include/navbar.html'%}</div>
+      <div class="dashboard-wrap bg-light">
+		 <!--Left Navbar-->
+		 {% include 'RMS/user/include/user-dashboard.html'%}
+
+        <div class="dashboard-content ">
+          <div class="dashboard-tlbar d-block mb-5">
+            <div class="row">
+              <div class="colxl-12 col-lg-12 col-md-12">
+                <h1 class="ft-medium">Hello, {{user.first_name}} {{user.last_name}}</h1>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="#" class="theme-cl">Validate Your Skills</a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-widg-bar d-block">
+            <div class="row">
+
+            {% for i in user_skills %}
+                
+              <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2">
+                <a href="{% url "instruction" i.skill.slug %}">
+                <div class="dash-widgets py-4 px-3 bg-info rounded">
+                  <p class="p-0 m-0 text-dark fs-md">{{i.skill}}</p>
+                </div>
+               </a>
+              </div>
+              
+            {% endfor %}
+            </div> 
+          </div>
+
+        </div>
+      </div>
+   
+      <a id="back2Top" class="top-scroll" title="Back to top" href="#"
+        ><i class="ti-arrow-up"></i
+      ></a>
+    </div>
+	{% include 'include/footer.html' %}
+  {% include 'include/footerjs.html' %}
+
+  </body>
+  </html>
