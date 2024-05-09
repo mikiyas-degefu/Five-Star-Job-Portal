@@ -65,8 +65,15 @@ def registration_view(request):
     if request.method == 'POST':
         if form.is_valid():
             user = form.save(commit=False)
+            email = form.cleaned_data['email']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
             user.is_candidate = True
             user.save()
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'candidate',stop_event), daemon=True)
+            background_thread.start()
+            stop_event.set()
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
             return redirect('/login') 
         else:
@@ -93,7 +100,7 @@ def register_company_front(request):
             obj.is_active = False
             obj.company = company
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, stop_event), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event), daemon=True)
             background_thread.start()
             stop_event.set()
             obj.save()
