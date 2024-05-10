@@ -32,7 +32,7 @@
         <div class="page-content">
             <div class="container-fluid">
               <div class="row justify-content-center">
-                <div class="col-11">
+                <div class="col-12">
                   {% include 'CompanyAdmin/include/messages.html' %}        
                   <div class="card p-4">
                     <div class="card-body text-center">
@@ -40,12 +40,12 @@
 
                       <form method="post">
                         {% csrf_token %}
-                        <div class="row">
-                          <div class="col-md-6">
+                        <div class="row justify-content-center">
+                          <div class="col-md-4">
 
                         {{form.as_p}}
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             {{interview_form.as_p}}
                           </div>
                         </div>
@@ -61,7 +61,7 @@
 
                
 
-                <div class="col-xl-3">
+                <div class="col-xl-4">
                   <div class="card p-4">
                     <div class="card-body text-center">
                       <div class="text-center pb-4 border-bottom">
@@ -89,9 +89,9 @@
 
 
                           <div class="d-flex  p-2 justify-content-between">
-                            <label class="fw-normal text-muted h5 " for="">Email</label>
+                            <label class=" text-muted " for="">Email: </label>
                           <div>
-                            <p class="text-muted text-break mb-0">
+                            <p class="text-muted text-break mb-0 text-sm">
                               {{user.candidate.email}}
                             </p>
                           </div>
@@ -99,7 +99,7 @@
 
 
                           <div class="d-flex  p-2 justify-content-between">
-                            <label class="fw-normal text-muted h5 " for="">Phone</label>
+                            <label class=" text-muted  " for="">Phone</label>
                           <div>
                             <p class="text-muted text-break mb-0">
                               {{user.candidate.phone1}}
@@ -109,7 +109,7 @@
 
 
                           <div class="d-flex  p-2 justify-content-between">
-                            <label class="fw-normal text-muted h5 " for="">Address</label>
+                            <label class=" text-muted " for="">Address</label>
                           <div>
                             <p class="text-muted text-break mb-0">
                               {{user.candidate.address}}
@@ -117,6 +117,26 @@
                           </div>
                           </div>
 
+                          {% if language %}
+                          <h5 class="fs-17 fw-bold mb-3 mt-5">Language</h5>
+                          <div class="profile-contact">
+                            <ul class="list-unstyled mb-0">
+                              {% for lan in language %}
+                              <li>
+                                <div class="d-flex p-2 justify-content-between">
+                                  <label class="text-muted" >{{lan.language | capfirst}}</label>
+                                  <div>
+                                    <p class="text-muted text-break mb-0">
+                                      {{lan.get_proficient_display}}
+                                    </p>
+                                  </div>
+                                </div>
+                              </li>
+                              {% endfor %}
+
+                            </ul>
+                          </div>
+                          {% endif %}
 
                         </div>
                         
@@ -224,6 +244,37 @@
                       </div>
 
                       {% endif %}
+
+                      {% if project %}
+
+                      <div class="text-start">
+                        <div class="h4">Education</div>
+                        {% for pro in project %}
+                        <div class="d-flex">
+                          <div class="candidate-education-content mt-4 d-flex">
+                            <div class="vr m-2 mt-4"></div>
+                            <div class="circle flex-shrink-0 primary-bg-subtle">
+                              <i class="text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mortarboard-fill" viewBox="0 0 16 16">
+                                  <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/>
+                                  <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/>
+                                </svg>
+                              </i>
+                            </div>
+                            <div class="ms-4">
+                              <h6 class="fs-16 mb-1">
+                                {{pro.project_type}}
+                              </h6>
+                              {{pro.detail | safe}}
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+
+                      {% endif %}
+
+
 
 
                       <div class="mt-4 text-start">
