@@ -13,28 +13,75 @@ from UserManagement.models import CustomUser
 
 
 
-
 class CompanyFormFront(forms.ModelForm):
+    error_css_class = 'text-danger'
     class Meta:
+        about = forms.CharField(widget=FroalaEditor())
         model = Company
-        fields = ['name', 'slogan', 'location']
+        exclude = ['active', 'date_created', 'views', 'total_jobs' ]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'slogan': forms.TextInput(attrs={'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={
+                'class': 'text-dark form-control mb-3 w-100',
+                'placeholder': 'Company Name (Required)',
+                }),
+            'slogan': forms.TextInput(attrs={
+                'class': 'text-dark form-control mb-3 w-100',
+                'placeholder': 'Company Slogan',
+                }),
+            'logo': forms.ClearableFileInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'enter'
+                }),
+            'about': forms.Textarea(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'Company About',
+                }),
+            'email': forms.EmailInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'Enter Company Email'
+                }),
+            'address': forms.TextInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'Enter Company Address'
+                }),
+            'phone': forms.TextInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'Enter Company Phone'
+                }),
+            'website': forms.URLInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'placeholder': 'Enter Company Website'
+                }),
+            'since': forms.DateInput(attrs={
+                'class': 'text-dark form-control mb-3',
+                'type': 'date'
+                }),
         }
 
+
+
 class CustomUserFormFront(UserCreationForm):
+    error_css_class = 'text-warning'
+    password1 = forms.CharField( max_length=40, label='Password' ,widget=forms.PasswordInput(attrs={
+        'class' : 'form-control',
+        'placeholder' : 'Enter Your Password',
+        'autocomplete': 'off'
+    }))
+    password2 = forms.CharField( max_length=40, label='Confirm Password', widget=forms.PasswordInput(attrs={
+        'class' : 'form-control',
+        'placeholder' : 'Confirm Password',
+        'autocomplete': 'off'
+    }))
     class Meta:
         model = CustomUser
         fields = ['first_name', 'username' ,  'last_name', 'email' ,'password1', 'password2']
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
-            'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder' : 'User First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder' : 'User Last Name'}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder' : 'User username'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder' : 'User Email'}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder' : 'User First Name'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder' : 'User First Name'}),
             
         }
 

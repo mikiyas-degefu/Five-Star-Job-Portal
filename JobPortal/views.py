@@ -94,28 +94,32 @@ def registration_view(request):
 
 
 def register_company_front(request):
+    company_form = CompanyFormFront(request.POST or None, request.FILES or None)
+    user_form = CustomUserFormFront(request.POST or None)
+
     if request.method == 'POST':
-        company_form = CompanyFormFront(request.POST)
-        user_form = CustomUserFormFront(request.POST)
         if company_form.is_valid() and user_form.is_valid():
-            obj = user_form.save(commit=False)
+            company = company_form.save()
+            user = user_form.save(commit=False)
+            user.is_admin = True
+            user.company = company
+            user.save()
+
             email = user_form.cleaned_data['email']
             first_name = user_form.cleaned_data['first_name']
             last_name = user_form.cleaned_data['last_name']
-            company = company_form.save()
-            obj.is_admin = True
-            obj.is_active = False
-            obj.company = company
+            company_name = company.name
+            
+            
+
+
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event, company_name), daemon=True)
             background_thread.start()
             stop_event.set()
-            obj.save()
+            
             messages.success(request, "Welcome user! Your company is successfully registered. We're excited to review your information and get you started! We'll be in touch within 48 hours to confirm approval")
             return redirect('login')
-    else:
-        company_form = CompanyFormFront()
-        user_form = CustomUserFormFront()
     
     context = {
         'company_form': company_form,
