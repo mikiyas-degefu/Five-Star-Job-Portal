@@ -5,7 +5,7 @@ from froala_editor.widgets import FroalaEditor
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name','logo', 'slogan', 'about', 'email', 'address', 'phone', 'since', 'location', 'website']
+        fields = ['name','logo', 'slogan', 'about', 'email', 'address', 'phone', 'since', 'website']
 
         widgets = {
             'name' : forms.TextInput(attrs={
@@ -36,10 +36,6 @@ class CompanyForm(forms.ModelForm):
             'since' : forms.DateInput(attrs={
                 'class' : 'form-control',
                 'type' : 'date',
-                'placeholder' : '*Required'
-            }),
-            'location' : forms.TextInput(attrs={
-                'class' : 'form-control',
                 'placeholder' : '*Required'
             }),
             'website' : forms.TextInput(attrs={

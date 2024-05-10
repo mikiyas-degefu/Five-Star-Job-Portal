@@ -17,7 +17,7 @@ from UserManagement.models import CustomUser
 class CompanyFormFront(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'slogan', 'location']
+        fields = ['name', 'slogan']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'slogan': forms.TextInput(attrs={'class': 'form-control'}),

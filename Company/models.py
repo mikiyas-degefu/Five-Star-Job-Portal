@@ -29,7 +29,6 @@ class Company(models.Model):
     since = models.DateField(auto_now=False, auto_now_add=False , null=True , blank=True)
     views = models.IntegerField(default=0)
     total_jobs = models.IntegerField(default=0)
-    location = models.CharField(max_length=100) 
     website = models.URLField(max_length=200,null=True , blank=True)
     date_created = models.DateField(auto_now_add=True, null=True)
 

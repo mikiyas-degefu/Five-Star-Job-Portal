@@ -820,7 +820,8 @@
 
                 <h2> Top Companies </h2>
 
-                
+                {% if company %}
+
                 {% for i in company  %}
 
                 <div class="col-lg-2">
@@ -850,6 +851,7 @@
 
                 
                 {% endfor %}
+                {% endif %}
               </div>
               <!--end row-->
             </div>

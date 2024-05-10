@@ -1050,8 +1050,13 @@ def company_interviewer_change_password(request):
 
 
 def validate_skill_list(request):
-    candidate = Candidate.objects.get(user=request.user)
-    user_skills = UserSkill.objects.filter(candidate=candidate)
+    try :
+        candidate = Candidate.objects.get(user=request.user)
+        user_skills = UserSkill.objects.filter(candidate=candidate)
+    except:
+        user_skills = None
+    
+    
 
 
     context = {
