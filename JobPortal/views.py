@@ -24,7 +24,7 @@ from UserManagement.forms import ( ChangePasswordForm)
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from .resource import (handle_registration_email)
+from .resource import (handle_registration_email, handle_successfully_applied_send_email)
 
 
 social_medias = Social_Media.objects.all()
@@ -92,7 +92,7 @@ def registration_view(request):
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
             return redirect('/login') 
         else:
-            messages.error(request, '&#128532 Hello User , An error occurred while Creating Account Please try again')
+            messages.error(request, 'Hello User , An error occurred while Creating Account Please try again')
 
     context = {
         'form' : form
@@ -640,6 +640,12 @@ def user_apply_job(request, slug):
         obj.user = request.user
         obj.job = job
         obj.save()
+
+        stop_event = threading.Event()
+        background_thread = threading.Thread(target=handle_successfully_applied_send_email, args=(request,obj.user.first_name,obj.user.last_name, job.title, job.company.name, obj.user.email,stop_event ), daemon=True)
+        background_thread.start()
+        stop_event.set()
+
         messages.success(request, 'Successfully Applied Check your Applied Jobs')
         return redirect(request.META.get('HTTP_REFERER'))
 
