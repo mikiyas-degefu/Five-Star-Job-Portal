@@ -87,8 +87,27 @@ input.invalid {
                                         <div class="col-lg-7">
                                             <div class="auth-content card-body p-5 text-white">
                                               <div  class="w-100 p-5">
-                                                <form id="regForm" method="post">
+                                                <form id="regForm" method="post" enctype="multipart/form-data">
                                                   {% csrf_token %}
+                                                  
+                                                  {% if company_form.errors %}
+                                                         <ul class="text-warning">
+                                                          {% for field, errors in company_form.errors.items %}
+                                                        {% for error in errors %}
+                                                         <li>{{ field | capfirst }}: {{ error | capfirst }}</li>
+                                                       {% endfor %}
+                                                       {% endfor %}
+                                                       </ul>
+                                                    {% endif %}
+                                                    {% if user_form.errors %}
+                                                         <ul class="text-warning">
+                                                          {% for field, errors in user_form.errors.items %}
+                                                        {% for error in errors %}
+                                                         <li>{{ field | capfirst }}: {{ error | capfirst }}</li>
+                                                       {% endfor %}
+                                                       {% endfor %}
+                                                       </ul>
+                                                    {% endif %}
                                                   <h1>Register:</h1>
                                                   
                                                   <!-- One "tab" for each step in the form: -->

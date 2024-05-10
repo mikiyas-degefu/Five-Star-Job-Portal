@@ -13,6 +13,7 @@ admin.site.register(models.Contact_Message)
 
 
 class CompanyAdmin(ImportExportModelAdmin):
+    list_display = ['name', 'active', 'views', 'total_jobs']
     resource_classes = [CompanyResource]
 
 admin.site.register(models.Company, CompanyAdmin)

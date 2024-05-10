@@ -156,6 +156,14 @@ def company_delete(request, id):
 
 def change_status(request, company_id):
     company = Company.objects.get(id=company_id)
+    company_admins = CustomUser.objects.filter(company = company)
+
+    try:
+        for admin in company_admins:
+            admin.is_active = True
+            admin.save()
+    except:
+        pass
 
     if company.active:
         company.active = False

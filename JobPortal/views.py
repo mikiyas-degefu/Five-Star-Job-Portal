@@ -45,9 +45,11 @@ def login_view(request):
             return redirect('interviewer-dashboard')
         elif user is not None and not user.is_active:
             messages.error(request, 'Your account is in review please try again later!')
-        elif user is not None and user.is_admin and user.is_active:
+        elif user is not None and user.is_admin and user.is_active and user.company.active:
             login(request, user)
             return redirect('company-admin-dashboard')
+        elif user is not None and user.is_admin and user.is_active and not user.company.active:
+            messages.error(request, 'Your Company is not active, Please contact us')
         elif user is not None and user.is_candidate :
             login(request, user)
             return redirect('index')
@@ -71,16 +73,22 @@ def registration_view(request):
     form = CustomUserCreationForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
+
             user = form.save(commit=False)
             email = form.cleaned_data['email']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
+
             user.is_candidate = True
             user.save()
+
+
             stop_event = threading.Event()
             background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'candidate',stop_event), daemon=True)
             background_thread.start()
             stop_event.set()
+
+
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
             return redirect('/login') 
         else:
@@ -100,21 +108,19 @@ def register_company_front(request):
     if request.method == 'POST':
         if company_form.is_valid() and user_form.is_valid():
             company = company_form.save()
+
             user = user_form.save(commit=False)
             user.is_admin = True
             user.company = company
             user.save()
 
-            email = user_form.cleaned_data['email']
-            first_name = user_form.cleaned_data['first_name']
-            last_name = user_form.cleaned_data['last_name']
             company_name = company.name
             
             
 
 
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event, company_name), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,company.email,None, None, 'company' ,stop_event, company_name), daemon=True)
             background_thread.start()
             stop_event.set()
             
