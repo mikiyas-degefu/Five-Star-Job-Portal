@@ -98,7 +98,36 @@ def handle_inactive_send_email(request, company_name, company_email, stop_event)
         msg.attach_alternative(html_content, "text/html")
         if msg.send():
             return True
+        
 
+def handle_successfully_applied_send_email(request, company_name, company_email, stop_event):
+    while not stop_event.is_set():
+        content = f'''
+                <p>  Dear {company_name}, </p>
+    
+                <p>We're reaching out regarding your account with Seraye Job Portal. We noticed that your account has been inactive for some time, and additionally, we identified some inaccuracies in a previously posted job listing.</p>
+    
+                <p> Maintaining accurate job postings is crucial for both job seekers and employers on our platform. To ensure a positive experience for everyone</p>
+    
+                <h4> No longer need your account?</h4>
+                <p>If you no longer wish to use [Company Name], there's no need to take any action. However, please note that inactive accounts are automatically deleted after 30 days, along with any associated data, in accordance with our data privacy policy</p>
+    
+                <h4>Support and Assistance:</h4>
+                <p>If you have any questions about reactivating your account, updating your job postings, or our job board in general, our friendly support team is happy to help! You can reach them at seraye@gmail.com or by phone at +251942274410.</p>
+    
+                <p> We look forward to having you back on {company_name} and helping you connect with top talent!</p>
+                <p> Sincerely,</p> 
+                <p> The Seraye Job Portal Team </p> '''
+        
+        subject = f'{company_name} Account Deactivated - Update Job Postings to Re-activate'
+        from_email = 'mikiyasmebrate2656@gmail.com'
+        to_email = company_email
+        text_content = '<!DOCTYPE html>'
+        html_content = content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            return True
 
 ######
 ## IMPORT EXPORT ##
