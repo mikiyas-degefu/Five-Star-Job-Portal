@@ -94,28 +94,32 @@ def registration_view(request):
 
 
 def register_company_front(request):
+    company_form = CompanyFormFront(request.POST or None, request.FILES or None)
+    user_form = CustomUserFormFront(request.POST or None)
+
     if request.method == 'POST':
-        company_form = CompanyFormFront(request.POST)
-        user_form = CustomUserFormFront(request.POST)
         if company_form.is_valid() and user_form.is_valid():
-            obj = user_form.save(commit=False)
+            company = company_form.save()
+            user = user_form.save(commit=False)
+            user.is_admin = True
+            user.company = company
+            user.save()
+
             email = user_form.cleaned_data['email']
             first_name = user_form.cleaned_data['first_name']
             last_name = user_form.cleaned_data['last_name']
-            company = company_form.save()
-            obj.is_admin = True
-            obj.is_active = False
-            obj.company = company
+            company_name = company.name
+            
+            
+
+
             stop_event = threading.Event()
-            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event), daemon=True)
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,email,first_name,last_name, 'company' ,stop_event, company_name), daemon=True)
             background_thread.start()
             stop_event.set()
-            obj.save()
+            
             messages.success(request, "Welcome user! Your company is successfully registered. We're excited to review your information and get you started! We'll be in touch within 48 hours to confirm approval")
             return redirect('login')
-    else:
-        company_form = CompanyFormFront()
-        user_form = CustomUserFormFront()
     
     context = {
         'company_form': company_form,
@@ -1046,7 +1050,7 @@ def company_interviewer_change_password(request):
 
 
 
-
+import random
 
 
 def validate_skill_list(request):
@@ -1069,16 +1073,15 @@ def validate_skill_list(request):
 
 
 
-def instruction(request , slug):
+def instruction(request , id):
     candidate = Candidate.objects.get(user=request.user)
-    skill = Skill.objects.get(slug=slug)
-    user_skills = UserSkill.objects.filter(candidate=candidate)
-    questions = Question.objects.filter(for_skill=skill).count
+    user_skill = UserSkill.objects.get(skill__id=id , candidate=candidate).skill
+    questions = Question.objects.filter(for_skill=user_skill).count
 
 
     context = {
        "questions" : questions, 
-       "skill" : skill,
+       "skill" : user_skill,
     }
     
 
@@ -1087,18 +1090,33 @@ def instruction(request , slug):
 
 
 
-def validate_skill(request , slug):
-    user = request.user
-    skill = Skill.objects.get(slug=slug)
-    userskill = UserSkill.objects.get(skill=skill)
-    questions = Question.objects.filter(for_skill=skill)
-    
+def validate_skill(request , id):
+    candidate = Candidate.objects.get(user=request.user)
+    user_skills = UserSkill.objects.get(candidate=candidate , skill__id=id).skill
+    questions = Question.objects.filter(for_skill=user_skills)
 
+    count = 0 
+    if request.method == 'POST':
+        selected_answers = {}
+        for question in questions:
+            try :
+                id = int(request.POST.get(f'choice_{question.id}'))
+            except:
+                id = None    
+            if int(question.answer.id) == id:
+              count = count + 1
+        if int(count) >= int(questions.count() * 0.7):
+            user_skills.valid = True
+            user_skills.save()
+            messages.success(request , "Congradulations You have verified your skill") 
+        else :
+            messages.error(request , "Sorry You faild the test try agian")        
+        return redirect("validate_skill_list")    
 
     context = {
        "questions" : questions,
        'choices' : Choice.objects.all() ,
-       "skill" : skill
+       "skill" : user_skills
     }
     
 

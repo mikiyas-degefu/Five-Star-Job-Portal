@@ -56,8 +56,8 @@ urlpatterns = [
 
 
     path('validate_skill_list/', views.validate_skill_list, name="validate_skill_list"),
-    path('instruction/<slug:slug>/', views.instruction, name="instruction"),
-    path('validate_skill/<slug:slug>/', views.validate_skill, name="validate_skill"),
+    path('instruction/<str:id>/', views.instruction, name="instruction"),
+    path('validate_skill/<str:id>/', views.validate_skill, name="validate_skill"),
 
 
 ]

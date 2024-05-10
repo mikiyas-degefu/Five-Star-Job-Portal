@@ -46,7 +46,7 @@ SERAYE - JOB PORTAL\n
 
 ######
 #### EMAIL
-def handle_registration_email(request,email,first_name,last_name,email_type,stop_event):
+def handle_registration_email(request,email,first_name,last_name,email_type,stop_event, company_name = None):
     while not stop_event.is_set():
         subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
         text_content = "Registration Successful"
@@ -54,6 +54,7 @@ def handle_registration_email(request,email,first_name,last_name,email_type,stop
             'first_name': first_name,
             'last_name' : last_name,
             'email' : email,
+            'company_name' : company_name
         }
         html_content = render_to_string('success-email-company.html',context) if email_type == 'company' else render_to_string('success-email.html',context)
         

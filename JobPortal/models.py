@@ -339,11 +339,6 @@ auditlog.register(Job_Posting)
 
 
 
-question_level = [
-    ('beginner', 'Beginner'),
-    ('intermediate', 'Intermediate'),
-    ('expert', 'Expert'),
-]
 
 
 
@@ -357,7 +352,6 @@ class Choice(models.Model):
 
 class Question(models.Model):
     text = models.CharField(max_length=200)
-    level = models.CharField(max_length=15, choices=question_level)
     for_skill = models.ForeignKey(Skill , on_delete=models.SET_NULL , null=True)
     answer = models.ForeignKey(Choice , on_delete=models.SET_NULL , null=True)
 

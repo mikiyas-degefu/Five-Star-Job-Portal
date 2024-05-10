@@ -33,13 +33,16 @@
             </div>
           </div>
 
+          {% include 'RMS/messages.html'%}
+
+
           <div class="dashboard-widg-bar d-block">
             <div class="row">
 
             {% for i in user_skills %}
                 
               <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2">
-                <a href="{% url "instruction" i.skill.slug %}">
+                <a href="{% url "instruction" i.skill.id %}">
                 <div class="dash-widgets py-4 px-3 bg-info rounded">
                   <p class="p-0 m-0 text-dark fs-md">{{i.skill}}</p>
                 </div>
