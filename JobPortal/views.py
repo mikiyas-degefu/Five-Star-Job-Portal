@@ -323,6 +323,7 @@ def user_profile(request):
         education = None
         experience = None
         project = None
+        language = None
     
     context = {
         'candidate' : candidate,
@@ -345,6 +346,7 @@ def user_resume(request):
         user_per_info = Candidate.objects.get(user = request.user)
     except: 
         user_per_info = None
+
     form_personal_info = CandidateForm(request.POST or None, request.FILES or None, instance=user_per_info)
 
     if request.method == 'POST':
@@ -352,6 +354,15 @@ def user_resume(request):
             obj = form_personal_info.save(commit=False)
             obj.user = request.user
             obj.save()
+
+            for skill in form_personal_info.cleaned_data['skill']:
+                try:
+                    UserSkill.objects.get(candidate = obj, skill = skill)
+                except:
+                    if skill.validable:
+                        UserSkill.objects.create(candidate = obj, skill = skill)
+
+            
             form_personal_info.save_m2m()
             messages.success(request, 'Your Resume has been successfully Created!')
             form_personal_info =  CandidateForm(request.POST or None, request.FILES or None, instance=user_per_info)

@@ -10,7 +10,7 @@ from .models import CustomUser
 
 class UserAdmin(ImportExportModelAdmin):
     resource_classes = [UserResource]
-    list_display = ['company']
+    list_display = ['username','first_name', 'last_name' , 'is_active' ,'email', 'company', 'is_candidate', 'is_admin','is_interviewer' ,'is_superuser',]
 
 admin.site.register(CustomUser, UserAdmin)
 
