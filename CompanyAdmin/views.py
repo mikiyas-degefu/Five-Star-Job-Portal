@@ -13,7 +13,7 @@ from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormComp
 from UserManagement.decorators import (admin_user_required)
 import threading
 from bs4 import BeautifulSoup
-from JobPortal.resource import handle_telegram_post
+from JobPortal.resource import handle_telegram_post, handle_rejected_send_email
 from JobPortal.resource import ( JobResource, ApplicationResource, UserResource)
 # Create your views here.
 
@@ -462,24 +462,29 @@ def applicant_detail(request, id, job_id, app_id):
     if request.method == "POST":
         if 'status' in request.POST:
             if form.is_valid():
-                form.save()
+                status = form.save(commit=False)
+                if status.status == 'rejected':
+                    stop_event = threading.Event()
+                    background_thread = threading.Thread(target=handle_rejected_send_email, args=(request,user.first_name,user.last_name, job.title, job.company.name, user.email,stop_event ), daemon=True)
+                    background_thread.start()
+                    stop_event.set()
+
                 messages.success(request, '&#128515 Hello User, Status successfully  updated')
                 
+            if 'interviewer' in request.POST:
+                if interview_form.is_valid():
+                    obj = interview_form.save(commit=False)
+                    obj2 = form.save(commit=False)
 
-        if 'interviewer' in request.POST:
-            if interview_form.is_valid():
-                obj = interview_form.save(commit=False)
-                obj2 = form.save(commit=False)
-                if interview_form.cleaned_data['interviewer'] is not None:
-                    obj2.status = 'in_review'  
-                else:
-                    obj2.status = 'pending' 
-
-                obj2.save()
-                obj.application = app
-                obj.save()
-                messages.success(request, '&#128515 Hello User,  successfully  updated')
-                return redirect('company-admin-applicant')
+                    if interview_form.cleaned_data['interviewer'] is not None:
+                        obj2.status = 'in_review'  
+                        obj2.save()
+                        obj.application = app
+                        obj.save()
+                        messages.success(request, '&#128515 Hello User,  successfully  updated')
+                        return redirect('company-admin-applicant')
+    
+                    
                 
                 
     context = {

@@ -124,6 +124,35 @@ def handle_successfully_applied_send_email(request, fist_name, last_name, job_ti
             return True
         
 
+def handle_rejected_send_email(request, fist_name, last_name, job_title,company_name,user_email,stop_event):
+    while not stop_event.is_set():
+        content = f'''
+                <p>Dear {fist_name} {last_name}, </p>
+    
+                <p>Thank you for your interest in the {job_title} position at {company_name} that you applied for through Seraye Job Portal. We appreciate you taking the time to submit your application and learn more about our company.</p>
+    
+                <p>After careful consideration, we have decided to move forward with other candidates whose experience more closely aligns with the specific requirements of this role.</p>
+                
+                <h4>Here are some resources that may be helpful in your job search:</h4>
+                
+                <p> - You can access your dashboard to review your applications, update your profile, and explore other job opportunities (http://127.0.0.1:8000/user-dashboard/).</p>
+                <p> - We offer a variety of resources to help with your job search, including interview tips and resume writing guides (http://127.0.0.1:8000/user-profile/).</p>
+    
+                <p> We encourage you to keep your profile updated on Seraye Job Portal as we frequently post new job openings. We wish you the very best of luck in your job search!</p>
+                <p> Sincerely,</p> 
+                <p> The Seraye Job Portal Team </p> '''
+        
+        subject = f'Application Update: {job_title} at {company_name}!'
+        from_email = 'mikiyasmebrate2656@gmail.com'
+        to_email = user_email
+        text_content = '<!DOCTYPE html>'
+        html_content = content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            return True
+        
+
 
 
 ######
