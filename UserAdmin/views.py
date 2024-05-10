@@ -15,7 +15,7 @@ from django.contrib.auth import logout
 from auditlog.models import LogEntry
 from django.db.models import Count
 import threading
-from JobPortal.resource import handle_telegram_post
+from JobPortal.resource import handle_telegram_post, handle_registration_email, handle_inactive_send_email
 from bs4 import BeautifulSoup
 import random
 from JobPortal.resource import (CompanyResource, SectorResource, JobResource, SkillResource, UserResource)
@@ -154,27 +154,44 @@ def company_delete(request, id):
     return redirect('user-admin-company')
 
 
-def change_status(request, company_id):
+def company_status(request, company_id):
     company = Company.objects.get(id=company_id)
     company_admins = CustomUser.objects.filter(company = company)
 
     try:
-        for admin in company_admins:
-            admin.is_active = True
-            admin.save()
+        #Deactivate 
+        if company.active:
+            company.active = False
+            company.save()
+
+            for admin in company_admins:
+                admin.is_active = True
+                admin.save()
+        
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=handle_inactive_send_email, args=(request, company.name, company.email,stop_event), daemon=True)
+            background_thread.start()
+            stop_event.set()
+            messages.success(request, 'Successfully Deactivated')
+
+         #Activate  
+        else:
+            company.active = True
+            company.save()
+
+            for admin in company_admins:
+                admin.is_active = True
+                admin.save()
+
+
+            stop_event = threading.Event()
+            background_thread = threading.Thread(target=handle_registration_email, args=(request,company.email,'first_name','last_name','company_activations',stop_event, company.name ), daemon=True)
+            background_thread.start()
+            stop_event.set()
+
+            messages.success(request, 'Successfully Activated')
     except:
         pass
-
-    if company.active:
-        company.active = False
-        company.save()
-        messages.success(request, 'Successfully Deactivated')
-    else:
-        company.active = True
-        company.save()
-        messages.success(request, 'Successfully Activated')
-    company.save()
-
     return redirect('user-admin-company')
 
 

@@ -82,7 +82,7 @@
                             {% for company in companies %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
-                            <td><img src="/media/{{company.logo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
+                            <td ><img src="/media/{{company.logo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
                             <td>{{company.name}}</td>
                             <td>{{company.email}}</td>
                             <td>{{company.phone}}</td>
@@ -129,23 +129,26 @@
                             </button>
                         </td>
                         <td scope="col">
-                          {% if company.active %}
-                          <button data-id = {{company.id}}  class="btn btn-danger btn-status" id="inactive-btn" >
-                            Deactive
+
+
+                          <button 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#statusCompanyModal"
+                          data-bs-whatever="@mdo"
+                          data-id = {{company.id}} 
+                          data-name = {{company.name}}  
+                          data-status = {{company.active}}
+                          class="btn btn-status  {% if company.active %} btn-danger {% else %} btn-success  {% endif %}">
+                            {% if company.active %} Deactive {% else %} Active {% endif %} 
                           </button>
-                           
-                          {% else %}
-                          <button  data-id = {{company.id}} class="btn btn-success btn-status" id="active-btn" >
-                            Active
-                          </button>
-            
-                          {% endif %}
+
+
                         </td>
                           </tr>
                           {% endfor %}
                           {% else %}
                           <tr>
-                            <td class="text-center text-danger" colspan="9">No Data Found</td>
+                            <td class="text-center text-danger" colspan="10">No Data Found</td>
                           </tr>
                           {% endif %}
                         </tbody>
@@ -276,6 +279,31 @@
   <!--End Modal -->
 
 
+  <!--Active Company  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="statusCompanyModal" tabindex="-1" aria-labelledby="statusCompanyModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusCompanyModalLabel">Delete Company</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="statusMessageComapany"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="statusCompanyAnchor" type="submit" class="btn btn-danger">Submit</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
 
 </div>
 <!-- END layout-wrapper -->
@@ -338,40 +366,24 @@ $(document).ready(function(){
         })
 
 
-         // Edit Data Detail 
+      // Edit Data Detail 
+       //Event handler that handle on Click to delete
+     $(".btn-status").on('click', function(){
+      const buttonData = $(this).data()
+      let status
+      if (buttonData.status == "True"){
+        status = "Deactive"
+      }else{
+        status = "Active"
+      }
+
+      $("#statusCompanyAnchor").attr("href", `/user-admin/company_status/${buttonData.id}`)
+      $("#statusMessageComapany").html(`Are you sure you want to ${status} <div> <code> ${buttonData.name}</code>? </div> `)
+    })
 
  
 
-         $(".btn-status").on('click', function() {
-          const buttonElement = $(this); // Store the reference to the button element
-          const companyId = buttonElement.data().id;
-          const url = `/user-admin/change_status/${companyId}/`;
-        
-          console.log("Button clicked");
-          console.log("URL:", url);
-        
-          $.ajax({
-            url: url,
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': '{{ csrf_token }}' // Replace with the appropriate Django template variable
-            },
-            success: function(response) {
-              const isActive = buttonElement.hasClass('btn-success');
-              if (isActive) {
-                buttonElement.removeClass('btn-success').addClass('btn-danger').text('Deactive');
-              } else {
-                buttonElement.removeClass('btn-danger').addClass('btn-success').text('Active');
-              }
-            },
-            error: function(error) {
-              console.log("AJAX request error");
-              console.log("Error:", error);
-        
-              // Handle the error
-            }
-          });
-        });
+         
 
 
      // Edit Data Detail 
