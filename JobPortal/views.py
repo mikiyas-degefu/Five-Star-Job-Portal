@@ -768,8 +768,13 @@ def interviewer_interviews_lists(request):
 @interviewer_user_required
 def interview_detail(request, slug):
     interview = Interviews.objects.get(slug = slug)
-    education = Education.objects.filter(candidate = interview.application.user)
-    experience = Experience.objects.filter(candidate = interview.application.user)
+    user =  interview.application.user 
+    education = Education.objects.filter(candidate = interview.application.user).select_related()
+    experience = Experience.objects.filter(candidate = interview.application.user).select_related()
+    project = Project.objects.filter(candidate = interview.application.user).select_related()
+    language = Language.objects.filter(candidate = interview.application.user).select_related()
+
+
     interview_form = InterviewFormInterview(request.POST or None, instance=interview)
     job_status_form = ApplicationForm(request.POST or None, instance=interview.application)
 
@@ -878,9 +883,12 @@ def interview_detail(request, slug):
 
 
     context = {
+        'user' : user,
         'interview' : interview,
-        'educations': education,
-        'experiences' : experience,
+        'education': education,
+        'experience' : experience,
+        'project' : project,
+        'language' : language,
         'interview_form' : interview_form,
         'job_status_form' : job_status_form
     }
