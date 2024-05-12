@@ -853,8 +853,11 @@ def interview_today_interview_list(request):
 @interviewer_user_required
 def interview_individual_now(request, slug):
     interview = Interviews.objects.get(slug = slug)
-    education = Education.objects.filter(candidate = interview.application.user)
-    experience = Experience.objects.filter(candidate = interview.application.user)
+    user =  interview.application.user 
+    education = Education.objects.filter(candidate = interview.application.user).select_related()
+    experience = Experience.objects.filter(candidate = interview.application.user).select_related()
+    project = Project.objects.filter(candidate = interview.application.user).select_related()
+    language = Language.objects.filter(candidate = interview.application.user).select_related()
     interview_form = InterviewerNoteForm(request.POST or None, instance=interview)
     application_form = ApplicationForm()
 
@@ -868,8 +871,11 @@ def interview_individual_now(request, slug):
 
     context = {
         'interview' : interview,
-        'educations': education,
-        'experiences' : experience,
+        'user' : user,
+        'education': education,
+        'experience' : experience,
+        'project' : project,
+        'language' : language,
         'interview_form' : interview_form,
     }
     return render(request, 'RMS/interviewer/today-interview.html', context)
