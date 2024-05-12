@@ -140,7 +140,59 @@ def handle_rejected_send_email(request, fist_name, last_name, job_title,company_
     
                 <p> We encourage you to keep your profile updated on Seraye Job Portal as we frequently post new job openings. We wish you the very best of luck in your job search!</p>
                 <p> Sincerely,</p> 
-                <p> The Seraye Job Portal Team </p> '''
+                <p> {company_name} Team </p>
+                <p> Seraye Job Portal</p> '''
+        
+        subject = f'Application Update: {job_title} at {company_name}!'
+        from_email = 'mikiyasmebrate2656@gmail.com'
+        to_email = user_email
+        text_content = '<!DOCTYPE html>'
+        html_content = content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            return True
+        
+
+def handle_scheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event):
+    while not stop_event.is_set():
+        content = f'''
+                <p>Dear {fist_name} {last_name}, </p>
+    
+                <p>We're thrilled to inform you that your application for the {job_title} position at {company_name} has been shortlisted! Your background truly impressed us, and we're eager to learn more about how you can contribute to our team.</p>
+    
+                <p>Consider this a personal invitation to interview for the position on {date} at {time} {interview_type} interview. The interview will be held {company_location} or contact us {interviewer_phone}.</p>
+                
+                <h4>We look forward to meeting you and discussing this opportunity further!</h4>
+                
+                <p> Sincerely,</p> 
+                <p> {company_name} Team </p>
+                <p> Seraye Job Portal</p> '''
+        
+        subject = f'Application Update: {job_title} at {company_name}!'
+        from_email = 'mikiyasmebrate2656@gmail.com'
+        to_email = user_email
+        text_content = '<!DOCTYPE html>'
+        html_content = content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            return True
+
+def handle_rescheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event):
+    while not stop_event.is_set():
+        content = f'''
+                <p>Dear {fist_name} {last_name}, </p>
+    
+                <p>We are writing to inform you that we need to reschedule your interview for the {job_title} position at {company_name}. We sincerely apologize for any inconvenience this may cause.</p>
+    
+                <p>We would like to reschedule your interview for {date} at {time}. The interview will still be held {interview_type}, {company_location} or contact us {interviewer_phone}.</p>
+                
+                <h4>We look forward to meeting you soon!</h4>
+                
+                <p> Sincerely,</p> 
+                <p> {company_name} Team </p>
+                <p> Seraye Job Portal</p> '''
         
         subject = f'Application Update: {job_title} at {company_name}!'
         from_email = 'mikiyasmebrate2656@gmail.com'

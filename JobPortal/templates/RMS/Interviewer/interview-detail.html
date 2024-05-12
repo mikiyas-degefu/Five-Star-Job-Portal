@@ -83,33 +83,6 @@
       </div>
     {% endif %}
   
-    <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="cancelInterviewLabel">Interview</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-      
-        <div class="modal-body">
-          <div class="row">
-            <div class="col">
-              <div class="mb-5">
-                <h2 class="small-title">Are You sure you want to cancel</h2>
-                <div class="card">
-                  <div class="card-body">
-                    <p>{{interview.application.user.candidate.first_name | capfirst}}  {{interview.application.user.candidate.last_name | capfirst}} Applications? </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>
-          <a type="submit" href="{% url 'cancel-interview' interview.slug %}" class="btn btn-danger">Yes</a>
-        </div>
-      </div>
-  </div>
   </div>
 
   <div class="dashboard-wrap bg-light">
@@ -117,9 +90,6 @@
     {% include 'RMS/interviewer/include/navbar.html'%}
     <div class="dashboard-content">
       <div class="dashboard-widg-bar d-block">
-
-         
-
         <div class="row">
           <div class="main-content">
 
@@ -131,6 +101,32 @@
           </div>
 
           <div class="row gx-4 gy-5">
+            <div class="col-12">
+
+
+              {% if interview.status == 'scheduled' %}
+              <button type="button" data-bs-toggle="modal" data-bs-target="#makeInterview" class="btn btn-primary" >Re-Schedule Interview</button>
+              {% elif interview.status == 'pending'  %}
+              <button type="button" data-bs-toggle="modal" data-bs-target="#makeInterview" class="btn btn-primary" >Schedule Interview</button>
+              {% endif %}
+
+
+              {% if interview.status == 'completed'%}
+              <form action="" method="post"> {% csrf_token %}
+                 <div class="row mt-3 d-flex justify-content-center"> 
+                   <div class="col-8 p-0 m-0 bg-white">
+                     {{job_status_form.status}}
+                   </div>
+                   <div class="col-8 p-0 m-0">
+                     <button class="btn btn-primary mt-3" type="submit">Save changes</button>
+                   </div>
+                 </div>
+              </form>
+
+
+
+          {% endif %}
+            </div>
             <div class="col-xl-4">
               <div class="card p-4">
                 <div class="card-body text-center">

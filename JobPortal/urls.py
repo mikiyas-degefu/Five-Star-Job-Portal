@@ -44,7 +44,6 @@ urlpatterns = [
     path('interviewer-job-detail/<slug:slug>', views.interviewer_job_detail, name='interviewer-job-detail'),
     path('interviewer-interviews-list/', views.interviewer_interviews_lists, name='interviewer-interviews-list'),
     path('interview-detail/<slug:slug>', views.interview_detail, name='interview_detail'),
-    path('cancel-interview/<slug:slug>', views.interview_cancel, name='cancel-interview'),
     path('interview-scheduled/', views.interview_scheduled, name='interview-scheduled'),
     path('today-interviews/', views.interview_today_interview_list, name='today-interviews'),
     path('interview-now/<slug:slug>', views.interview_individual_now, name="interviews-now"),
