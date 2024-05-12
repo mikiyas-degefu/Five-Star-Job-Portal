@@ -162,6 +162,8 @@ def index(request):
        job = Job_Posting.objects.filter(job_status = True)[0:5]
     job_number = Job_Posting.objects.filter(job_status = True)
     company = Company.objects.all()
+
+
     
     context = {
         'social_medias' : social_medias,
@@ -224,6 +226,45 @@ def job_list(request):
     return render(request, 'RMS/job-list.html', context)
 
 
+
+
+
+def job_search(request, job , city ):
+    try: bookmark = Bookmarks.objects.filter(user=request.user).values_list('job__id', flat=True)
+    except: bookmark = None
+    try: candidate = Candidate.objects.get(user = request.user)
+    except: candidate = None
+    try: application = Application.objects.filter(user=request.user).values_list('job__id', flat=True)
+    except: application = None
+
+
+    
+   
+
+    paginator = Paginator(job,5)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+
+
+    for job_listing in Job.objects.all():
+        if job is None or job_listing["title"].lower() == job.lower():
+            if city is None or job_listing["city"].lower() == city.lower():
+                    job_listings.append(job_listing)
+
+
+    context = {
+        'social_medias' : social_medias,
+        'job_listing' : page,
+        'bookmark' : bookmark,
+        'candidate' : candidate,
+        'application' : application,
+        'sector' : sector,
+        'company' : company,
+        'sector_popular' : sector_popular
+    }
+    return render(request, 'RMS/job-search.html', context)
+
+
 def job_sector_categories(request, slug):
     try: bookmark = Bookmarks.objects.filter(user=request.user).values_list('job__id', flat=True)
     except: bookmark = None
@@ -269,6 +310,8 @@ def job_sector_categories(request, slug):
         'sector_popular' : sector_popular
     }
     return render(request, 'RMS/job-list.html', context)
+
+    
 
 
 def job_detail(request, slug):
@@ -1099,7 +1142,8 @@ def instruction(request , id):
 def validate_skill(request , id):
     candidate = Candidate.objects.get(user=request.user)
     user_skills = UserSkill.objects.get(candidate=candidate , skill__id=id).skill
-    questions = Question.objects.filter(for_skill=user_skills)
+    questions = Question.objects.filter(for_skill=user_skills)[:5]
+    questions_num = Question.objects.filter(for_skill=user_skills).count()
 
     count = 0 
     if request.method == 'POST':
@@ -1112,11 +1156,11 @@ def validate_skill(request , id):
             if int(question.answer.id) == id:
               count = count + 1
         if int(count) >= int(questions.count() * 0.7):
-            user_skills.valid = True
+            user_skills.validated = True
             user_skills.save()
-            messages.success(request , "Congradulations You have verified your skill") 
+            messages.success(request , "Congradulations You have answered {count} questions correctly from {questions_num} questions there for yout skill is verified.") 
         else :
-            messages.error(request , "Sorry You faild the test try agian")        
+            messages.error(request , "Sorry You have answered {count} questions correctly from {questions_num} questions there for you have faild the test try agian")        
         return redirect("validate_skill_list")    
 
     context = {

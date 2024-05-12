@@ -62,7 +62,7 @@ education_status_list = [
 class UserSkill(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     skill = models.ForeignKey("Skill" ,  on_delete=models.CASCADE)
-    validated = models.BooleanField(null=True , blank=True)
+    validated = models.BooleanField(default=True)
    
 
     def __str__(self) -> str:

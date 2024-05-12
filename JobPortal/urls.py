@@ -8,6 +8,7 @@ urlpatterns = [
     path('signup/', views.registration_view, name="signup"),
     path('register_company_front/', views.register_company_front, name='register_company_front'),
     path('job-list/', views.job_list, name='job-list'),
+    path('job_search/<str:job_title>/<str:city>', views.job_search, name='job_search'),
     path('job-sector/<slug:slug>', views.job_sector_categories, name='job_sector_categories'),
     path('job-detail/<slug:slug>', views.job_detail, name='Job-detail'),
 
