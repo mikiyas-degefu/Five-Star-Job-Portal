@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
-from Company.forms import CompanyForm
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact,Company
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
@@ -16,11 +15,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 import datetime
 from UserManagement.decorators import interviewer_user_required
-from UserManagement.models import CustomUser 
-from django.core.mail import  EmailMultiAlternatives
 from UserManagement.forms import ( ChangePasswordForm)
 import threading
-from django.core.mail import EmailMultiAlternatives
 from .resource import (handle_registration_email, handle_successfully_applied_send_email, handle_scheduled_send_email, handle_rescheduled_send_email)
 
 

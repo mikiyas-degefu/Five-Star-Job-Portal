@@ -11,13 +11,12 @@ from UserManagement.models import CustomUser
 from django.db.models import Count, Subquery
 from UserManagement.forms import CustomUserCreationForm , CustomUserEditFormCompanyAdmin , CompanyAdmin , CustomUserEditFormAdmin , ChangePasswordForm
 from UserManagement.decorators import (admin_user_required)
+from django.contrib.auth import logout
 import threading
 from bs4 import BeautifulSoup
 from JobPortal.resource import handle_telegram_post, handle_rejected_send_email
 from JobPortal.resource import ( JobResource, ApplicationResource, UserResource)
 # Create your views here.
-
-
 
 
 
@@ -41,6 +40,9 @@ def index(request):
     recent_jobs = Job_Posting.objects.filter(company = request.user.company)[:6]
 
 
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
+
+
 
     context = {
         'total_users' : total_users,
@@ -54,13 +56,15 @@ def index(request):
         'application_status_rejected' : application_status_rejected,
         'company_admins' : company_admins,
         'company_interviewers' : company_interviewers,
-        'recent_jobs' : recent_jobs
+        'recent_jobs' : recent_jobs,
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/index.html', context=context)
 
 
 @admin_user_required
 def job_posting(request):
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
     jobs = Job_Posting.objects.filter(company = request.user.company)
     count = 30
@@ -124,6 +128,8 @@ def job_posting(request):
         'jobs' : page,
         'count' : count,
         'form' : form,
+        'count_interview_status' : count_interview_status
+        
     }
     return render(request, 'CompanyAdmin/job_posting.html', context=context)
 
@@ -136,6 +142,7 @@ def company_interviewer(request):
     form = CompanyAdmin(request.POST or None, request.FILES or None)
     company_interviewer = CustomUser.objects.filter(is_interviewer=True , company=company)
     count = 30
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
    
     if 'q' in request.GET:
         q = request.GET['q']
@@ -174,13 +181,15 @@ def company_interviewer(request):
         'company_interviewer' : page,
         'count' : count,
         'form' : form,
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/company_interviewer.html', context=context)
     
 
 @admin_user_required
 def company_admins(request):
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     user = request.user
     company = user.company
     form = CompanyAdmin(request.POST or None, request.FILES or None)
@@ -224,7 +233,8 @@ def company_admins(request):
         'company_admins' : page,
         'count' : count,
         'form' : form,
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/company_admin_users.html', context=context)
     
@@ -237,6 +247,7 @@ def company_user_detail(request, id):
     except:
         return HttpResponse('You are not authorized to access this page!')
     
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     form = CustomUserEditFormCompanyAdmin(request.POST or None, request.FILES or None, instance=company_admins)
 
     if request.method == 'POST':
@@ -248,7 +259,8 @@ def company_user_detail(request, id):
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
         'form': form,
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/company_admin_user_detail.html', context=context)
 
@@ -280,17 +292,10 @@ def change_status_user(request, id):
            user.is_active = True
            user.save()
            return redirect('/') 
-    else :
-        return error
-
-
-
-    return redirect('/')   
-
 
 @admin_user_required
 def company_admin_profile(request):
-    
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     user = request.user
     form =  CustomUserEditFormAdmin(request.POST or None, request.POST or None, instance=user)
     if request.method == 'POST':
@@ -303,7 +308,8 @@ def company_admin_profile(request):
     context = {
         'user' : user,
         'form' : form,
-        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
+        'count_interview_status' : count_interview_status
     }
 
     return render(request, 'CompanyAdmin/profile.html', context=context)
@@ -351,6 +357,7 @@ def job_detail(request, id):
         return HttpResponse('You are not authorized to access this page!')
     
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None, instance=job)
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
 
     if request.method == 'POST':
         if form.is_valid():
@@ -384,6 +391,7 @@ def job_detail(request, id):
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
         'form': form,
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/job_detail.html', context=context)
 
@@ -391,10 +399,9 @@ def job_detail(request, id):
 
 @admin_user_required
 def applicant(request):
-    form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
-
     jobs = Application.objects.filter( job__company = request.user.company).select_related()
     count = 30
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
    
     if 'q' in request.GET:
         q = request.GET['q']
@@ -416,30 +423,52 @@ def applicant(request):
         page = paginator.page(paginator.num_pages)
         count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
 
-    if request.method == 'POST':
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.company = request.user.company
-            obj.save()
-            form.save_m2m()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
-            return redirect('company-admin-job-posting')
-        else:
-            messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
-            return redirect('company-admin-job-posting')
 
     context = {
         'applications' : page,
         'count' : count,
-        'form' : form,
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/applicant.html', context=context)
+
+@admin_user_required
+def interview_status(request):
+    interviews = Interviews.objects.filter( interviewer__company = request.user.company).select_related()
+    count = 30
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        interviews = Interviews.objects.filter(interviewer__company = request.user.company).filter(Q(application__job__title__contains=q) | Q(application__user__first_name__contains=q) | Q(application__user__last_name__contains=q) | Q(application__user__email__contains=q) | Q(application__user__phone__contains=q) | Q(status__contains=q) | Q(type__contains=q) | Q(date_schedule__contains=q) ).select_related()
+    
+    paginator = Paginator(interviews, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    context = {
+        'interviews' : page,
+        'count' : count,
+        'count_interview_status' : count_interview_status
+    }
+    return render(request, 'CompanyAdmin/interview_status.html', context=context)
 
 
 
 @admin_user_required
 def applicant_detail(request, id, job_id, app_id):
-   
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     try:
         user = CustomUser.objects.get(pk = id)   
         education = Education.objects.filter(candidate = user).select_related()
@@ -495,15 +524,18 @@ def applicant_detail(request, id, job_id, app_id):
         'form' : form,
         'interview_form' : interview_form,
         'project' : project,
-        'language' : language
+        'language' : language,
+        'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 
 @admin_user_required
 def company_info (request):
     company = get_object_or_404(Company, id=request.user.company.id)
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     context = {
-        "company" : company
+        "company" : company,
+        'count_interview_status' : count_interview_status
     }
     return render(request , 'CompanyAdmin/company_info.html' , context)
 
@@ -512,6 +544,7 @@ def company_info (request):
 def edit_company_info (request , id):
     company = Company.objects.get(id=id)
     form = CompanyForm(request.POST or None, request.FILES or None, instance=company)
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -522,7 +555,8 @@ def edit_company_info (request , id):
             return redirect('company_info')
     context = {
         "company" : company,
-        "form" : form
+        "form" : form,
+        'count_interview_status' : count_interview_status
     }
     return render(request , 'CompanyAdmin/edit_company_info.html' , context)
 

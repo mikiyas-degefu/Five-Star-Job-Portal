@@ -1,0 +1,308 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<!-- head-->
+{% include 'CompanyAdmin/include/head.html' %}
+<!--/ head-->
+
+<body data-sidebar="dark">
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+    
+    <!-- header-->
+    {% include 'CompanyAdmin/include/sidebar.html' %}
+    <!--/ header-->
+
+   
+    {% include 'CompanyAdmin/include/verticalBar.html' %}
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover caption-top ">
+                      {% include 'CompanyAdmin/include/messages.html' %}                    
+                      <caption>Interview Status</caption>
+                      <a type="button"  href="{% url 'company-export-application' %}"   download  class="btn float-end btn-primary me-3 mb-2">
+                        <i class="fa fa-download"></i>
+                     </a>
+                      <div class="row">
+
+                        <form>
+                          <div class="col-8 col-md-4 m-1">
+                            <input type="text" name="q" class="form-control ps-3 pe-3" placeholder="Enter Key Word">
+                          </div>
+                          <div class="col-3 col-md-1 m-1">
+                            <button type="submit" class="btn btn-primary" ><span class="mdi mdi-magnify"></span></button>
+                            
+                          </div>        
+                        </form>    
+                                
+                      </div>
+
+                        <thead  class="table-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">For Job</th>
+                            <th scope="col">Schedule</th>
+                            <th scope="col">Interviewer</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if interviews %}
+                            {% for interview in interviews %}
+                          <tr>
+                            <th scope="row">{{count | add:forloop.counter}}</th>
+                            <td>{{interview.application.user.first_name | capfirst}}</td>
+                            <td>{{interview.application.user.last_name | capfirst}}</td>
+                            <td>{{interview.application.user.candidate.phone1}}</td>
+                            <td>{{interview.application.user.email}}</td>
+                            <td>{{interview.application.job}}</td>
+                            <td>{{interview.date_schedule }}</td>
+                            <td>{{interview.interviewer.first_name}} {{interview.interviewer.last_name}}</td>
+                            <td>
+                            
+                              <i class="mdi mdi-circle font-size-12  {% if app.status == 'pending' %} 
+                              text-secondary  
+                        {% elif interview.status == 'pending' %} 
+                               text-secondary 
+                        {% elif interview.status == 'scheduled' %} 
+                               text-info 
+                        {% elif interview.status == 'completed' %} 
+                               text-success 
+                        {% endif %} me-1"></i> {{interview.get_status_display}}
+                            
+                            </td>
+                            <td>
+                               
+                            <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit "> <i class="fa fa-eye"></i> </a>
+                            
+                
+                        </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td class="text-center text-danger" colspan="12">No Data Found</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+
+                      <!-- Pagination -->
+             <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-outline justify-content-center" >
+                {% if interviews.has_previous %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ interviews.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                  </li>
+                {% endif %}
+            
+                {% if interviews.number|add:'-4' > 1 %}
+                  <li class="page-item"><a class="page-link" href="?page={{ interviews.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% for i in interviews.paginator.page_range %}
+                  {% if interviews.number == i %}
+                    <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                    {{ i }}
+                    <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                  {% elif i > interviews.number|add:'-5' and i < interviews.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            
+                {% if interviews.paginator.num_pages > interviews.number|add:'4' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ interviews.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+            
+                {% if interviews.has_next %}
+                  <li class="page-item">
+                  <a class="page-link" href="?page={{ interviews.next_page_number }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                  </li>
+                {% endif %}
+                </ul>
+              </nav>
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        {% include 'CompanyAdmin/include/footer.html' %}
+    </div>
+    <!-- end main content-->
+
+
+
+<!--Detail Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="detailJobs" tabindex="-1" aria-labelledby="detailJobsLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailJobsLabel">Company Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <div id="detailModalBody" class="modal-body">
+        </div>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Add Company Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="AddJob" tabindex="-1" aria-labelledby="AddJobLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddJobLabel">Company Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form  method="post" enctype="multipart/form-data">
+          <div id="detailModalBody" class="modal-body">
+            {% csrf_token %}
+            {{form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary">Save</button>
+            
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--End Modal -->
+
+<!--Delete  Modal-->
+  <!-- Modal -->
+  <div class="modal fade" id="deleteJobModal" tabindex="-1" aria-labelledby="deleteJobModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteJobModalLabel">Delete Responsible Ministry</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="h4 fw-normal" id="deleteJob"></p>
+        </div> 
+          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="deleteJobAnchor" type="submit" class="btn btn-danger">Delete</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!--End Modal -->
+
+
+
+</div>
+<!-- END layout-wrapper -->
+
+<script>
+$(document).ready(function(){
+
+    // Start Detail Data
+
+    //Event handler that handle button on Click
+    $(".btn-detail").on('click', function(){
+          const buttonData = $(this).data()
+          console.log(buttonData)
+          //Open Modal
+         handleDetailModalJob(
+            buttonData.company, 
+            buttonData.title, 
+            buttonData.sector,
+            buttonData.description,
+            buttonData.vacancies,
+            buttonData.experience,
+            buttonData.skills,
+            buttonData.location,
+            buttonData.salary_range_start,
+            buttonData.salary_range_final,
+            buttonData.type,
+            buttonData.compensation_type,
+            buttonData.date_posted,
+            buttonData.date_closed,
+            )
+    });
+
+
+    handleDetailModalJob = (company , title , sector , description , vacancies , experience, skills , location , salary_range_start , salary_range_final , type , compensation_type ,  job_status , date_posted , date_closed , )=>{
+        let htmlBody = `
+        <div class="mt-3">
+          <p class="fw-bold">Company: <span class="fw-normal">${company}</span></p>
+          <p class="fw-bold">Title: <span class="fw-normal">${title}</span></p>
+          <p class="fw-bold">Sector: <span class="fw-normal">${sector}</span></p>
+          <p class="fw-bold">Description: <span class="fw-normal">${description}</span></p>
+          <p class="fw-bold">Vacancies: <span class="fw-normal">${vacancies}</span></p>
+          <p class="fw-bold">Experience: <span class="fw-normal">${experience}</span></p>
+          <p class="fw-bold">Skills: <span class="fw-normal">${skills}</span></p>
+          <p class="fw-bold">Location: <span class="fw-normal">${location}</span></p>
+          <p class="fw-bold">Salary Range: <span class="fw-normal">${salary_range_start} </span></p>
+          <p class="fw-bold">Salary Range: <span class="fw-normal">${salary_range_final} </span></p>
+          <p class="fw-bold">Type: <span class="fw-normal">${type}</span></p>
+          <p class="fw-bold">Compensation Type: <span class="fw-normal">${compensation_type}</span></p>
+          <p class="fw-bold">Date Posted: <span class="fw-normal">${date_posted}</span></p>
+          <p class="fw-bold">Date Closed: <span class="fw-normal">${date_closed}</span></p>
+      </div>
+        `
+        $('#detailModalBody').html(htmlBody)
+
+    }
+
+
+
+     //Event handler that handle on Click to delete
+     $(".btn-delete").on('click', function(){
+          const buttonData = $(this).data()
+          $("#deleteJobAnchor").attr("href", `/company-admin/job-posting-delete/${buttonData.id}`)
+          $("#deleteJob").html(`Are you sure you want to delete <div> <code> ${buttonData.name}</code>? </div> `)
+        })
+
+
+    
+         // Edit Data Detail 
+
+    })
+
+</script>
+
+</body>
+</html>
