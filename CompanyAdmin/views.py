@@ -14,7 +14,7 @@ from UserManagement.decorators import (admin_user_required)
 from django.contrib.auth import logout
 import threading
 from bs4 import BeautifulSoup
-from JobPortal.resource import handle_telegram_post, handle_rejected_send_email
+from JobPortal.resource import handle_telegram_post, handle_rejected_send_email, handle_hired_send_email
 from JobPortal.resource import ( JobResource, ApplicationResource, UserResource)
 # Create your views here.
 
@@ -482,8 +482,36 @@ def interview_status_detail(request, id):
                 app = application_form.save(commit=False)
                 app.save()
                 if app.status == 'rejected':
+                    stop_event = threading.Event()
+                    background_thread = threading.Thread(target=handle_rejected_send_email, args=(request,
+                                                                                                  interview.application.user.first_name,
+                                                                                                  interview.application.user.last_name, 
+                                                                                                  interview.application.job.title, 
+                                                                                                  interview.application.job.company.name, 
+                                                                                                  interview.application.user.email,
+                                                                                                  stop_event 
+                                                                                                  ), 
+                                                                                                  daemon=True)
+                    background_thread.start()
+                    stop_event.set()
                     messages.success(request,f"&#128515 Hello User, Successfully Rejected '{interview.application.user.first_name} {interview.application.user.last_name}'" )
-                if app.status == 'hired':
+                
+                elif app.status == 'hired':
+                    stop_event = threading.Event()
+                    background_thread = threading.Thread(target=handle_hired_send_email, args=(request,
+                                                                                                  interview.application.user.first_name,
+                                                                                                  interview.application.user.last_name, 
+                                                                                                  interview.application.job.title, 
+                                                                                                  interview.application.job.company.name, 
+                                                                                                  interview.application.user.email,
+                                                                                                  interview.application.job.type,
+                                                                                                  interview.application.job.company.email,
+                                                                                                  interview.application.job.company.phone,
+                                                                                                  stop_event 
+                                                                                                  ), 
+                                                                                                  daemon=True)
+                    background_thread.start()
+                    stop_event.set()
                     messages.success(request,f"&#128515 Hello User, Successfully Hired '{interview.application.user.first_name} {interview.application.user.last_name}'" )
     except:
         return HttpResponse('You are not authorized to access this page!')

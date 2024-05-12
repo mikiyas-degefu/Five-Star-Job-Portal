@@ -153,6 +153,33 @@ def handle_rejected_send_email(request, fist_name, last_name, job_title,company_
         if msg.send():
             return True
         
+def handle_hired_send_email(request, first_name, last_name, job_title,company_name,user_email,job_type,company_email,hr_phone,stop_event):
+    while not stop_event.is_set():
+        content = f'''
+                <p>Dear {first_name} {last_name}, </p>
+    
+                <p>We are thrilled to offer you the position of {job_title} at {company_name}!</p>
+    
+                <p>During the interview process, we were very impressed with your skills and experiences.  We believe your qualifications and expertise will be a valuable asset to our team.</p>
+                    
+                <p> This is a {job_type} position.</p>
+                <p>We're confident that {first_name} {last_name}'s expertise  will be a valuable asset to our team.  Let's all give {first_name} {last_name} warm welcome!</p>
+    
+                <p> Feel free to reach out to {first_name} {last_name} at {company_email} or connect with them on {hr_phone} to introduce yourselves.  We're excited to have you on board, {first_name} {last_name}!</p>
+                <p> Best,</p> 
+                <p> {company_name} Team </p>
+                <p> Seraye Job Portal</p> '''
+        
+        subject = f'Job Offer - {job_title} at {company_name}'
+        from_email = 'mikiyasmebrate2656@gmail.com'
+        to_email = user_email
+        text_content = '<!DOCTYPE html>'
+        html_content = content
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, "text/html")
+        if msg.send():
+            return True
+        
 
 def handle_scheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event):
     while not stop_event.is_set():
@@ -203,6 +230,8 @@ def handle_rescheduled_send_email(request, fist_name, last_name, job_title,compa
         msg.attach_alternative(html_content, "text/html")
         if msg.send():
             return True
+
+
         
 
 
