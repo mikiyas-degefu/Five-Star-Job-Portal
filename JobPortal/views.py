@@ -1,15 +1,13 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact
 from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
-from Company.forms import CompanyForm
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact,Company
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
-import csv
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
 from UserManagement.forms import CustomUserCreationForm, Login_Form, InterviewerForm
@@ -17,14 +15,9 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 import datetime
 from UserManagement.decorators import interviewer_user_required
-from UserManagement.models import CustomUser 
-from django.core.mail import send_mail, EmailMultiAlternatives
-import requests
 from UserManagement.forms import ( ChangePasswordForm)
 import threading
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from .resource import (handle_registration_email)
+from .resource import (handle_registration_email, handle_successfully_applied_send_email, handle_scheduled_send_email, handle_rescheduled_send_email)
 
 
 social_medias = Social_Media.objects.all()
@@ -92,7 +85,7 @@ def registration_view(request):
             messages.success(request, 'Your Account has been Successfully Created! Please Login')
             return redirect('/login') 
         else:
-            messages.error(request, '&#128532 Hello User , An error occurred while Creating Account Please try again')
+            messages.error(request, 'Hello User , An error occurred while Creating Account Please try again')
 
     context = {
         'form' : form
@@ -683,6 +676,12 @@ def user_apply_job(request, slug):
         obj.user = request.user
         obj.job = job
         obj.save()
+
+        stop_event = threading.Event()
+        background_thread = threading.Thread(target=handle_successfully_applied_send_email, args=(request,obj.user.first_name,obj.user.last_name, job.title, job.company.name, obj.user.email,stop_event ), daemon=True)
+        background_thread.start()
+        stop_event.set()
+
         messages.success(request, 'Successfully Applied Check your Applied Jobs')
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -808,173 +807,62 @@ def interviewer_interviews_lists(request):
 @interviewer_user_required
 def interview_detail(request, slug):
     interview = Interviews.objects.get(slug = slug)
-    education = Education.objects.filter(candidate = interview.application.user)
-    experience = Experience.objects.filter(candidate = interview.application.user)
+    user =  interview.application.user 
+    education = Education.objects.filter(candidate = interview.application.user).select_related()
+    experience = Experience.objects.filter(candidate = interview.application.user).select_related()
+    project = Project.objects.filter(candidate = interview.application.user).select_related()
+    language = Language.objects.filter(candidate = interview.application.user).select_related()
+
+
     interview_form = InterviewFormInterview(request.POST or None, instance=interview)
     job_status_form = ApplicationForm(request.POST or None, instance=interview.application)
 
     if request.method == 'POST':
         if interview_form.is_valid():
             obj = interview_form.save(commit=False)
-            stop_event = threading.Event()
-            background_thread = threading.Thread(target=send_reg_email, args=(request,interview.application.user.email,interview.application.user.first_name,interview.application.user.last_name, stop_event), daemon=True)
-            background_thread.start()
-            stop_event.set()
+
+            status =  0 if obj.status == None else 1 
+
             obj.status = 'scheduled'
             obj.save()
+
             time = str(interview.time_schedule.strftime('%I:%M %p'))
+
+            stop_event = threading.Event()
             
-            content = f'''
-             <p>  Hi {interview.application.user.first_name} {interview.application.user.last_name} </p>
-
-             <p> Your interview is scheduled for {interview.date_schedule} at {time} in the position of {interview.application.job.title} and will take place at our office located at {interview.application.job.location}. 
-               Please plan to arrive a few minutes early to allow time for check-in.</p>
-
-             <p> During the interview, you'll have the opportunity to meet with our team and learn more about the position and our company culture. We're excited to get to know you better
-               and learn about your experience and qualifications.</p>
-
-            <p> Best regards,</p>
-            <p> {interview.interviewer.first_name} {interview.interviewer.last_name},</p>
-            <p> ACT American College Of Technology HR </p> '''
-
-            def send_email_interview_schedule():
-                subject = 'Interview Schedule'
-                from_email = 'mikiyasmebrate2656@gmail.com'
-                to_email = interview.application.user.candidate.email
-                text_content = '<!DOCTYPE html>'
-                html_content = content
-                msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-                msg.attach_alternative(html_content, "text/html")
-                if msg.send():
-                    messages.success(request, 'Successfully email sent.')
-
-            send_email_interview_schedule()
-            messages.success(request, 'Successfully Scheduled. ')
-        
-        if job_status_form.is_valid():
-            obj1 = job_status_form.save(commit=False)
-            value = obj1.status
-            obj1.save()
-            if value == 'hired':
-                content = f'''
-                        <p> Hi {interview.application.user.first_name} {interview.application.user.last_name}, </p>
-                          
-                        <p> I'm thrilled to inform you that you've been selected for the {interview.application.job.title} role at ACT American College of Technology! 
-                            On behalf of the entire team, I want to congratulate you and welcome you to our organization.</p>
-                          
-                        <p> We were impressed by your skills, experience, and enthusiasm for the role. We believe that you'll be a valuable addition to our team and contribute
-                            greatly to our mission.</p>
-                          
-                        <p>In the coming days, you'll receive an email from our HR department with details about your start date, onboarding process, and other important information.
-                           If you have any questions in the meantime, please don't hesitate to reach out to me directly.</p>
-                          
-                        <p> Once again, congratulations on your new role, and we look forward to having you on board! </p>
-                          
-                         <p> Best regards,</p>
-                          
-                        <p> {interview.interviewer.first_name} {interview.interviewer.last_name},</p>
-                        <p> ACT American College Of Technology HR </p>
-                          
-                     '''
-            elif value == 'rejected':
-                content = f'''
-                        <p>Dear {interview.application.user.first_name} {interview.application.user.last_name}, </p>
-
-                        <p>Thanks you for taking the time to meet with our team for the role of {interview.application.job.title}.
-                        It was a pleasure to learn about your skill and accomplishments.</p>
-
-                        <p>We received a large number of job applications and after carefully reviewing all of them. we unfortunately 
-                        have to inform you that we will be selecting another candidate at this time.</P>
-
-                        <p>We want to note that competition for jobs is strong and that we often have to make difficult choices between 
-                        many high-caliber candidates. Now that we've had chance to know more about your skills, we will be keeping
-                        your resume on file for future openings. </p>
-
-                        <p>We wish you every personal and professional success in your endeavors. Please fell free to reach out
-                        to us if you have any questions. </p> 
-
-                        <p> Best regards,</p>
-                          
-                        <p> {interview.interviewer.first_name} {interview.interviewer.last_name},</p>
-                        <p> ACT American College Of Technology HR </p>
-                        '''
-
-            def send_email_interview_schedule():
-                subject = 'Interview Schedule'
-                from_email = 'mikiyasmebrate2656@gmail.com'
-                to_email = interview.application.user.candidate.email
-                text_content = '<!DOCTYPE html>'
-                html_content = content
-                msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-                msg.attach_alternative(html_content, "text/html")
-                if msg.send():
-                    messages.success(request, 'Successfully email sent.')
-
-
-            send_email_interview_schedule()
-            messages.success(request, f'Successfully {value}')
-        
+            background_thread = threading.Thread(target=handle_scheduled_send_email if not status else handle_rescheduled_send_email, args=(request,user.first_name,
+                                                                                           user.last_name, 
+                                                                                           interview.application.job.title,
+                                                                                           interview.application.job.company.name,
+                                                                                           user.email,
+                                                                                           interview.date_schedule,
+                                                                                           time, 
+                                                                                           interview.type, 
+                                                                                           interview.application.job.company.address,
+                                                                                           interview.interviewer.phone,
+                                                                                           stop_event
+                                                                                           ), 
+                                                                                           daemon=True)
+            background_thread.start()
+            stop_event.set()
+            
+            messages.success(request, 'Successfully Scheduled. ')        
         return redirect('interview-scheduled')
 
 
     context = {
+        'user' : user,
         'interview' : interview,
-        'educations': education,
-        'experiences' : experience,
+        'education': education,
+        'experience' : experience,
+        'project' : project,
+        'language' : language,
         'interview_form' : interview_form,
         'job_status_form' : job_status_form
     }
+    
     return render(request, 'RMS/interviewer/interview-detail.html', context)
 
-@login_required
-@interviewer_user_required
-def interview_cancel(request, slug):
-    interview = Interviews.objects.get(slug = slug)
-    application = Application.objects.get(id = interview.application.id)
-
-    application.status = 'rejected'
-    interview.status = 'canceled'
-    
-    application.save()
-    interview.save()
-    content = f'''
-              <p>Dear {interview.application.user.first_name} {interview.application.user.last_name}, </p>
-
-              <p>Thanks you for taking the time to meet with our team for the role of {interview.application.job.title}.
-              It was a pleasure to learn about your skill and accomplishments.</p>
-
-              <p>We received a large number of job applications and after carefully reviewing all of them. we unfortunately 
-              have to inform you that we will be selecting another candidate at this time.</P>
-
-              <p>We want to note that competition for jobs is strong and that we often have to make difficult choices between 
-              many high-caliber candidates. Now that we've had chance to know more about your skills, we will be keeping
-              your resume on file for future openings. </p>
-
-              <p>We wish you every personal and professional success in your endeavors. Please fell free to reach out
-              to us if you have any questions. </p>
-
-              <p> Best regards,</p>
-                          
-             <p> {interview.interviewer.first_name} {interview.interviewer.last_name},</p>
-            <p> ACT American College Of Technology HR </p>
- 
-'''
-
-    def send_email_interview_schedule():
-        subject = 'Interview Feedback'
-        from_email = 'mikiyasmebrate2656@gmail.com'
-        to_email = interview.application.user.candidate.email
-        text_content = '<!DOCTYPE html>'
-        html_content = content
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-        msg.attach_alternative(html_content, "text/html")
-        if msg.send():
-            messages.success(request, 'Email Successfully sent.')
-
-    send_email_interview_schedule()
-            
-    messages.success(request, 'Successfully Cancelled')
-    return redirect('interviewer-interviews-list')
 
 @login_required
 @interviewer_user_required
@@ -1004,8 +892,11 @@ def interview_today_interview_list(request):
 @interviewer_user_required
 def interview_individual_now(request, slug):
     interview = Interviews.objects.get(slug = slug)
-    education = Education.objects.filter(candidate = interview.application.user)
-    experience = Experience.objects.filter(candidate = interview.application.user)
+    user =  interview.application.user 
+    education = Education.objects.filter(candidate = interview.application.user).select_related()
+    experience = Experience.objects.filter(candidate = interview.application.user).select_related()
+    project = Project.objects.filter(candidate = interview.application.user).select_related()
+    language = Language.objects.filter(candidate = interview.application.user).select_related()
     interview_form = InterviewerNoteForm(request.POST or None, instance=interview)
     application_form = ApplicationForm()
 
@@ -1019,8 +910,11 @@ def interview_individual_now(request, slug):
 
     context = {
         'interview' : interview,
-        'educations': education,
-        'experiences' : experience,
+        'user' : user,
+        'education': education,
+        'experience' : experience,
+        'project' : project,
+        'language' : language,
         'interview_form' : interview_form,
     }
     return render(request, 'RMS/interviewer/today-interview.html', context)

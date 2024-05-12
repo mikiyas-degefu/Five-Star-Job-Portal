@@ -316,12 +316,15 @@ class Interviews(models.Model):
     type = models.CharField(max_length=15, choices=interview_type, null=True, blank=True)
     note = FroalaField( null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=600)
+    read = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            now = datetime.datetime.now()
-            self.slug = slugify(unidecode(self.application.user.username)) + '-' + slugify(unidecode(self.interviewer.username)) + '-' + slugify(unidecode(self.application.job.title))+ '-' + now.strftime("%Y-%m-%d")
-        super().save(*args, **kwargs)
+    try:
+        def save(self, *args, **kwargs):
+            if not self.slug:
+                now = datetime.datetime.now()
+                self.slug = slugify(unidecode(self.application.user.username)) + '-' + slugify(unidecode(self.interviewer.username)) + '-' + slugify(unidecode(self.application.job.title))+ '-' + now.strftime("%Y-%m-%d")
+            super().save(*args, **kwargs)
+    except: None
     def __str__(self) -> str:
         return self.interviewer.username + '-'+self.application.user.username
     

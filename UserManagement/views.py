@@ -5,7 +5,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth import logout
 from UserManagement.decorators import (admin_super_user_required)
-from django.core.mail import send_mail
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
