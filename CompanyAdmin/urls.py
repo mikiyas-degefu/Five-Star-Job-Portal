@@ -23,7 +23,7 @@ urlpatterns = [
 
     #Interview Status
     path('interview-status/', views.interview_status, name='company-admin-interview-status'),
-    path('applicant/<str:id>/<str:job_id>/<str:app_id>/', views.applicant_detail, name='company-admin-applicant-detail'),
+    path('interview-status/<str:id>/', views.interview_status_detail, name='company-admin-interview-detail'),
 
     path('company_info/', views.company_info, name='company_info'),
     path('edit_company_info/<str:id>', views.edit_company_info, name='edit_company_info'),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm)
+from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm,InterviewerForm)
 from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Sector, Interviews ,Project, Language)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
@@ -463,6 +463,39 @@ def interview_status(request):
         'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/interview_status.html', context=context)
+
+
+@admin_user_required
+def interview_status_detail(request, id):
+    count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
+    try:
+        interview = Interviews.objects.get(pk = id)
+        interview.read = True
+        interview.save()
+        try:
+            application_form = ApplicationForm(request.POST or None, instance=interview.application)
+        except:
+            application_form = ApplicationForm(request.POST or None)
+
+        if request.method == "POST":
+            if application_form.is_valid():
+                app = application_form.save(commit=False)
+                app.save()
+                if app.status == 'rejected':
+                    messages.success(request,f"&#128515 Hello User, Successfully Rejected '{interview.application.user.first_name} {interview.application.user.last_name}'" )
+                if app.status == 'hired':
+                    messages.success(request,f"&#128515 Hello User, Successfully Hired '{interview.application.user.first_name} {interview.application.user.last_name}'" )
+    except:
+        return HttpResponse('You are not authorized to access this page!')
+    
+                
+    context = {
+        'interview' : interview,
+        'count_interview_status' : count_interview_status,
+        'interview_form' : application_form
+    }
+    return render(request, 'CompanyAdmin/interview_status_detail.html', context=context)
+
 
 
 

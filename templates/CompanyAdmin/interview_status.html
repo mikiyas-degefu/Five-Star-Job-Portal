@@ -59,7 +59,7 @@
                             <th scope="col">Phone</th>
                             <th scope="col">Email</th>
                             <th scope="col">For Job</th>
-                            <th scope="col">Schedule</th>
+                            <th scope="col">Job Status</th>
                             <th scope="col">Interviewer</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -70,16 +70,16 @@
                             {% for interview in interviews %}
                           <tr>
                             <th scope="row">{{count | add:forloop.counter}}</th>
-                            <td>{{interview.application.user.first_name | capfirst}}</td>
-                            <td>{{interview.application.user.last_name | capfirst}}</td>
-                            <td>{{interview.application.user.candidate.phone1}}</td>
-                            <td>{{interview.application.user.email}}</td>
-                            <td>{{interview.application.job}}</td>
-                            <td>{{interview.date_schedule }}</td>
-                            <td>{{interview.interviewer.first_name}} {{interview.interviewer.last_name}}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}" >{{interview.application.user.first_name | capfirst}}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}">{{interview.application.user.last_name | capfirst}}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}">{{interview.application.user.candidate.phone1}}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}">{{interview.application.user.email}}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}" >{{interview.application.job}}</td>
+                            <td class="fw-bold">{{interview.application.get_status_display }}</td>
+                            <td class=" {% if not interview.read %} fw-bold {% endif %}">{{interview.interviewer.first_name}} {{interview.interviewer.last_name}}</td>
                             <td>
                             
-                              <i class="mdi mdi-circle font-size-12  {% if app.status == 'pending' %} 
+                              <i class="mdi mdi-circle font-size-12   {% if app.status == 'pending' %} 
                               text-secondary  
                         {% elif interview.status == 'pending' %} 
                                text-secondary 
@@ -92,7 +92,7 @@
                             </td>
                             <td>
                                
-                            <a class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit "> <i class="fa fa-eye"></i> </a>
+                            <a href="{% url 'company-admin-interview-detail' interview.id %}" class="btn btn-outline-secondary mt-2 btn-sm me-2 btn-edit "> <i class="fa fa-eye"></i> </a>
                             
                 
                         </td>
