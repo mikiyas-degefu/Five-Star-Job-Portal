@@ -29,7 +29,9 @@
               <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>
               <form action="" method="post">
                 {% csrf_token %}
+               
               <a href="{% url 'user-apply-job' job.slug %}" type="submit" class="btn btn-danger">Yes</a>
+              {{form.cover_letter}}
             </form>
             </div>
           </div>

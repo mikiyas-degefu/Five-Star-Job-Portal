@@ -128,6 +128,18 @@ class Contact_Message(models.Model):
 
 
 
+class FAQ(models.Model):
+    question = models.CharField(max_length=70)
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add= True)
+
+    def __str__(self) -> str:
+        return self.question
+    
+    class Meta:
+        ordering = ['-created_at'] #New's First
+
+
 
 auditlog.register(CompanyCatagory)
 auditlog.register(Blog_Categories)

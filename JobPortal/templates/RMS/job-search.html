@@ -29,7 +29,7 @@
               <div class="row justify-content-center">
                 <div class="col-md-6">
                   <div class="text-center text-white">
-                    <h3 class="mb-4">Job List</h3>
+                    <h3 class="mb-4">Job Search</h3>
                     <div class="page-next">
                       <nav
                         class="d-inline-block"
@@ -46,7 +46,7 @@
                             class="breadcrumb-item active"
                             aria-current="page"
                           >
-                            Job List
+                            Job Search
                           </li>
                         </ol>
                       </nav>
@@ -99,56 +99,19 @@
               <div class="row d-flex">
                 <div class="col-lg-9">
                   <div class="me-lg-5">
-                    <div class="job-list-header">
-                      <form action="#">
-                        <div class="row g-2">
-                          <div class="col-lg-12">
-                            <div class="filler-job-form">
-                              <form class="form-inline my-2 my-lg-0">
-                                <div class="input-group">
-                                  <input name="q" class="form-control" type="search" placeholder="Search any thing" aria-label="Search">
-                                  <div class="input-group-append">
-                                    <button class="btn btn-outline-primary ms-3" type="submit">Search</button>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                          <!--end col-->
-                          
-                          <!--end col-->
-                        </div>
-                        <!--end row-->
-                      </form>
-                    </div>
+                    
                     <!--end job-list-header-->
                     <div class="wedget-popular-title mt-4">
-                      <h6>Popular</h6>
-                      <ul class="list-inline">
-                        
-                        {% for popular in sector_popular%}
-                        <li class="list-inline-item">
-                          <div class="popular-box d-flex align-items-center">
-                            <div class="number flex-shrink-0 me-2">{{popular.count_job_post}}</div>
-                            <a
-                              href="{% url 'job_sector_categories' popular.slug%}"
-                              class="primary-link stretched-link"
-                            >
-                              <h6 class="fs-14 mb-0">{{popular.name}}</h6>
-                            </a>
-                          </div>
-                        </li>
-                        {% endfor %}
-
-                      </ul>
+                      <h6>Job Search</h6>
+                      
                     </div>
                     <!--end wedget-popular-title-->
                     <!-- Job-list -->
                     <div class="row d-flex justify-content-center ">
                  
                        <div class="col">
-                      {% if job_list%}
-                         {% for job in job_list%}
+                      {% if job_listings %}
+                         {% for job in job_listings %}
                         
                       <div class="job-box shadow-lg border-2 border-primary
 
@@ -241,6 +204,11 @@
                       </div>
                       <!--end job-box-->
                          {% endfor %}
+
+                      {% else %} 
+                       
+                      <h4 class="text-info mt-5"> No Job Found For Your Search </h4>
+                       
                       {% endif %}
                       
 

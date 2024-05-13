@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .models import Blog, Comment, Social_Media, Contact
+from .models import Blog, Comment, Social_Media, Contact , Company , FAQ
 from .forms import CommentForm, ContactForm
 from django.contrib import messages
+from UserManagement.models import CustomUser 
+from JobPortal.models import Candidate  , Job_Posting
+
 # Create your views here.
 social_medias = Social_Media.objects.all()
 
@@ -69,7 +72,16 @@ def contact(request):
     return render(request, 'Company/contact.html', context)
 
 def about(request):
+    users = CustomUser.objects.all().count()
+    candidate = Candidate.objects.all().count()
+    jobs = Job_Posting.objects.all().count()
+    company = Company.objects.all().count()
+
     context = {
+        "users" : users,
+        "candidate" : candidate,
+        "jobs" : jobs,
+        "company" : company,
         'social_medias' : social_medias,
     }
     return render(request, 'Company/about.html',context)
@@ -81,7 +93,16 @@ def privacy_and_policy(request):
     return render(request, 'Company/privacy-policy.html', context)
 
 def faqs(request):
+    faqs = FAQ.objects.all()
+    total_faqs = faqs.count()
+    half_point = total_faqs // 2
+    
+    faq1 = faqs[:half_point]
+    faq2 = faqs[half_point:]
     context = {
         'social_medias' : social_medias,
+        "faq1" : faq1,
+        "faq2" : faq2
+
     }
     return render(request, 'Company/faqs.html',context)

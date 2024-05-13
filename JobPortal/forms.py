@@ -481,13 +481,81 @@ class SectorForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ('status',)
+        fields = ('status', 'cover_letter')
 
         widgets = {
             'status' : forms.Select(attrs={
                      'class' : 'form-select'
-                     })
+                     })     
         }
+
+
+
+CITY_CHOICES = (
+    ('Addis Ababa', 'Addis Ababa'),
+    ('Ērer Sātā', 'Ērer Sātā'),
+    ('Shashemenē', 'Shashemenē'),
+    ('K’ebrī Dehar', 'K’ebrī Dehar'),
+    ('Nazrēt', 'Nazrēt'),
+    ('Mekele', 'Mekele'),
+    ('Godē', 'Godē'),
+    ('Āwasa', 'Āwasa'),
+    ('Dire Dawa', 'Dire Dawa'),
+    ('Bahir Dar', 'Bahir Dar'),
+    ('Sodo', 'Sodo'),
+    ('Ārba Minch’', 'Ārba Minch’'),
+    ('Desē', 'Desē'),
+    ('Hosa’ina', 'Hosa’ina'),
+    ('K’ebrī Beyah', 'K’ebrī Beyah'),
+    ('Jijiga', 'Jijiga'),
+    ('Dīla', 'Dīla'),
+    ('Nek’emtē', 'Nek’emtē'),
+    ('Debre Birhan', 'Debre Birhan'),
+    ('Debre Mark’os', 'Debre Mark’os'),
+    ('Ferfer', 'Ferfer'),
+    ('Āwarē', 'Āwarē'),
+    ('Harar', 'Harar'),
+    ('Kombolcha', 'Kombolcha'),
+    ('Jīma', 'Jīma'),
+    ('Debre Tabor', 'Debre Tabor'),
+    ('Harshin', 'Harshin'),
+    ('Ādīgrat', 'Ādīgrat'),
+    ('Debre Zeyit', 'Debre Zeyit'),
+    ('Gambēla', 'Gambēla'),
+    ('Mīzan Teferī', 'Mīzan Teferī'),
+    ('Ādwa', 'Ādwa'),
+    ('Gonder', 'Gonder'),
+    ('Bodītī', 'Bodītī'),
+    ('Āsela', 'Āsela'),
+    ('Āksum', 'Āksum'),
+    ('Bonga', 'Bonga'),
+    ('Finote Selam', 'Finote Selam'),
+    ('Semera', 'Semera'),
+    ('Goba', 'Goba'),
+    ('Hāgere Hiywet', 'Hāgere Hiywet'),
+    ('Robē', 'Robē'),
+    ('Yirga ‘Alem', 'Yirga ‘Alem'),
+    ('Giyon', 'Giyon'),
+    ('Bedēsa', 'Bedēsa'),
+    ('Āzezo', 'Āzezo'),
+    ('Butajīra', 'Butajīra'),
+    ('Ālamat’ā', 'Ālamat’ā'),
+    ('Āreka', 'Āreka'),
+    ('Gīmbī', 'Gīmbī'),
+    ('Wik’ro', 'Wik’ro'),
+    ('Welk’īt’ē', 'Welk’īt’ē'),
+    ('Metu', 'Metu'),
+    ('Fichē', 'Fichē'),
+    ('K’olīto', 'K’olīto'),
+    ('Genet', 'Genet'),
+    ('Āgaro', 'Āgaro'),
+    ('Gelemso', 'Gelemso'),
+    ('Āsosa', 'Āsosa'),
+)
+
+class CityForm(forms.Form):
+    city = forms.ChoiceField(choices=CITY_CHOICES)
+
 
 
 

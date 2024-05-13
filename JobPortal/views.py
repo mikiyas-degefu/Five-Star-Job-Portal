@@ -4,8 +4,8 @@ from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from django.shortcuts import render, redirect
-from Company.models import Social_Media, Contact,Company
-from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from Company.models import Social_Media, Contact,Company , Blog
+from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront , CityForm
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
@@ -18,7 +18,7 @@ from UserManagement.decorators import interviewer_user_required
 from UserManagement.forms import ( ChangePasswordForm)
 import threading
 from .resource import (handle_registration_email, handle_successfully_applied_send_email, handle_scheduled_send_email, handle_rescheduled_send_email)
-
+from django.db.models import Count
 
 social_medias = Social_Media.objects.all()
 
@@ -141,6 +141,11 @@ def index(request):
     sector_popular = Sector.objects.all()[0:12]
     job = None
     user = request.user
+    city_form = CityForm()
+    if request.method == 'POST':
+        job_title = request.POST.get('job_title')
+        city = request.POST.get('city')
+        return redirect('job_search', job_title=job_title, city=city)
     if request.user :
         try:
             candidate = Candidate.objects.get(user=request.user)
@@ -149,12 +154,10 @@ def index(request):
            
         except:
             job = Job_Posting.objects.filter(job_status = True)[0:5]  
-           
-       
     else :
        job = Job_Posting.objects.filter(job_status = True)[0:5]
     job_number = Job_Posting.objects.filter(job_status = True)
-    company = Company.objects.all()
+    company = Company.objects.annotate(views_count=Count('views')).order_by('-views_count')[:6]
 
 
     
@@ -167,7 +170,9 @@ def index(request):
         'application' : application,
         'sector' : sector,
         'sector_popular' : sector_popular,
-        "company" : company
+        "company" : company,
+        "city_form" : city_form,
+        "blogs" : Blog.objects.all()[:3],
     }
     return render(request, 'RMS/index.html', context)
 
@@ -214,7 +219,7 @@ def job_list(request):
         'application' : application,
         'sector' : sector_new,
         'company':company,
-        'sector_popular' : sector_popular
+        'sector_popular' : sector_popular,
     }
     return render(request, 'RMS/job-list.html', context)
 
@@ -222,40 +227,45 @@ def job_list(request):
 
 
 
-def job_search(request, job , city ):
-    try: bookmark = Bookmarks.objects.filter(user=request.user).values_list('job__id', flat=True)
-    except: bookmark = None
-    try: candidate = Candidate.objects.get(user = request.user)
-    except: candidate = None
-    try: application = Application.objects.filter(user=request.user).values_list('job__id', flat=True)
-    except: application = None
+
+def job_search(request, job_title, city):
+    try:
+        bookmark = Bookmarks.objects.filter(user=request.user).values_list('job__id', flat=True)
+    except:
+        bookmark = None
+    try:
+        candidate = Candidate.objects.get(user=request.user)
+    except:
+        candidate = None
+    try:
+        application = Application.objects.filter(user=request.user).values_list('job__id', flat=True)
+    except:
+        application = None
 
 
     
-   
+    job_listings =  Job_Posting.objects.filter(job_status = True).filter(Q(city=city) , Q(title__contains=job_title))
 
-    paginator = Paginator(job,5)
+    paginator = Paginator(job_listings, 5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-
-
-    for job_listing in Job.objects.all():
-        if job is None or job_listing["title"].lower() == job.lower():
-            if city is None or job_listing["city"].lower() == city.lower():
-                    job_listings.append(job_listing)
-
-
+    sector_new = []
+    sector = Sector.objects.all()
+    for i in sector:
+        if i.count_job_post() > 0:
+            sector_new.append(i)
+    company = Company.objects.all()        
     context = {
-        'social_medias' : social_medias,
-        'job_listing' : page,
-        'bookmark' : bookmark,
-        'candidate' : candidate,
-        'application' : application,
-        'sector' : sector,
-        'company' : company,
-        'sector_popular' : sector_popular
+        'job_listings': page,
+        'job_listings': job_listings,
+        'bookmark': bookmark,
+        'sector' : sector_new,
+        'company':company,
     }
     return render(request, 'RMS/job-search.html', context)
+
+
+
 
 
 def job_sector_categories(request, slug):
@@ -312,6 +322,7 @@ def job_detail(request, slug):
     company = job.company
     company.views = company.views + 1
     company.save()
+    form = ApplicationForm()
     
     company_info = Contact.objects.all().first()
     social_media = Social_Media.objects.all().first()
@@ -327,6 +338,7 @@ def job_detail(request, slug):
         'social_media' : social_media,
         'bookmark' : bookmark,
         'application'  :application,
+        'form' : form
     }
     return render(request, 'RMS/job-details.html', context)
 
@@ -986,16 +998,6 @@ def company_interviewer_change_password(request):
 
 
 
-
-
-
-
-
-
-
-import random
-
-
 def validate_skill_list(request):
     try :
         candidate = Candidate.objects.get(user=request.user)
@@ -1003,11 +1005,17 @@ def validate_skill_list(request):
     except:
         user_skills = None
     
-    
-
+    validated_skill = []
+    unvalidated_skill = []
+    for i in user_skills:
+        if i.validated == True:
+            validated_skill.append(i)
+        else :
+            unvalidated_skill.append(i)
 
     context = {
-       "user_skills" : user_skills, 
+       "validated_skill" : validated_skill,
+       "unvalidated_skill" : unvalidated_skill 
     }
     
 

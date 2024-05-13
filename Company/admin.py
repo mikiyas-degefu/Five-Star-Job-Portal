@@ -10,6 +10,7 @@ admin.site.register(models.Comment)
 admin.site.register(models.Contact)
 admin.site.register(models.Social_Media)
 admin.site.register(models.Contact_Message)
+admin.site.register(models.FAQ)
 
 
 class CompanyAdmin(ImportExportModelAdmin):

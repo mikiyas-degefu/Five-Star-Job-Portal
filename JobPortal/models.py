@@ -217,6 +217,71 @@ compensation_types = [
 ]
 
 
+
+
+CITY_CHOICES = (
+        ('Addis Ababa', 'Addis Ababa'),
+        ('Ērer Sātā', 'Ērer Sātā'),
+        ('Shashemenē', 'Shashemenē'),
+        ('K’ebrī Dehar', 'K’ebrī Dehar'),
+        ('Nazrēt', 'Nazrēt'),
+        ('Mekele', 'Mekele'),
+        ('Godē', 'Godē'),
+        ('Āwasa', 'Āwasa'),
+        ('Dire Dawa', 'Dire Dawa'),
+        ('Bahir Dar', 'Bahir Dar'),
+        ('Sodo', 'Sodo'),
+        ('Ārba Minch’', 'Ārba Minch’'),
+        ('Desē', 'Desē'),
+        ('Hosa’ina', 'Hosa’ina'),
+        ('K’ebrī Beyah', 'K’ebrī Beyah'),
+        ('Jijiga', 'Jijiga'),
+        ('Dīla', 'Dīla'),
+        ('Nek’emtē', 'Nek’emtē'),
+        ('Debre Birhan', 'Debre Birhan'),
+        ('Debre Mark’os', 'Debre Mark’os'),
+        ('Ferfer', 'Ferfer'),
+        ('Āwarē', 'Āwarē'),
+        ('Harar', 'Harar'),
+        ('Kombolcha', 'Kombolcha'),
+        ('Jīma', 'Jīma'),
+        ('Debre Tabor', 'Debre Tabor'),
+        ('Harshin', 'Harshin'),
+        ('Ādīgrat', 'Ādīgrat'),
+        ('Debre Zeyit', 'Debre Zeyit'),
+        ('Gambēla', 'Gambēla'),
+        ('Mīzan Teferī', 'Mīzan Teferī'),
+        ('Ādwa', 'Ādwa'),
+        ('Gonder', 'Gonder'),
+        ('Bodītī', 'Bodītī'),
+        ('Āsela', 'Āsela'),
+        ('Āksum', 'Āksum'),
+        ('Bonga', 'Bonga'),
+        ('Finote Selam', 'Finote Selam'),
+        ('Semera', 'Semera'),
+        ('Goba', 'Goba'),
+        ('Hāgere Hiywet', 'Hāgere Hiywet'),
+        ('Robē', 'Robē'),
+        ('Yirga ‘Alem', 'Yirga ‘Alem'),
+        ('Giyon', 'Giyon'),
+        ('Bedēsa', 'Bedēsa'),
+        ('Āzezo', 'Āzezo'),
+        ('Butajīra', 'Butajīra'),
+        ('Ālamat’ā', 'Ālamat’ā'),
+        ('Āreka', 'Āreka'),
+        ('Gīmbī', 'Gīmbī'),
+        ('Wik’ro', 'Wik’ro'),
+        ('Welk’īt’ē', 'Welk’īt’ē'),
+        ('Metu', 'Metu'),
+        ('Fichē', 'Fichē'),
+        ('K’olīto', 'K’olīto'),
+        ('Genet', 'Genet'),
+        ('Āgaro', 'Āgaro'),
+        ('Gelemso', 'Gelemso'),
+        ('Āsosa', 'Āsosa'),
+    )
+
+    
 class Job_Posting(models.Model):
     company = models.ForeignKey(Company , on_delete=models.CASCADE , null=True , blank=True)
     title = models.CharField(max_length=50)
@@ -226,6 +291,7 @@ class Job_Posting(models.Model):
     experience = models.CharField(max_length=20)
     skills = models.ManyToManyField(Skill)
     location = models.CharField(max_length=200)
+    city = models.CharField(max_length=100, choices=CITY_CHOICES , default=True)
     salary_range_start = models.FloatField()
     salary_range_final = models.FloatField()
     type = models.CharField( choices=job_type, max_length=30)
@@ -275,6 +341,7 @@ class Application(models.Model):
     date_applied = models.DateField(auto_now_add=True) # Select Option from application_status
     status = models.CharField(max_length=15, choices=application_status, default='pending')
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=200)
+    cover_letter = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
