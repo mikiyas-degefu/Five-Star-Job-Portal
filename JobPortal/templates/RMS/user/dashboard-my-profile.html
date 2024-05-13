@@ -70,8 +70,9 @@
       
 
               <!-- START PROFILE -->
+
              
-              <section class="section">
+              <section class="section" id="pdf_section">
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-lg-4">
@@ -310,6 +311,10 @@
                     </div>
                     <!--end container-->
               </section>
+
+              <button class="btn btn-primary mb-5" onclick="printDiv()">Print as PDF</button>
+             
+              
               <!-- END PROFILE -->
               {% else %}
               <div class="mt-4 pt-3">
@@ -381,6 +386,20 @@
   </div>
   {% include 'include/footer.html' %}
   {% include 'include/footerjs.html' %}
+
 </body>
+
+<script>
+  function printDiv(divName) {
+    var printContents = document.getElementById("pdf_section").innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+</script>
 
 </html>

@@ -22,6 +22,7 @@ import threading
 from .resource import (handle_registration_email, handle_successfully_applied_send_email, handle_scheduled_send_email, handle_rescheduled_send_email)
 from django.db.models import Count
 
+
 social_medias = Social_Media.objects.all()
 
 #Session
