@@ -251,6 +251,7 @@ def company_admins(request):
     
 @admin_user_required
 def company_user_detail(request, id):
+    notification_application = Application.objects.filter(read = False).select_related()
     try:
        company_admins  = CustomUser.objects.get(id=id , company=request.user.company)
     except:
@@ -277,6 +278,7 @@ def company_user_detail(request, id):
 
 @admin_user_required
 def company_user_delete(request, id):
+    notification_application = Application.objects.filter(read = False).select_related()
     try:
         user = CustomUser.objects.get(pk = id, company=request.user.company)
     except:
@@ -291,6 +293,7 @@ def company_user_delete(request, id):
 
 @admin_user_required
 def change_status_user(request, id):
+    notification_application = Application.objects.filter(read = False).select_related()
     user = CustomUser.objects.get(id=id)
     current_user = request.user
     if user != current_user: 
@@ -364,6 +367,7 @@ def job_delete(request, id):
 
 @admin_user_required
 def job_detail(request, id):
+    notification_application = Application.objects.filter(read = False).select_related()
     try:
         job = Job_Posting.objects.get(pk = id, company=request.user.company)
     except:
@@ -485,6 +489,7 @@ def interview_status(request):
 
 @admin_user_required
 def interview_status_detail(request, id):
+    notification_application = Application.objects.filter(read = False).select_related()
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     try:
         interview = Interviews.objects.get(pk = id)
@@ -549,6 +554,7 @@ def interview_status_detail(request, id):
 
 @admin_user_required
 def applicant_detail(request,app_id):
+    notification_application = Application.objects.filter(read = False).select_related()
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     try:
         app = Application.objects.get(pk = app_id)
@@ -632,6 +638,7 @@ def company_info (request):
 
 @admin_user_required
 def edit_company_info (request , id):
+    notification_application = Application.objects.filter(read = False).select_related()
     company = Company.objects.get(id=id)
     form = CompanyForm(request.POST or None, request.FILES or None, instance=company)
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
