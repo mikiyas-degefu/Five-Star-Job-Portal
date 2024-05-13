@@ -297,7 +297,7 @@ def change_status_user(request, id):
 def company_admin_profile(request):
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     user = request.user
-    form =  CustomUserEditFormAdmin(request.POST or None, request.POST or None, instance=user)
+    form =  CustomUserEditFormAdmin(request.POST or None, request.FILES or None, instance=user)
     if request.method == 'POST':
         if form.is_valid():
             form.save()

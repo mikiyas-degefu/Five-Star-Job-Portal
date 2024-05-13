@@ -628,7 +628,7 @@ def blog_delete(request, id):
 @admin_super_user_required
 def admin_profile(request):
     user = request.user
-    form =  CustomUserEditFormAdmin(request.POST or None, request.POST or None, instance=user)
+    form =  CustomUserEditFormAdmin(request.POST or None,request.FILES or None, instance=user)
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -834,6 +834,7 @@ def audit(request):
     
     context = {
         'auditlog_entries' : page,
+        'count' : count,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
     return render(request, 'UserAdmin/log.html', context=context)

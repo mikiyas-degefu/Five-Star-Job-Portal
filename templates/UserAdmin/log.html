@@ -49,7 +49,7 @@
                         <tbody>
                           {% if auditlog_entries %}
                             {% for entry in auditlog_entries %}
-                            <td>{{ forloop.counter }}</td>
+                            <td>{{count | add:forloop.counter}}</td>
                             <td>{{ entry.timestamp }}</td>
                             <td>
                                 {% if entry.actor.get_full_name %}
