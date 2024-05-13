@@ -4,13 +4,10 @@ from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from django.shortcuts import render, redirect
-<<<<<<< HEAD
 from Company.models import Social_Media, Contact,Company , Blog
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront , CityForm
-=======
 from Company.models import Social_Media, Contact,Company
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront, ApplicationCoverLetterForm
->>>>>>> 446164a0ec5e0fbe5fe01f0e438dbd542fff7181
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
@@ -326,12 +323,8 @@ def job_detail(request, slug):
     job = Job_Posting.objects.get(slug=slug)
     company = job.company
     company.views = company.views + 1
-<<<<<<< HEAD
     company.save()
     form = ApplicationForm()
-=======
-    company.save()  # Increase Company views by 1 
->>>>>>> 446164a0ec5e0fbe5fe01f0e438dbd542fff7181
     
     company_info = Contact.objects.all().first()
     social_media = Social_Media.objects.all().first()
@@ -392,11 +385,8 @@ def job_detail(request, slug):
         'social_media' : social_media,
         'bookmark' : bookmark,
         'application'  :application,
-<<<<<<< HEAD
-        'form' : form
-=======
+        'form' : form,
         'application_form' : application_form
->>>>>>> 446164a0ec5e0fbe5fe01f0e438dbd542fff7181
     }
     return render(request, 'RMS/job-details.html', context)
 
