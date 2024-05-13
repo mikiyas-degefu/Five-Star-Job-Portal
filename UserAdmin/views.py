@@ -21,6 +21,8 @@ import random
 from JobPortal.resource import (CompanyResource, SectorResource, JobResource, SkillResource, UserResource)
 # Create your views here.
 
+notification_company = Company.objects.filter(read = False).select_related()
+
 
 @admin_super_user_required
 def index(request):
@@ -54,6 +56,7 @@ def index(request):
 
 
     context = {
+        'notification_company': notification_company,
         'total_user' : total_users,
         'total_companies' : total_companies,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
@@ -69,6 +72,7 @@ def index(request):
         'companies_graph_name' : companies_graph_name,
         'companies_graph_jobs': companies_graph_jobs,
         'companies_graph_views' : companies_graph_views,
+        'notification_company': notification_company,
     }
     return render(request, 'UserAdmin/index.html', context=context)
 
@@ -110,6 +114,7 @@ def company(request):
 
     
     context = {
+        'notification_company': notification_company,
         'companies' : page,
         'count' : count,
         'form' : form,
@@ -123,6 +128,8 @@ def company(request):
 def company_detail(request, id):
     try:
         company = Company.objects.get(pk = id)
+        company.read = True
+        company.save()
     except:
         company = None
     
@@ -136,6 +143,7 @@ def company_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
+        'notification_company': notification_company,
         'form': form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
@@ -234,6 +242,7 @@ def job_sector(request):
 
     
     context = {
+        'notification_company': notification_company,
         'sectors' : page,
         'count' : count,
         'form' : form,
@@ -320,6 +329,7 @@ def job_posting(request):
 
     
     context = {
+        'notification_company': notification_company,
         'jobs' : page,
         'count' : count,
         'form' : form,
@@ -382,6 +392,7 @@ def job_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
+        'notification_company': notification_company,
         'form': form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
     }
@@ -440,6 +451,7 @@ def skills(request):
 
     
     context = {
+        'notification_company': notification_company,
         'skills' : page,
         'count' : count,
         'form' : form,
@@ -510,6 +522,7 @@ def blog_category(request):
 
     
     context = {
+        'notification_company': notification_company,
         'categories' : page,
         'count' : count,
         'form' : form,
@@ -583,6 +596,7 @@ def blog(request):
 
     
     context = {
+        'notification_company': notification_company,
         'blogs' : page,
         'count' : count,
         'form' : form,
@@ -607,6 +621,7 @@ def blog_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
+        'notification_company': notification_company,
         'form': form,
         'blog' : blog,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
@@ -637,6 +652,7 @@ def admin_profile(request):
             messages.error(request, '&#128532 Hello User , An error occurred while Updating User Information ')
 
     context = {
+        'notification_company': notification_company,
         'user' : user,
         'form' : form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
@@ -679,6 +695,7 @@ def admin_social_media(request):
 
 
     context = {
+        'notification_company': notification_company,
         'social_medias' : social_media,
         'form' : form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
@@ -704,6 +721,7 @@ def admin_social_media_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Social Media')
     context = {
+        'notification_company': notification_company,
         'form': form,
         'social_media' : social,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
@@ -752,6 +770,7 @@ def contact_messages(request):
 
     
     context = {
+        'notification_company': notification_company,
         'contact_messages' : page,
         'count' : count,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()
@@ -797,6 +816,7 @@ def contact_messages_detail(request, id):
 
     
     context = {
+        'notification_company': notification_company,
         'contact_message': contact_message,
         'contact_messages' : page,
         'count' : count,
@@ -833,6 +853,7 @@ def audit(request):
 
     
     context = {
+        'notification_company': notification_company,
         'auditlog_entries' : page,
         'count' : count,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count()

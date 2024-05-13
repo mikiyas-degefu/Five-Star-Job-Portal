@@ -31,6 +31,7 @@ class Company(models.Model):
     total_jobs = models.IntegerField(default=0)
     website = models.URLField(max_length=200,null=True , blank=True)
     date_created = models.DateField(auto_now_add=True, null=True)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

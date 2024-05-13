@@ -8,16 +8,18 @@ from UserManagement.decorators import (admin_super_user_required)
 import threading
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from JobPortal.models import Company
 
 # Create your views here.
 
-
+notification_company = Company.objects.filter(read = False).select_related()
 
 def send_reg_email(request,email,first_name,last_name,password, stop_event):
     while not stop_event.is_set():
         subject, from_email, to = 'Registration Successful', 'mikiyasmebrate2656@gmail.com', f"{email}"
         text_content = "Registration Successful"
         context = {
+            'notification_company' : notification_company,
             'first_name': first_name,
             'last_name' : last_name,
             'email' : email,
@@ -80,6 +82,7 @@ def admin_user(request):
 
     
     context = {
+        'notification_company' : notification_company,
         'admin_user' : page,
         'count' : count,
         'form' : form
@@ -115,6 +118,7 @@ def admin_user_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
+        'notification_company' : notification_company,
         'form': form
     }
     return render(request, 'UserAdmin/admin_user_detail.html', context=context)
@@ -159,6 +163,7 @@ def company_user(request):
 
     
     context = {
+        'notification_company' : notification_company,
         'company_user' : page,
         'count' : count,
         'form' : form
@@ -193,6 +198,7 @@ def company_user_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
+        'notification_company' : notification_company,
         'form': form
     }
     return render(request, 'UserAdmin/company_user_detail.html', context=context)    
@@ -236,6 +242,7 @@ def candidate_user(request):
 
     
     context = {
+        'notification_company' : notification_company,
         'candidate_user' : page,
         'count' : count,
         'form' : form
@@ -270,6 +277,7 @@ def candidate_user_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
+        'notification_company' : notification_company,
         'form': form
     }
     return render(request, 'UserAdmin/candidate_user_detail.html', context=context) 
