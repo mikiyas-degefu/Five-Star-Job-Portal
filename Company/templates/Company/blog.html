@@ -66,6 +66,7 @@
         </div>
         <!-- END SHAPE -->
 
+       
         <!-- START BLOG-PAGE -->
         <section class="section">
           <div class="container">
@@ -77,14 +78,15 @@
               </div>
               <!--end col-->
 
-
-
+ 
+              {% if latest_blog %}
               <div class="col-lg-7">
                 <div class="post-preview overflow-hidden rounded-3 mb-3 mb-lg-0">
                   <a href="{% url 'single_blog' latest_blog.slug%}"><img src="/media/{{latest_blog.image}}" alt="Blog"
                       class="img-fluid blog-img" /></a>
                 </div>
               </div>
+             
               <!--end col-->
               <div class="col-lg-5">
                 <!-- Post-->
@@ -92,10 +94,10 @@
                   <div class="post ms-lg-4">
                     <p class="text-muted mb-2">
                      <b>
-                      {% if latest_blog %} 
+                     
                       {% for types in latest_blog.type.all %}
                       {{types}} {% endfor %}</b>- {{latest_blog.created_at|timesince }} ago 
-                      {% endif %}
+                     
                     </p>
                     <h5 class="mb-3">
                       <a href="{% url 'single_blog' latest_blog.slug%}" class="primary-link">{{ latest_blog.title }}</a>
@@ -109,11 +111,15 @@
                 <!-- Post end-->
               </div>
               <!--end col-->
+              {% endif %}
+
             </div>
             <!--end row-->
 
+            
 
 
+            {% if blogs %}
             <div class="row mt-5">
               <div class="col-lg-12">
                 <div>
@@ -196,16 +202,26 @@
                     </nav>
                 </div><!--end col-->
             </div><!-- end row -->
+
+           
               
      
 
 
-            </div>
+            </div>          
+           {% endif %}
+
+
+           {% if latest_blog %}
+           {% else %}
+              <h2 class="text-center p-5 m-5"> No Blog</h2>
+           {% endif %}
 
           </div>
           <!-- end container -->
         </section>
         <!-- END BLOG-PAGE -->
+        
       </div>
       <!-- End Page-content -->
 

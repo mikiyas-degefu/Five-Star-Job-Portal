@@ -16,7 +16,11 @@ def blog(request):
     
     paginator = Paginator(blogs, 9)
     page_number = request.GET.get('page')
-    page = paginator.get_page(page_number)
+    try: page = paginator.get_page(page_number)
+    except: page = None
+
+    print('>>>', blogs)
+
 
     context = {
         'social_medias' : social_medias,
