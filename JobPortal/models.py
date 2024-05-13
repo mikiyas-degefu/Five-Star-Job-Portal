@@ -276,6 +276,7 @@ class Application(models.Model):
     date_applied = models.DateField(auto_now_add=True) # Select Option from application_status
     status = models.CharField(max_length=15, choices=application_status, default='pending')
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=200)
+    read = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:

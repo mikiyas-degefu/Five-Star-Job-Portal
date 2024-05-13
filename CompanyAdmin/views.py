@@ -22,6 +22,8 @@ from JobPortal.resource import ( JobResource, ApplicationResource, UserResource)
 
 @admin_user_required
 def index(request):
+    notification_application = Application.objects.filter(read = False).select_related()
+
     total_users = CustomUser.objects.filter(company = request.user.company).count()
     total_views = request.user.company.views
     total_jobs = Job_Posting.objects.filter(company = request.user.company).count()
@@ -45,6 +47,7 @@ def index(request):
 
 
     context = {
+        'notification_application' : notification_application,
         'total_users' : total_users,
         'total_views' : total_views,
         'total_jobs' : total_jobs,
@@ -64,6 +67,7 @@ def index(request):
 
 @admin_user_required
 def job_posting(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     form = JobPostingCompanyAdminForm(request.POST or None, request.FILES or None)
     jobs = Job_Posting.objects.filter(company = request.user.company)
@@ -125,6 +129,7 @@ def job_posting(request):
     
     
     context = {
+        'notification_application' : notification_application,
         'jobs' : page,
         'count' : count,
         'form' : form,
@@ -137,6 +142,7 @@ def job_posting(request):
 
 @admin_user_required
 def company_interviewer(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     user = request.user
     company = user.company
     form = CompanyAdmin(request.POST or None, request.FILES or None)
@@ -178,6 +184,7 @@ def company_interviewer(request):
 
     
     context = {
+        'notification_application' : notification_application,
         'company_interviewer' : page,
         'count' : count,
         'form' : form,
@@ -189,6 +196,7 @@ def company_interviewer(request):
 
 @admin_user_required
 def company_admins(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     user = request.user
     company = user.company
@@ -230,6 +238,7 @@ def company_admins(request):
 
     
     context = {
+        'notification_application' : notification_application,
         'company_admins' : page,
         'count' : count,
         'form' : form,
@@ -258,6 +267,7 @@ def company_user_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     context = {
+        'notification_application' : notification_application,
         'form': form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
         'count_interview_status' : count_interview_status
@@ -295,6 +305,7 @@ def change_status_user(request, id):
 
 @admin_user_required
 def company_admin_profile(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     user = request.user
     form =  CustomUserEditFormAdmin(request.POST or None, request.FILES or None, instance=user)
@@ -306,6 +317,7 @@ def company_admin_profile(request):
             messages.error(request, '&#128532 Hello User , An error occurred while Updating User Information ')
 
     context = {
+        'notification_application' : notification_application,
         'user' : user,
         'form' : form,
         'count_messages' : Contact_Message.objects.filter(is_read = False).count(),
@@ -317,6 +329,7 @@ def company_admin_profile(request):
 
 @admin_user_required
 def company_admin_change_password(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     form = ChangePasswordForm(request.user)
     if request.method == 'POST':
         form = ChangePasswordForm(request.user,request.POST)
@@ -390,6 +403,7 @@ def job_detail(request, id):
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating job')
     context = {
+        'notification_application' : notification_application,
         'form': form,
         'count_interview_status' : count_interview_status
     }
@@ -399,6 +413,7 @@ def job_detail(request, id):
 
 @admin_user_required
 def applicant(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     jobs = Application.objects.filter( job__company = request.user.company).select_related()
     count = 30
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
@@ -425,6 +440,7 @@ def applicant(request):
 
 
     context = {
+        'notification_application' : notification_application,
         'applications' : page,
         'count' : count,
         'count_interview_status' : count_interview_status
@@ -433,6 +449,7 @@ def applicant(request):
 
 @admin_user_required
 def interview_status(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     interviews = Interviews.objects.filter( interviewer__company = request.user.company).select_related()
     count = 30
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
@@ -458,6 +475,7 @@ def interview_status(request):
         count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
 
     context = {
+        'notification_application' : notification_application,
         'interviews' : page,
         'count' : count,
         'count_interview_status' : count_interview_status
@@ -519,6 +537,7 @@ def interview_status_detail(request, id):
     
                 
     context = {
+        'notification_application' : notification_application,
         'interview' : interview,
         'count_interview_status' : count_interview_status,
         'interview_form' : application_form
@@ -529,14 +548,18 @@ def interview_status_detail(request, id):
 
 
 @admin_user_required
-def applicant_detail(request, id, job_id, app_id):
+def applicant_detail(request,app_id):
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     try:
-        user = CustomUser.objects.get(pk = id)   
+        app = Application.objects.get(pk = app_id)
+        app.read =True
+        app.save()
+        
+        user = app.user  
         education = Education.objects.filter(candidate = user).select_related()
         experience = Experience.objects.filter(candidate = user).select_related()
-        job = Job_Posting.objects.get(pk = job_id)
-        app = Application.objects.get(pk = app_id)
+        job = app.job
+       
         project = Project.objects.filter(candidate = user)
         language = Language.objects.filter(candidate = user)
         interview = Interviews.objects.filter(application = app).first()
@@ -580,6 +603,7 @@ def applicant_detail(request, id, job_id, app_id):
                 
                 
     context = {
+        'notification_application' : notification_application,
         'user' : user,
         'education' : education,
         'experience' : experience,
@@ -595,9 +619,11 @@ def applicant_detail(request, id, job_id, app_id):
 
 @admin_user_required
 def company_info (request):
+    notification_application = Application.objects.filter(read = False).select_related()
     company = get_object_or_404(Company, id=request.user.company.id)
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     context = {
+        'notification_application' : notification_application,
         "company" : company,
         'count_interview_status' : count_interview_status
     }
@@ -618,6 +644,7 @@ def edit_company_info (request , id):
             messages.error(request, '&#128532  An error occurred while updating Company')
             return redirect('company_info')
     context = {
+        'notification_application' : notification_application,
         "company" : company,
         "form" : form,
         'count_interview_status' : count_interview_status
@@ -627,6 +654,7 @@ def edit_company_info (request , id):
 
 @admin_user_required
 def export_job(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     jobs = Job_Posting.objects.filter(company = request.user.company)
     resource = JobResource()
     dataset = resource.export(jobs)
@@ -637,6 +665,7 @@ def export_job(request):
 
 @admin_user_required
 def export_application(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     applicant = Application.objects.filter(job__company = request.user.company)
     resource = ApplicationResource()
     dataset = resource.export(applicant)
@@ -647,6 +676,7 @@ def export_application(request):
 
 @admin_user_required
 def export_admins(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     users = CustomUser.objects.filter(is_admin = True, company = request.user.company)
     resource = UserResource()
     dataset = resource.export(users)
@@ -657,6 +687,7 @@ def export_admins(request):
 
 @admin_user_required
 def export_interviewers(request):
+    notification_application = Application.objects.filter(read = False).select_related()
     users = CustomUser.objects.filter(is_interviewer = True, company = request.user.company)
     resource = UserResource()
     dataset = resource.export(users)
