@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .models import Blog, Comment, Social_Media, Contact , Company , FAQ
+from .models import Blog, Comment, Social_Media, Contact , Company , FAQ 
 from .forms import CommentForm, ContactForm
 from django.contrib import messages
 from UserManagement.models import CustomUser 
-from JobPortal.models import Candidate  , Job_Posting
+from JobPortal.models import Candidate  , Job_Posting , Skill, Question , Choice
 
 # Create your views here.
 social_medias = Social_Media.objects.all()

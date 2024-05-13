@@ -38,10 +38,10 @@
           <div class="dashboard-widg-bar d-block">
             <div>
 
-              {% if validated_skill %}
+              {% if unvalidated_skill %}
 
               <h2 class="mb-4"> Unvalidated Skills </h2>
-              {% for i in validated_skill %}
+              {% for i in unvalidated_skill %}
               
                 <a href="{% url "instruction" i.skill.id %}" class="btn btn-primary">
                   {{i.skill}} 
@@ -49,8 +49,6 @@
                 </a>
                 
               {% endfor %}
-
-
               {% else %}
 
               <p class="mb-4">No Unvalidated Skills </p>
@@ -65,10 +63,10 @@
           <div class="dashboard-widg-bar d-block">
             <div>
 
-              {% if unvalidated_skill %}
+              {% if validated_skill %}
 
               <h2 class="mb-4 mt-4"> Validated Skills </h2>
-              {% for i in unvalidated_skill %}
+              {% for i in validated_skill %}
                 
               
               

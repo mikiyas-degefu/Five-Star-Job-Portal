@@ -30,18 +30,8 @@
                 <div class="h3">Are you sure you want to Apply {{job.title}}?</div>
             </div>
             <div class="modal-footer">
-<<<<<<< HEAD
-              <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>
-              <form action="" method="post">
-                {% csrf_token %}
-               
-              <a href="{% url 'user-apply-job' job.slug %}" type="submit" class="btn btn-danger">Yes</a>
-              {{form.cover_letter}}
-            </form>
-=======
               <button type="button" class="btn btn-muted" data-bs-dismiss="modal">Close</button>                
               <button type="submit" class="btn btn-primary" >Yes</button>
->>>>>>> 446164a0ec5e0fbe5fe01f0e438dbd542fff7181
             </div>
           </form>
           </div>

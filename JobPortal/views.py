@@ -423,13 +423,22 @@ def user_profile(request):
         education = Education.objects.filter(candidate = request.user)
         experience = Experience.objects.filter(candidate = request.user)
         project = Project.objects.filter(candidate = request.user)
-        language = Language.objects.filter(candidate = request.user)
+        language = Language.objects.filter(candidate = request.user)  
     except:
         candidate = None 
         education = None
         experience = None
         project = None
         language = None
+        
+    try : 
+        user_skill = UserSkill.objects.filter(candidate=candidate)
+    except:   
+        user_skill = None 
+
+
+    
+    print(user_skill)
     
     context = {
         'candidate' : candidate,
@@ -437,7 +446,9 @@ def user_profile(request):
         'education' : education,
         'experience': experience,
         'projects' : project,
-        'language' : language
+        'language' : language,
+        "user_skills" : user_skill
+      
         
     }
     return render(request, 'RMS/user/dashboard-my-profile.html', context)
@@ -1053,14 +1064,9 @@ def validate_skill_list(request):
     except:
         user_skills = None
     
-    validated_skill = []
-    unvalidated_skill = []
-    for i in user_skills:
-        if i.validated == True:
-            validated_skill.append(i)
-        else :
-            unvalidated_skill.append(i)
-
+    validated_skill = user_skills.filter(validated=True)
+    unvalidated_skill = user_skills.filter(validated=False)
+    
     context = {
        "validated_skill" : validated_skill,
        "unvalidated_skill" : unvalidated_skill 
@@ -1092,6 +1098,7 @@ def instruction(request , id):
 def validate_skill(request , id):
     candidate = Candidate.objects.get(user=request.user)
     user_skills = UserSkill.objects.get(candidate=candidate , skill__id=id).skill
+    user_skill = UserSkill.objects.get(candidate=candidate , skill__id=id)
     questions = Question.objects.filter(for_skill=user_skills)[:5]
     questions_num = Question.objects.filter(for_skill=user_skills).count()
 
@@ -1106,11 +1113,11 @@ def validate_skill(request , id):
             if int(question.answer.id) == id:
               count = count + 1
         if int(count) >= int(questions.count() * 0.7):
-            user_skills.validated = True
-            user_skills.save()
-            messages.success(request , "Congradulations You have answered {count} questions correctly from {questions_num} questions there for yout skill is verified.") 
+            user_skill.validated = True
+            user_skill.save()
+            messages.success(request , f"Congradulations You have answered {count} questions correctly from {questions_num} questions there for yout skill is verified.") 
         else :
-            messages.error(request , "Sorry You have answered {count} questions correctly from {questions_num} questions there for you have faild the test try agian")        
+            messages.error(request , f"Sorry You have answered {count} questions correctly from {questions_num} questions there for you have faild the test try agian")        
         return redirect("validate_skill_list")    
 
     context = {

@@ -62,7 +62,7 @@ education_status_list = [
 class UserSkill(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     skill = models.ForeignKey("Skill" ,  on_delete=models.CASCADE)
-    validated = models.BooleanField(default=True)
+    validated = models.BooleanField(default=False)
    
 
     def __str__(self) -> str:
@@ -339,6 +339,7 @@ class Application(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)  # Related with Candidate
     job = models.ForeignKey(Job_Posting, on_delete=models.SET_NULL, null=True)  # Related with Job_Post
     cover_letter = FroalaField(null =True, blank = True)
+    read = models.BooleanField(default=False)
     date_applied = models.DateField(auto_now_add=True) # Select Option from application_status
     status = models.CharField(max_length=15, choices=application_status, default='pending')
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=200)
