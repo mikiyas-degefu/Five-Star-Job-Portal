@@ -338,10 +338,15 @@ application_status = [
 class Application(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)  # Related with Candidate
     job = models.ForeignKey(Job_Posting, on_delete=models.SET_NULL, null=True)  # Related with Job_Post
+    cover_letter = FroalaField(null =True, blank = True)
     date_applied = models.DateField(auto_now_add=True) # Select Option from application_status
     status = models.CharField(max_length=15, choices=application_status, default='pending')
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=200)
+<<<<<<< HEAD
     cover_letter = models.TextField(null=True, blank=True)
+=======
+    read = models.BooleanField(default=False)
+>>>>>>> 446164a0ec5e0fbe5fe01f0e438dbd542fff7181
 
     def save(self, *args, **kwargs):
         if not self.slug:

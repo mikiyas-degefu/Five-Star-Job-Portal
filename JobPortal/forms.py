@@ -490,6 +490,13 @@ class ApplicationForm(forms.ModelForm):
         }
 
 
+class ApplicationCoverLetterForm(forms.ModelForm):
+    cover_letter = forms.CharField(label="Optional Cover Letter",widget=FroalaEditor())
+    class Meta:
+        model = Application
+        fields = ('cover_letter',)
+
+        
 
 CITY_CHOICES = (
     ('Addis Ababa', 'Addis Ababa'),

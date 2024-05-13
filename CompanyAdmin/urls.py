@@ -19,7 +19,7 @@ urlpatterns = [
 
     #Applicant
     path('applicant/', views.applicant, name='company-admin-applicant'),
-    path('applicant/<str:id>/<str:job_id>/<str:app_id>/', views.applicant_detail, name='company-admin-applicant-detail'),
+    path('applicant/<str:app_id>/', views.applicant_detail, name='company-admin-applicant-detail'),
 
     #Interview Status
     path('interview-status/', views.interview_status, name='company-admin-interview-status'),
