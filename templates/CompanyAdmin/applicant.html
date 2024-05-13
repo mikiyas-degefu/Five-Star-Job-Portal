@@ -69,8 +69,8 @@
                         <tbody>
                           {% if applications %}
                             {% for app in applications %}
-                          <tr>
-                            <th scope="row">{{count | add:forloop.counter}}</th>
+                          <tr> 
+                            <th scope="row">{{count | add:forloop.counter}} {% if app.read %} <span class="badge bg-primary">New</span> {% endif %} </th>
                             <td>{{app.user.first_name | capfirst}}</td>
                             <td>{{app.user.last_name | capfirst}}</td>
                             <td>{{app.user.candidate.phone1}}</td>

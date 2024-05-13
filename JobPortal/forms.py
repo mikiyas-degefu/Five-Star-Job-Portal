@@ -481,7 +481,7 @@ class SectorForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ('status', 'cover_letter')
+        fields = ('status', )
 
         widgets = {
             'status' : forms.Select(attrs={
