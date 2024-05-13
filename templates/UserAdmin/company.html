@@ -81,7 +81,7 @@
                           {% if companies %}
                             {% for company in companies %}
                           <tr>
-                            <th scope="row">{{count | add:forloop.counter}}</th>
+                            <th scope="row">{{count | add:forloop.counter}} {% if company.read %} <span class="badge bg-primary">New</span> {% endif %}</th>
                             <td ><img src="/media/{{company.logo}}" class="img-fluid" style="height: 30px; width: 30px;" alt=""></td>
                             <td>{{company.name}}</td>
                             <td>{{company.email}}</td>
