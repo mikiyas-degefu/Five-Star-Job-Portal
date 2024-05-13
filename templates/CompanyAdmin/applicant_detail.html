@@ -294,6 +294,18 @@
                   </div>
                 </div>
 
+               {% if app.cover_letter %}
+               <div class="col-xl-12">
+                <div class="card p-4">
+                  <div class="card-body">
+                    <h3>Cover Letter</h3>
+                    {{app.cover_letter | safe }}                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+               {% endif %}
 
               </div>
             </div>

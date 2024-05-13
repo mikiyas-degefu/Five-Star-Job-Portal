@@ -470,8 +470,9 @@ def interview_status_detail(request, id):
     count_interview_status = Interviews.objects.filter( interviewer__company = request.user.company, status = 'completed', read = False).select_related().count()
     try:
         interview = Interviews.objects.get(pk = id)
-        interview.read = True
-        interview.save()
+        if interview.status == 'hired':
+            interview.read = True
+            interview.save()
         try:
             application_form = ApplicationForm(request.POST or None, instance=interview.application)
         except:
@@ -541,6 +542,7 @@ def applicant_detail(request, id, job_id, app_id):
         interview = Interviews.objects.filter(application = app).first()
         form = ApplicationForm(request.POST or None, instance=app)
 
+
         try:
             interview_form = AdminInterviewForm(request.user.company, request.POST or None, instance=interview)
         except:
@@ -586,6 +588,7 @@ def applicant_detail(request, id, job_id, app_id):
         'interview_form' : interview_form,
         'project' : project,
         'language' : language,
+        'app' : app,
         'count_interview_status' : count_interview_status
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)

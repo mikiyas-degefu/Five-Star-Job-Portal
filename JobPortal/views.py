@@ -5,7 +5,7 @@ from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting,
 from Company.models import Company
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact,Company
-from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront, ApplicationCoverLetterForm
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
@@ -311,10 +311,55 @@ def job_detail(request, slug):
     job = Job_Posting.objects.get(slug=slug)
     company = job.company
     company.views = company.views + 1
-    company.save()
+    company.save()  # Increase Company views by 1 
     
     company_info = Contact.objects.all().first()
     social_media = Social_Media.objects.all().first()
+
+    #cover letter
+    application_form = ApplicationCoverLetterForm(request.POST or None)
+
+    try: applied = Application.objects.get(user = request.user, job__slug = slug)
+    except: applied = None
+
+    try : candidate = Candidate.objects.get(user = request.user)
+    except : candidate = None
+
+    try: education = Education.objects.filter(candidate = request.user).count()
+    except : education = None
+
+    
+
+    if request.method == 'POST':
+        if application_form.is_valid():
+            if request.user.id is None:
+                messages.error(request, 'Please Login')
+                return redirect('login')
+            if applied is not None:
+                messages.error(request, 'You are already Applied on this JOB please Check your Applied Jobs Lists')
+                return redirect(request.META.get('HTTP_REFERER'))
+            elif candidate is None:
+                messages.error(request, 'Please Add Personal Information! ')
+                return redirect('user-resume')
+            elif education < 1:
+                messages.error(request, 'Please at least add One Education Background!')
+                return redirect('user-add-education')
+            else:
+                obj = application_form.save(commit=False)
+                app = Application()
+                app.user = request.user
+                app.job = job
+                app.cover_letter = obj.cover_letter
+                app.save()
+
+                stop_event = threading.Event()
+                background_thread = threading.Thread(target=handle_successfully_applied_send_email, args=(request,request.user.first_name,request.user.last_name, job.title, job.company.name, request.user.email,stop_event ), daemon=True)
+                background_thread.start()
+                stop_event.set()
+        
+                messages.success(request, 'Successfully Applied Check your Applied Jobs')
+                return redirect(request.META.get('HTTP_REFERER'))
+
 
     try: bookmark = Bookmarks.objects.get(user = request.user, job = job)
     except: bookmark = None
@@ -327,6 +372,7 @@ def job_detail(request, slug):
         'social_media' : social_media,
         'bookmark' : bookmark,
         'application'  :application,
+        'application_form' : application_form
     }
     return render(request, 'RMS/job-details.html', context)
 
