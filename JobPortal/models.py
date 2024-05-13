@@ -144,7 +144,7 @@ language_proficient = [
 
 class Language(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
-    language = models.CharField(unique=True, max_length=30)
+    language = models.CharField(max_length=30)
     proficient = models.CharField(max_length=40, choices=language_proficient)
     slug = models.SlugField(unique=True, blank=True,  max_length=200)
 
