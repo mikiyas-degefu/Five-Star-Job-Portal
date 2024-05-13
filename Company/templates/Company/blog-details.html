@@ -227,7 +227,7 @@
                       <h5 class="border-bottom pb-3">Leave a Message</h5>
                       <div class="row mt-4">
 
-                        {% if  user.is_authenticated%}
+                        {% if  user.is_authenticated %}
                         <div class="col-lg-6 d-none">
                           <div class="position-relative mb-3">
                             <label for="name" class="form-label"
@@ -238,7 +238,7 @@
                             <input
                               name="name"
                               id="id_name"
-                              value= "{{ user.candidate.first_name }} {{user.candidate.last_name}}"
+                              value= "{{ user.first_name }} {{user.last_name}}"
                               type="text"
                               class="form-control   {% if form.name.errors %} is-invalid {% endif %}   "
                               placeholder="Enter your name*"
