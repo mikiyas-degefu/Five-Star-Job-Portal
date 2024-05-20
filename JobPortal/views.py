@@ -52,9 +52,14 @@ def login_view(request):
             return redirect('index')
         else:
             messages.error(request, 'Invalid Password or Email')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form
@@ -95,9 +100,14 @@ def registration_view(request):
         else:
             messages.error(request, 'Hello User , An error occurred while Creating Account Please try again')
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form
@@ -132,9 +142,14 @@ def register_company_front(request):
             messages.success(request, "Welcome user! Your company is successfully registered. We're excited to review your information and get you started! We'll be in touch within 48 hours to confirm approval")
             return redirect('login')
     
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'company_form': company_form,
@@ -177,9 +192,15 @@ def index(request):
 
 
     
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
+
     context = {
         'notification_job' : notification_job,
         'social_medias' : social_medias,
@@ -231,9 +252,14 @@ def job_list(request):
     company = Company.objects.all()    
    
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'social_medias' : social_medias,
@@ -279,9 +305,14 @@ def job_search(request, job_title, city):
         if i.count_job_post() > 0:
             sector_new.append(i)
     company = Company.objects.all()        
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'job_listings': page,
@@ -330,9 +361,14 @@ def job_sector_categories(request, slug):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'social_medias' : social_medias,
@@ -408,9 +444,14 @@ def job_detail(request, slug):
     except: bookmark = None
     try: application = Application.objects.filter(user=request.user).values_list('job__id', flat=True)
     except: application = None
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'social_medias' : social_medias,
@@ -429,9 +470,14 @@ def job_detail(request, slug):
 #Password
 @login_required
 def reset_password(request):
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'social_medias' : social_medias,
@@ -448,9 +494,14 @@ def user_change_password(request):
 def user_dashboard(request):
     application = Application.objects.filter(user = request.user).count()
     bookmark  = Bookmarks.objects.filter(user = request.user).count()
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'count_application' : application,
@@ -482,9 +533,14 @@ def user_profile(request):
     
     print(user_skill)
     
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'candidate' : candidate,
@@ -532,9 +588,14 @@ def user_resume(request):
             return redirect('user-resume')
         else :
             messages.error(request, 'You request han not been successful please try again! ')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form_personal_info,
@@ -558,9 +619,14 @@ def user_add_education(request):
             messages.success(request, 'Your Education Status has been successfully Updated!')
             form_education = EducationForm()
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form_education,
@@ -592,9 +658,14 @@ def detail_user_education(request, slug):
             obj.save()
             messages.success(request, 'Your Education Status has been successfully Updated!')
             redirect('user-add-education')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form,
@@ -619,9 +690,14 @@ def user_add_project(request):
         else:
              messages.error(request, 'Hello User , An error occurred while Adding Project')
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form_project,
@@ -644,9 +720,14 @@ def detail_user_project(request, id):
             redirect('user-add-project')
         else:
             messages.error(request, 'Hello User , An error occurred while Updating Project')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form,
@@ -684,9 +765,14 @@ def user_add_language(request):
         else:
              messages.error(request, 'Hello User , An error occurred while Adding Language')
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form_language,
@@ -709,9 +795,14 @@ def detail_user_language(request, id):
             redirect('user-add-project')
         else:
             messages.error(request, 'Hello User , An error occurred while Updating Language')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form,
@@ -745,9 +836,14 @@ def user_add_experience(request):
             messages.success(request, 'Your Experience Status has been successfully Updated!')
             form_experience = EducationForm()
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form_experience,
@@ -768,9 +864,14 @@ def detail_user_experience(request, slug):
             obj.save()
             messages.success(request, 'Your Experience Status has been successfully Updated!')
             redirect('user-add-experience')
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form,
@@ -798,9 +899,14 @@ def user_delete_experience(request, slug):
 def user_applied_jobs(request):
     application = Application.objects.filter(user = request.user)
     interview = Interviews.objects.filter(application__user = request.user)
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'application' : application,
@@ -858,9 +964,14 @@ def user_cancel_job(request, slug):
 @login_required
 def user_bookmark(request):
     bookmarks = Bookmarks.objects.filter(user = request.user)
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'bookmarks' : bookmarks
@@ -912,9 +1023,14 @@ def interviewer_dashboard(request):
     date = now.strftime("%Y-%m-%d")
     today_interviews = Interviews.objects.filter(~Q(application__status = 'canceled'), Q(status = 'scheduled') | Q(status = 'completed') , interviewer = request.user,date_schedule = date )
     applicant_status = Interviews.objects.filter()[:6]
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'total_application' : total_application,
@@ -929,9 +1045,14 @@ def interviewer_dashboard(request):
 @interviewer_user_required
 def interviewer_job_list(request):
     job_lists = Job_Posting.objects.filter(job_status = True , company = request.user.company)
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'job_lists' : job_lists
@@ -948,9 +1069,14 @@ def interviewer_personal_info(request):
             form.save()
             messages.success(request, 'Your Information has been successfully updated')
             return redirect(request.META.get('HTTP_REFERER'))
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'form' : form
@@ -962,9 +1088,14 @@ def interviewer_personal_info(request):
 def interviewer_job_detail(request, slug):
     job = Job_Posting.objects.get(slug=slug)
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'job' : job,
@@ -975,9 +1106,14 @@ def interviewer_job_detail(request, slug):
 @interviewer_user_required
 def interviewer_interviews_lists(request):
     interviews = Interviews.objects.filter(~Q(application__status = 'canceled'), status = 'pending', interviewer = request.user)
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'interviews' : interviews,
@@ -1031,9 +1167,14 @@ def interview_detail(request, slug):
         return redirect('interview-scheduled')
 
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'user' : user,
@@ -1054,9 +1195,14 @@ def interview_detail(request, slug):
 def interview_scheduled(request):
     interviews = Interviews.objects.filter(~Q(application__status = 'canceled'), status = 'scheduled', interviewer = request.user)
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'interviews' : interviews,
@@ -1071,9 +1217,14 @@ def interview_today_interview_list(request):
     date = now.strftime("%Y-%m-%d")
  
     interviews = Interviews.objects.filter(~Q(application__status = 'canceled'), Q(status = 'scheduled') | Q(status = 'completed') , interviewer = request.user,date_schedule = date )
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'interviews' : interviews,
@@ -1101,9 +1252,14 @@ def interview_individual_now(request, slug):
             messages.success(request, 'Successfully Completed. ')
             return redirect('interview-scheduled')
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'interview' : interview,
@@ -1129,9 +1285,14 @@ def interview_candidate_job_status(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'sectors' : sector,
@@ -1155,9 +1316,14 @@ def interview_applicant_category(request, slug):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
         'sectors' : sector,
@@ -1201,9 +1367,14 @@ def validate_skill_list(request):
     validated_skill = user_skills.filter(validated=True)
     unvalidated_skill = user_skills.filter(validated=False)
     
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
        "validated_skill" : validated_skill,
@@ -1222,9 +1393,14 @@ def instruction(request , id):
     questions = Question.objects.filter(for_skill=user_skill).count
 
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
        "questions" : questions, 
@@ -1262,9 +1438,14 @@ def validate_skill(request , id):
             messages.error(request , f"Sorry You have answered {count} questions correctly from {questions_num} questions there for you have faild the test try agian")        
         return redirect("validate_skill_list")    
 
-    notification_candidate = Candidate.objects.get(user=request.user)
-    notification_ser_skills = notification_candidate.skill.all()
-    notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
     context = {
         'notification_job' : notification_job,
        "questions" : questions,

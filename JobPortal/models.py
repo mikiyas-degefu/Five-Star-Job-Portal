@@ -146,12 +146,6 @@ class Language(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     language = models.CharField(max_length=30)
     proficient = models.CharField(max_length=40, choices=language_proficient)
-    slug = models.SlugField(unique=True, blank=True,  max_length=200)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(unidecode(self.language))
-        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['language']
