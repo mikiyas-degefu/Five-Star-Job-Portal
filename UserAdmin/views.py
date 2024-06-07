@@ -106,7 +106,7 @@ def company(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Added')
+            messages.success(request, '&#128515 Hello User, Company Successfully Added')
             return redirect('user-admin-company')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while Adding Company')
@@ -138,7 +138,7 @@ def company_detail(request, id):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            messages.success(request, '&#128515 Hello User, Company successfully updated')
             return redirect('user-admin-company-detail',f'{id}')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
@@ -155,7 +155,7 @@ def company_delete(request, id):
     try:
         company = Company.objects.get(pk = id)
         company.delete()
-        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+        messages.success(request, '&#128515 Hello User,Company successfully deleted')
     except:
         messages.error(request, '&#128532 Hello User , An error occurred while Deleting Company')
     
@@ -234,7 +234,7 @@ def job_sector(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Added')
+            messages.success(request, '&#128515 Hello User, Job sector successfully added')
             return redirect('user-admin-sector')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while Adding Sector')
@@ -319,10 +319,7 @@ def job_posting(request):
                 background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,request.user.company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
                 background_thread.start()
                 stop_event.set()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
-
-
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            messages.success(request, '&#128515 Hello User, Job Successfully Updated')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
     

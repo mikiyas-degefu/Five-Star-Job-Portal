@@ -378,7 +378,10 @@ class JobPostingForm(forms.ModelForm):
             }),
             'skills' : forms.SelectMultiple(attrs={
                 'class' : 'form-select' 
-            })
+            }),
+            'city' : forms.Select(attrs={
+                'class' : 'form-select' 
+            }),
         }
 
         def clean_vacancies(self):
@@ -491,7 +494,7 @@ class ApplicationForm(forms.ModelForm):
 
 
 class ApplicationCoverLetterForm(forms.ModelForm):
-    cover_letter = forms.CharField(label="Optional Cover Letter",widget=FroalaEditor())
+    cover_letter = forms.CharField(label="Optional Cover Letter",required=False ,widget=FroalaEditor())
     class Meta:
         model = Application
         fields = ('cover_letter',)
@@ -561,7 +564,9 @@ CITY_CHOICES = (
 )
 
 class CityForm(forms.Form):
-    city = forms.ChoiceField(choices=CITY_CHOICES)
+    city = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs={
+        'class' : 'form-control'
+    }))
 
 
 
