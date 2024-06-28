@@ -13,8 +13,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import django
+
 from django.utils.translation import gettext
 django.utils.translation.ugettext = gettext
+
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
+# django.setup()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-s))30&3cgz@4(k502omkp_nkg-g)xr2%ot3dea=4tod^#278w7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -60,6 +64,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Seraye.urls'
@@ -130,8 +136,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL="media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
+MEDIA_URL='/media/'
 
 
 STATICFILES_DIRS = [
