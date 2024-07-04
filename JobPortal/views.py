@@ -1441,11 +1441,14 @@ def validate_skill_list(request):
     try :
         candidate = Candidate.objects.get(user=request.user)
         user_skills = UserSkill.objects.filter(candidate=candidate)
+        validated_skill = user_skills.filter(validated=True)
+        unvalidated_skill = user_skills.filter(validated=False)
     except:
         user_skills = None
+        validated_skill = None
+        unvalidated_skill = None
     
-    validated_skill = user_skills.filter(validated=True)
-    unvalidated_skill = user_skills.filter(validated=False)
+    
     
     try: 
         notification_candidate = Candidate.objects.get(user=request.user)

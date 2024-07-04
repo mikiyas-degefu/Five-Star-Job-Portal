@@ -77,7 +77,7 @@ class Education(models.Model):
     education_period_end = models.DateField()
     gpa = models.FloatField(null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, max_length=200)
-    document = models.FileField(upload_to='', null=True, blank=True)
+    document = models.FileField(upload_to='media/educationDocument', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -118,7 +118,7 @@ class Certification(models.Model):
     candidate = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     certification_name = models.CharField(max_length=100)
     issuing_organization = models.CharField(max_length=100)
-    document = models.FileField(upload_to='certifications/documents/', null=True, blank=True)
+    document = models.FileField(upload_to='media/certifications/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.certification_name)
