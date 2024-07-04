@@ -275,8 +275,7 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
         exclude = ['candidate']
-        widgets = {
-            
+        widgets = { 
             'document': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 

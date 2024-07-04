@@ -780,7 +780,7 @@ def user_add_certification(request):
     context = {
         'notification_job' : notification_job,
         'form' : form_certification,
-        'user_certification' : certification
+        'certification' : certification
         }
     return render(request, 'RMS/user/dashboard-add-certification.html', context)
 
@@ -811,7 +811,7 @@ def detail_user_certification(request, id):
         'notification_job' : notification_job,
         'form' : form,
         'certification': certification,
-        'user_certification':Certificationertification_list,
+        'user_certification': certification_list,
     }
     return render(request, 'RMS/user/dashboard-certification-detail.html', context)
 
