@@ -1,6 +1,6 @@
 from django import forms
-from .models import Candidate, Skill, Education, Experience, Job_Posting,Sector,Application, Interviews, Language, Project
-from Company.models import Company
+from .models import Candidate, Skill , Question , Education, Experience, Job_Posting,Sector,Application, Interviews, Language, Project , Certification
+from Company.models import Company , FAQ
 from datetime import date
 from django.forms import formset_factory
 from phonenumber_field.formfields import PhoneNumberField
@@ -208,6 +208,18 @@ class ProjectForm(forms.ModelForm):
             'detail' : FroalaEditor()
         }
 
+
+class CertificationForm(forms.ModelForm):
+    class Meta:
+        model = Certification
+        fields = ['certification_name', 'issuing_organization', 'document']
+        widgets = {
+            'certification_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'issuing_organization': forms.TextInput(attrs={'class': 'form-control'}),
+            'document': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+        }
+            
+
 class LanguageForm(forms.ModelForm):
     class Meta:
         model = Language
@@ -258,9 +270,15 @@ class EducationForm(forms.ModelForm):
         'placeholder' : 'DD-MM-YYYY (Required)',
         'type' : 'date'
     }))
+   
+
     class Meta:
         model = Education
         exclude = ['candidate']
+        widgets = {
+            
+            'document': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 class ExperienceForm(forms.ModelForm):
     company_name = forms.CharField(label='Company Name: ',max_length=40, widget=forms.TextInput(attrs={
@@ -652,11 +670,39 @@ class InterviewerNoteForm(forms.ModelForm):
 
 class SkillForm(forms.ModelForm):
     class Meta:
-        model = Skill
+        model = Skill  
         fields = ('title', )
 
         widgets = {
             'title' : forms.TextInput(attrs={
                 'class' : ' form-control'
             })
+        }
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['text', 'for_skill', 'answer']
+
+        widgets = {
+            'text' : forms.TextInput(attrs={
+                'class' : ' form-control'
+            }),
+            'for_skill' : forms.Select(attrs={
+                'class' : ' form-control'
+            }),
+            'answer' : forms.Select(attrs={
+                'class' : ' form-control'
+            })
+        }
+
+
+class FAQForm(forms.ModelForm):
+    class Meta:
+        model = FAQ
+        fields = ['question', 'answer']
+        widgets = {
+            'question': forms.TextInput(attrs={'class': 'form-control'}),
+            'answer': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }

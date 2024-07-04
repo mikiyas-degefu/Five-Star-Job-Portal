@@ -67,9 +67,17 @@
 
                         <li><a href="{% url 'admin-contact-message'%}">Contact Messages <span
                             class="badge rounded-pill bg-primary float-end">{{count_messages}}</span></a></li>
+                            <li><a href="{% url 'faq'%}">FAQ</a></li>
 
                         <li><a href="{% url 'admin-audit'%}">Audit</a></li>
+                        
                     </ul>
+                    <li>
+                        <a href="{% url 'skill-questions' %}" class="waves-effect">
+                            <span class="mdi mdi-file-question-outline"></span>
+                            <span>Skill Questions</span>
+                        </a>
+                    </li>
                 </li>
             </ul>
 

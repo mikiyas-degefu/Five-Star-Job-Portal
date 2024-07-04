@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message)
+from Company.models import (Company, Blog_Categories, Blog, Social_Media, Contact_Message , FAQ)
 from Company.forms import (CompanyForm, BlogCategoriesForm, BlogForm, SocialMediaForm)
-from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm)
-from JobPortal.models import (Sector, Skill , Job_Posting, Application , Question , Choice)
+from  JobPortal.forms import (SectorForm, SkillForm , JobPostingForm , QuestionForm , FAQForm)
+from JobPortal.models import (Sector, Skill , Job_Posting, Application , Question , Choice )
 from UserManagement.models import CustomUser
 from django.db.models import Q
 from UserManagement.decorators import (admin_super_user_required)
@@ -858,10 +858,180 @@ def audit(request):
     return render(request, 'UserAdmin/log.html', context=context)
     
 
+@admin_super_user_required
+def skill_questions(request):
+    form = QuestionForm(request.POST or None)
+    questions = Question.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        questions = Question.objects.filter( Q(title__contains=q))
+    
+    paginator = Paginator(questions, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, '&#128515 Hello User, Successfully Added')
+                return redirect('skill_questions')
+            except:
+                messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill or Skill Exist')
+                return redirect('skill_questions')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill')
+    
+
+    
+    context = {
+        'notification_company': notification_company,
+        'questions' : page,
+        'count' : count,
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/skill_questions.html', context=context)
+    
+@admin_super_user_required
+def question_delete(request, id):
+    try:
+        question = Question.objects.get(pk = id)
+        question.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Skill')
+    
+    return redirect('skill_questions')
+
+@admin_super_user_required
+def update_question(request):
+    id = request.POST['id']
+    text = request.POST['text']
+    for_skill = request.POST['for_skill']
+    answer = request.POST['answer']
+
+    try:
+        question = Question.objects.get(id = id)
+        question.text = text
+        question.anser = answer
+        question.for_skill = for_skill
+        question.save()
+        response = {'success' : True}
+    except:
+        response = {'success' : False}
+    return JsonResponse(response)
 
 
 
 
+
+
+
+@admin_super_user_required
+def faq(request):
+    form = FAQForm(request.POST or None)
+    faqs = FAQ.objects.all()
+    count = 30
+   
+    if 'q' in request.GET:
+        q = request.GET['q']
+        faqs = FAQ.objects.filter( Q(title__contains=q))
+    
+    paginator = Paginator(faqs, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                form.save()
+                messages.success(request, '&#128515 Hello User, Successfully Added')
+                return redirect('faq')
+            except:
+                messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill or Skill Exist')
+                return redirect('faq')
+        else:
+            messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill')
+    
+
+    
+    context = {
+        'notification_company': notification_company,
+        'faqs' : page,
+        'count' : count,
+        'form' : form,
+        'count_messages' : Contact_Message.objects.filter(is_read = False).count()
+    }
+    return render(request, 'UserAdmin/faq.html', context=context)
+    
+@admin_super_user_required
+def faq_delete(request, id):
+    try:
+        faq = FAQ.objects.get(pk = id)
+        faq.delete()
+        messages.success(request, '&#128515 Hello User, Successfully Deleted')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Skill')
+    
+    return redirect('skill_questions')
+
+@admin_super_user_required
+def update_faq(request):
+    id = request.POST['id']
+    question = request.POST['question']
+    answer = request.POST['answer']
+
+    try:
+        faq = FAQ.objects.get(id = id)
+        faq.question = question
+        faq.answer = question
+        faq.save()
+        response = {'success' : True}
+    except:
+        response = {'success' : False}
+    return JsonResponse(response)
+
+
+
+
+@admin_super_user_required
+def account_delete(request):
+    try:
+        user = request.user
+        user.delete()
+        user.success(request, '&#128515 Hello User, Successfully Deleted')
+        return redirect('index')
+    except:
+        messages.error(request, '&#128532 Hello User , An error occurred while Deleting Skill')
+    
+    return redirect('user-profile')
 
 
 

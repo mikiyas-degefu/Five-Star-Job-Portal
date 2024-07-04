@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from Company.models import Social_Media, Contact
-from .forms import CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront
+from .forms import CandidateForm, EducationForm, ExperienceForm, CertificationForm , InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront 
 from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews , Question , Choice , UserSkill
 from Company.models import Company
 from django.shortcuts import render, redirect
@@ -8,7 +8,7 @@ from Company.models import Social_Media, Contact,Company , Blog
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront , CityForm
 from Company.models import Social_Media, Contact,Company
 from .forms import LanguageForm,ProjectForm,CandidateForm, EducationForm, ExperienceForm, InterviewerForm as InterviewFormInterview, ApplicationForm, InterviewerNoteForm , CompanyFormFront , CustomUserFormFront, ApplicationCoverLetterForm
-from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project
+from .models import Skill,Sector, Candidate, Education, Experience, Job_Posting, Bookmarks, Application,Interviews, Language, Project , Certification
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required
@@ -517,12 +517,14 @@ def user_profile(request):
         experience = Experience.objects.filter(candidate = request.user)
         project = Project.objects.filter(candidate = request.user)
         language = Language.objects.filter(candidate = request.user)  
+        certification = Certification.objects.filter(candidate = request.user)
     except:
         candidate = None 
         education = None
         experience = None
         project = None
         language = None
+        certification = None
         
     try : 
         user_skill = UserSkill.objects.filter(candidate=candidate)
@@ -537,6 +539,7 @@ def user_profile(request):
         notification_candidate = Candidate.objects.get(user=request.user)
         notification_ser_skills = notification_candidate.skill.all()
         notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+
     except:
         notification_candidate = None
         notification_ser_skills = None
@@ -549,7 +552,8 @@ def user_profile(request):
         'experience': experience,
         'projects' : project,
         'language' : language,
-        "user_skills" : user_skill
+        "user_skills" : user_skill ,
+        "certification" : certification
       
         
     }
@@ -748,6 +752,82 @@ def user_delete_project(request, id):
         messages.error(request,'Your request has not been Unsuccessful Please try again!')
         return redirect('user-add-project')
     
+
+
+#Certification
+@login_required
+def user_add_certification(request):
+    certification = Certification.objects.filter(candidate = request.user)
+    form_certification = CertificationForm(request.POST or None)
+    if request.method == 'POST':
+        if form_certification.is_valid():
+            obj = form_certification.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Certification has been successfully Updated!')
+            form_certification = CertificationForm()
+        else:
+             messages.error(request, 'Hello User , An error occurred while Adding Certification')
+
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
+    context = {
+        'notification_job' : notification_job,
+        'form' : form_certification,
+        'user_certification' : certification
+        }
+    return render(request, 'RMS/user/dashboard-add-certification.html', context)
+
+@login_required
+def detail_user_certification(request, id):
+    certification =  Certification.objects.get(id = id)
+    form = CertificationForm(request.POST or None, instance=certification)
+    certification_list = Certification.objects.filter(candidate = request.user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.candidate = request.user
+            obj.save()
+            messages.success(request, 'Your Certification Status has been successfully Updated!')
+            redirect('user-add-certification')
+        else:
+            messages.error(request, 'Hello User , An error occurred while Updating Certification')
+    try: 
+        notification_candidate = Candidate.objects.get(user=request.user)
+        notification_ser_skills = notification_candidate.skill.all()
+        notification_job = Job_Posting.objects.filter(job_status=True, skills__in=notification_ser_skills).distinct()[:10]
+    except:
+        notification_candidate = None
+        notification_ser_skills = None
+        notification_job = None
+    context = {
+        'notification_job' : notification_job,
+        'form' : form,
+        'certification': certification,
+        'user_certification':Certificationertification_list,
+    }
+    return render(request, 'RMS/user/dashboard-certification-detail.html', context)
+
+
+@login_required
+def user_delete_certification(request, id):
+    certification = Certification.objects.get(id = id)
+
+    if certification.delete():
+        messages.success(request, 'Successfully Deleted!')
+        return redirect('user-add-certification')
+    else:
+        messages.error(request,'Your request has not been Unsuccessful Please try again!')
+        return redirect('user-add-project')
+    
+
 
 
 #Education

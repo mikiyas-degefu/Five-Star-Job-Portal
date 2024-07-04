@@ -15,7 +15,20 @@ urlpatterns = [
 
     path('skills/', views.skills, name='user-admin-skills'),
     path('update-skill/', views.update_skill, name='user-admin-update-skills'),
-    path('skill-delete/<str:id>/', views.skill_delete, name='user-admin-skill-delete'),
+    path('question_delete/<str:id>/', views.question_delete, name='question_delete'),
+
+
+    path('skill-questions/', views.skill_questions, name='skill-questions'),
+    path('update_question/', views.update_question, name='update_question'),
+    path('skill-questions-delete/<str:id>/', views.skill_delete, name='user-admin-questions-delete'),
+
+
+
+    path('faq/', views.faq, name='faq'),
+    path('update_faq/', views.update_faq, name='update_faq'),
+    path('faq_delete/<str:id>/', views.faq_delete, name='faq_delete'),
+
+    path('account_delete/', views.account_delete, name='account_delete'),
 
     path('job_posting/', views.job_posting, name='user-admin-job-posting'),
     path('update-job_posting/<str:id>', views.job_detail, name='user-admin-job-detail'),

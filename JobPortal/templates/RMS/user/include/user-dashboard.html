@@ -23,6 +23,7 @@
                     <li><a class="dropdown-item" href="{% url 'user-add-education' %}">Education</a></li>
                     <li><a class="dropdown-item" href="{% url 'user-add-experience' %}">Experience</a></li>
                     <li><a class="dropdown-item" href="{% url 'user-add-project' %}">Project</a></li>
+                    {% comment %} <li><a class="dropdown-item" href="{% url 'user-add-certification' %}">Certification</a></li> {% endcomment %}
                     <li><a class="dropdown-item" href="{% url 'user-add-language' %}">Language</a></li>
                   </ul>
                 </div>
@@ -63,16 +64,62 @@
                 >
               </li>
               <li>
-                <a href="javascript:void(0);"
-                  ><i class="lni lni-trash-can me-2"></i>Delete Account</a
-                >
-              </li>
-              <li>
                 <a href="{% url 'logout' %}"
                   ><i class="lni lni-trash-can me-2"></i>Log Out</a
                 >
               </li>
+              <li>
+                <button 
+                          class="btn btn-delete"  
+                          data-bs-toggle="modal" 
+                          data-bs-target="#deleteaccountModal"
+                          data-bs-whatever="@mdo"
+                          >
+                          <i class="lni lni-trash-can me-2"></i> 
+                          Delete account
+                </button>
+            </li>
             </ul>
           </div>
         </div>
       </div>
+
+
+
+      <!--Delete  Modal-->
+
+<div class="modal fade" id="deleteaccountModal" tabindex="-1" aria-labelledby="deleteaccountModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-text" id="deleteaccountModalLabel">Delete Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="h4 fw-normal" id="deleteMessagequestion"></p>
+      </div> 
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="#" id="deleteaccountAnchor" type="submit" class="btn btn-danger">Delete</a>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+  <!-- Include the necessary JavaScript libraries -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $(".btn-delete").on('click', function(){
+        $("#deleteaccountAnchor").attr("href", `/user-admin/account_delete`);
+        $("#deleteMessagequestion").html(`<code> <h3> Warning !!! </h3></code> <br>  Deleting your account is irreversible and will permanently remove all your data. <br> <br> <code> Are you absolutely sure you want to proceed? </code>`);
+      });
+    });
+  </script>
+{% endblock %}

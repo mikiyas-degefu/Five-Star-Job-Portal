@@ -22,6 +22,7 @@ admin.site.register(models.Choice)
 admin.site.register(models.UserSkill)
 admin.site.register(models.Language)
 admin.site.register(models.Project)
+admin.site.register(models.Certification)
 
 
 class SectorAdmin(ImportExportModelAdmin):

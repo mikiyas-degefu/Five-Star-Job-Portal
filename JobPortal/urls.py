@@ -31,6 +31,12 @@ urlpatterns = [
     path('user-add-project/', views.user_add_project, name='user-add-project'),
     path('user-project/<int:id>/',views.detail_user_project, name='detail-user-project'),
     path('user-delete-project/<int:id>',views.user_delete_project, name='user-delete-project'),
+
+    
+    path('user-add-certification/', views.user_add_certification, name='user-add-certification'),
+    path('user-certification/<int:id>/',views.detail_user_certification, name='detail-user-certification'),
+    path('user-delete-certification/<int:id>',views.user_delete_certification, name='user-delete-certification'),
+    
     path('user-add-language/', views.user_add_language, name='user-add-language'),
     path('user-language/<int:id>/',views.detail_user_language, name='detail-user-language'),
     path('user-delete-language/<int:id>',views.user_delete_language, name='user-delete-language'),

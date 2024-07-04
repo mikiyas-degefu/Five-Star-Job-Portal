@@ -296,6 +296,20 @@
 
                                   </div>
 
+
+
+                                  <div class="mt-4">
+                                    <h5 class="fs-18 fw-bold">Certification</h5>
+
+
+                                    {% for certification in certification %}
+                                    
+                                          <button type="button" class="btn btn-secondary btn-sm mt-3">{{certification.certification_name}}</button>
+        
+                                    {% endfor %}
+
+                                  </div>
+
                                 </div>
                                 <!--end tab-pane-->
                               </div>
