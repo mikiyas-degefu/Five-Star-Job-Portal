@@ -614,7 +614,7 @@ def user_resume(request):
 @login_required
 def user_add_education(request):
     education = Education.objects.filter(candidate = request.user)
-    form_education = EducationForm(request.POST or None)
+    form_education = EducationForm(request.POST or None , request.FILES or None)
     if request.method == 'POST':
         if form_education.is_valid():
             obj = form_education.save(commit=False)
@@ -758,7 +758,7 @@ def user_delete_project(request, id):
 @login_required
 def user_add_certification(request):
     certification = Certification.objects.filter(candidate = request.user)
-    form_certification = CertificationForm(request.POST or None)
+    form_certification = CertificationForm(request.POST or None , request.FILES or None)
     if request.method == 'POST':
         if form_certification.is_valid():
             obj = form_certification.save(commit=False)
@@ -1207,6 +1207,7 @@ def interview_detail(request, slug):
     user =  interview.application.user 
     education = Education.objects.filter(candidate = interview.application.user).select_related()
     experience = Experience.objects.filter(candidate = interview.application.user).select_related()
+    certification = Certification.objects.filter(candidate = interview.application.user).select_related()
     project = Project.objects.filter(candidate = interview.application.user).select_related()
     language = Language.objects.filter(candidate = interview.application.user).select_related()
 
@@ -1261,6 +1262,7 @@ def interview_detail(request, slug):
         'interview' : interview,
         'education': education,
         'experience' : experience,
+        'certification' : certification,
         'project' : project,
         'language' : language,
         'interview_form' : interview_form,

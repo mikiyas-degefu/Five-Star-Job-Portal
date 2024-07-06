@@ -682,16 +682,13 @@ class SkillForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['text', 'for_skill', 'answer']
+        fields = ['text', 'for_skill']
 
         widgets = {
             'text' : forms.TextInput(attrs={
                 'class' : ' form-control'
             }),
             'for_skill' : forms.Select(attrs={
-                'class' : ' form-control'
-            }),
-            'answer' : forms.Select(attrs={
                 'class' : ' form-control'
             })
         }

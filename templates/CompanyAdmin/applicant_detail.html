@@ -190,6 +190,15 @@
                               <p class="text-muted">
                                 {{edu.field_of_study}}
                               </p>
+                              {% if  edu.document  %}
+                              <div class="certification-button">
+                                <label for=""> Document </label>
+                                <div>
+                                  <a type="button" target="_blank" href="/media/{{ edu.document }}" class="btn btn-primary btn-sm ms-5">{{ edu.education_status }}</a>
+                                </div>
+                               
+                            </div>
+                            {% endif %}
                             </div>
                           </div>
                         </div>
@@ -248,7 +257,7 @@
                       {% if project %}
 
                       <div class="text-start">
-                        <div class="h4">Education</div>
+                        <div class="h4">Project</div>
                         {% for pro in project %}
                         <div class="d-flex">
                           <div class="candidate-education-content mt-4 d-flex">
@@ -287,6 +296,19 @@
                       </div>
 
                       <hr>
+
+
+                      <div class="mt-4 text-start">
+                        <h5 class="fs-18 fw-bold">Certifications</h5>
+
+                        {% for certification in certification %}
+                        <div class="certification-button">
+                            <a type="button" target="_blank" href="/media/{{ certification.document }}" class="btn btn-primary btn-sm mt-3  ps-5 pe-5 pb-3 pt-3">{{ certification.certification_name }}</a>
+                        </div>
+                        {% endfor %}
+
+                      </div>
+
 
                       
 

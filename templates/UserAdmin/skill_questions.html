@@ -206,7 +206,30 @@
           <div id="detailModalBody" class="modal-body">
             {% csrf_token %}
             {{form.as_p}}
-          </div>
+            <div>
+              <p class="text-danger">Add options here and select the answer with the button above it.</p>
+              <div class="row" id="options-container">
+                <div class="col-lg-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selected-option" id="option1-radio" value="1">
+                    <label class="form-check-label" for="option1-radio"></label>
+                    <input class="form-control border" type="text" name="option" placeholder="Option 1">
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selected-option" id="option2-radio" value="2">
+                    <label class="form-check-label" for="option2-radio"></label>
+                    <input class="form-control border" type="text" name="option" placeholder="Option 2">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-5">
+              <button type="button" class="btn btn-outline-primary btn-primary" id="add-option">Add Option</button>
+              <button type="button" class="btn btn-outline-primary btn-danger" id="remove-option">Remove Option</button>
+            </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
              <button type="submit" class="btn btn-primary">Save</button>
@@ -253,7 +276,39 @@
 <script>
 $(document).ready(function(){
 
-     // Function to show toast messages
+  
+  let optionCount = 2; // Counter for tracking the number of options
+    
+    // Add Option button click event
+    $('#add-option').click(function() {
+      if (optionCount < 5) { // Maximum of 5 options allowed
+        optionCount++; // Increment the option count
+        
+        // Generate HTML for the new option
+        let newOptionHTML = `
+          <div class="col-lg-6">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="selected-option" id="${optionCount}" value="${optionCount}">
+              <label class="form-check-label" for="option${optionCount}-radio"></label>
+              <input class="form-control border" type="text" id="${optionCount}" name="option" placeholder="Option ${optionCount}">
+            </div>
+          </div>
+        `;
+        
+        // Append the new option HTML to the options container
+        $('#options-container').append(newOptionHTML);
+      }
+    });
+    
+    // Remove Option button click event
+    $('#remove-option').click(function() {
+      if (optionCount > 2) { // Minimum of 2 options required
+        // Remove the last option from the options container
+        $('#options-container .col-lg-6:last-child').remove();
+        optionCount--; // Decrement the option count
+      }
+    });  
+  // Function to show toast messages
      showToast = (text, body, cssClass)=> {
       $.toast({
               heading: text,

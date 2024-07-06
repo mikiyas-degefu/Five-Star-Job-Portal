@@ -4,7 +4,6 @@ from froala_editor.fields import FroalaField
 from unidecode import unidecode
 import datetime
 from phonenumber_field.modelfields import PhoneNumberField
-from fontawesome_5.fields import IconField
 from auditlog.registry import auditlog
 
 # Create your models here.
@@ -106,7 +105,6 @@ class Contact(models.Model):
 
 class Social_Media(models.Model):
     name = models.CharField(max_length=30)
-    icon = IconField()
     link = models.URLField()
 
     def __str__(self) -> str:

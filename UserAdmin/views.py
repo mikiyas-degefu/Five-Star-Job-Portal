@@ -887,12 +887,24 @@ def skill_questions(request):
     if request.method == 'POST':
         if form.is_valid():
             try:
-                form.save()
+                question = form.save()
+
+                options = request.POST.getlist('option')
+                selected_option = request.POST.get('selected-option')
+                print(selected_option)
+                for count , option_text in enumerate(options):
+                        choice = Choice.objects.create(text=option_text, for_question=question)
+                        choice.save()
+                        print(count)
+                        if count + 1 == int(selected_option):
+                           print("inner",count)
+                           question.answer = choice
+                           question.save()
                 messages.success(request, '&#128515 Hello User, Successfully Added')
-                return redirect('skill_questions')
+                return redirect('skill-questions')
             except:
                 messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill or Skill Exist')
-                return redirect('skill_questions')
+                return redirect('skill-questions')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while Adding Skill')
     

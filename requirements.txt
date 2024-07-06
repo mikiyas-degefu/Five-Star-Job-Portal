@@ -5,7 +5,6 @@ charset-normalizer==3.3.2
 diff-match-patch==20230430
 Django==4.2.6
 django-auditlog==3.0.0
-django-fontawesome-5==1.0.18
 django-froala-editor==4.1.0
 django-import-export==4.0.0
 django-phonenumber-field==7.1.0

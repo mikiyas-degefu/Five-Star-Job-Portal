@@ -14,8 +14,6 @@ from pathlib import Path
 import os
 import django
 
-from django.utils.translation import gettext
-django.utils.translation.ugettext = gettext
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
 # django.setup()
@@ -49,7 +47,6 @@ INSTALLED_APPS = [
     'UserManagement',
     'JobPortal',
     'froala_editor',
-    'fontawesome_5',
     'phonenumber_field',
     'CompanyAdmin',
     'auditlog',

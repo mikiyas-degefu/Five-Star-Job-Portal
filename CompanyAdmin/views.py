@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse ,  get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from JobPortal.forms import (JobPostingCompanyAdminForm, ApplicationForm, AdminInterviewForm,InterviewerForm)
-from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Sector, Interviews ,Project, Language)
+from JobPortal.models import ( Job_Posting, Application, Candidate, Education, Experience, Sector, Interviews ,Project, Language , Certification)
 from UserManagement.models import (CustomUser)
 from django.db.models import Q
 from django.contrib import messages 
@@ -572,6 +572,10 @@ def applicant_detail(request,app_id):
         form = ApplicationForm(request.POST or None, instance=app)
 
 
+        certification = Certification.objects.filter(candidate = user)
+        
+
+
         try:
             interview_form = AdminInterviewForm(request.user.company, request.POST or None, instance=interview)
         except:
@@ -619,7 +623,8 @@ def applicant_detail(request,app_id):
         'project' : project,
         'language' : language,
         'app' : app,
-        'count_interview_status' : count_interview_status
+        'count_interview_status' : count_interview_status,
+        'certification' : certification
     }
     return render(request, 'CompanyAdmin/applicant_detail.html', context=context)
 
