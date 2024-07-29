@@ -83,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Seraye.wsgi.application'
+#WSGI_APPLICATION = 'Seraye.wsgi.application'
 
 
 # Database
