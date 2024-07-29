@@ -1062,13 +1062,13 @@ def user_bookmark(request):
 def user_add_bookmark(request, slug):
     try:
         check_job = Bookmarks.objects.get(job__slug = slug, user = request.user)
-        check_job = True
     except: 
-        check_job = False
+        check_job = None
     job = Job_Posting.objects.get(slug = slug)
 
     if check_job:
-        messages.error(request, 'You already Bookmarked this job')
+        check_job.delete()
+        messages.success(request, 'Successfully un-bookmark!')
         return redirect(request.META.get('HTTP_REFERER'))    
     else:
         user = request.user

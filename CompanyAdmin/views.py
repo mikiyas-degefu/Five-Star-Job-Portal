@@ -752,7 +752,7 @@ def filter_candidates(request , id):
     return render(request, 'CompanyAdmin/find_candidates.html', context=context)
 
 
-
+@admin_user_required
 def find_candidate_detail(request,id):
     print(id)
     try:
