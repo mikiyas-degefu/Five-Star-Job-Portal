@@ -709,3 +709,71 @@ def export_interviewers(request):
     
 
 
+
+
+
+# Filter candidates for companies 
+
+@admin_user_required
+def filter_candidates(request , id):
+    notification_application = Application.objects.filter(read = False).select_related()
+    job_skills = list(Job_Posting.objects.get(id=id).skills.all().values_list('id',flat=True))
+   
+    print(job_skills)
+    candidates = Candidate.objects.filter(skill__id__in = job_skills)
+    count = 30
+   
+    # if 'q' in request.GET:
+    #     q = request.GET['q']
+    #     candidate = candidate.filter()
+    
+    paginator = Paginator(candidates, 30) 
+    page_number = request.GET.get('page')
+
+    try:
+        page = paginator.get_page(page_number)
+        try: count = (30 * (int(page_number) if page_number  else 1) ) - 30
+        except: count = (30 * (int(1) if page_number  else 1) ) - 30
+    except PageNotAnInteger:
+        # if page is not an integer, deliver the first page
+        page = paginator.page(1)
+        count = (30 * (int(1) if page_number  else 1) ) - 30
+    except EmptyPage:
+        # if the page is out of range, deliver the last page
+        page = paginator.page(paginator.num_pages)
+        count = (30 * (int(paginator.num_pages) if page_number  else 1) ) - 30
+
+   
+    context = {
+        'candidates' : page,
+        'count' : count,
+        
+    }
+    return render(request, 'CompanyAdmin/find_candidates.html', context=context)
+
+
+@admin_user_required
+def find_candidate_detail(request,id):
+    print(id)
+    try:
+        user = Candidate.objects.get(id=id)  
+        education = Education.objects.filter(candidate = user.user)
+        experience = Experience.objects.filter(candidate = user.user)
+   
+        project = Project.objects.filter(candidate = user.user)
+        language = Language.objects.filter(candidate = user.user)
+
+        certification = Certification.objects.filter(candidate = user.user)
+    except:
+        return HttpResponse('Cant Find user Resume!')
+         
+                
+    context = {
+        'user' : user,
+        'education' : education,
+        'experience' : experience,
+        'project' : project,
+        'language' : language,
+        'certification' : certification
+    }
+    return render(request, 'CompanyAdmin/find_candidate_detail.html', context=context)

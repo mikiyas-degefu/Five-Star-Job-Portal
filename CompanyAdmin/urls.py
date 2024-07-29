@@ -34,4 +34,10 @@ urlpatterns = [
     path('application-download/', views.export_application, name='company-export-application'),
     path('admin-download/', views.export_admins, name='company-export-admin'),
     path('interviewer-download/', views.export_interviewers, name='company-export-interviewers'),
+
+
+    #Filter Candidates
+     path('filter_candidates/<int:id>', views.filter_candidates, name='filter_candidates'), 
+     path('find_candidate_detail/<int:id>', views.find_candidate_detail, name='find_candidate_detail'), 
+       
 ]

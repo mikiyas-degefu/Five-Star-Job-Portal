@@ -103,46 +103,53 @@
 
                             </td>
                             <td>
-                               
-                            <button 
-                            type="button" 
-                            class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#detailJobs"
-                            data-bs-whatever="@mdo"
-                            data-company="{{job.company}}"
-                            data-title="{{job.title}}"
-                            data-sector="{{job.sector}}"
-                            data-description='{{job.description}}'
-                            data-vacancies="{{job.vacancies}}"
-                            data-experience="{{job.experience}}"
-                            data-skills="{{job.skills}}"
-                            data-location="{{job.location}}"
-                            data-salary_range_start="{{job.salary_range_start}}"
-                            data-salary_range_final="{{job.salary_range_final}}"
-                            data-type="{{job.type}}"
-                            data-compensation_type="{{job.compensation_type}}"
-                            data-date_posted="{{job.date_posted}}"
-                            data-date_closed="{{job.date_closed}}"
-                            >
-                            <i class="fa fa-eye"></i> 
-                            </button>
-                            
-                         <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit " href="{% url 'company-admin-job-posting-detail' job.id %}"><i class="fa fa-pen"></i></a>
-                             
-                        </button>
-                        </button>
-                              <button 
-                              class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
-                              data-bs-toggle="modal" 
-                              data-bs-target="#deleteJobModal"
-                              data-bs-whatever="@mdo"
-                              data-id = {{job.id}}
-                              data-name = {{job.title}}
-                              >
-                              <i class="fa fa-trash"></i> 
-                            </button>
-                        </td>
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <button 
+                                      type="button" 
+                                      class="btn btn-detail btn-outline-secondary mt-2 btn-sm me-2"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#detailJobs"
+                                      data-bs-whatever="@mdo"
+                                      data-company="{{job.company}}"
+                                      data-title="{{job.title}}"
+                                      data-sector="{{job.sector}}"
+                                      data-description='{{job.description}}'
+                                      data-vacancies="{{job.vacancies}}"
+                                      data-experience="{{job.experience}}"
+                                      data-skills="{{job.skills}}"
+                                      data-location="{{job.location}}"
+                                      data-salary_range_start="{{job.salary_range_start}}"
+                                      data-salary_range_final="{{job.salary_range_final}}"
+                                      data-type="{{job.type}}"
+                                      data-compensation_type="{{job.compensation_type}}"
+                                      data-date_posted="{{job.date_posted}}"
+                                      data-date_closed="{{job.date_closed}}"
+                                  >
+                                      <i class="fa fa-eye"></i> 
+                                  </button>
+                                  
+                                  <a class="btn btn-outline-warning mt-2 btn-sm me-2 btn-edit" href="{% url 'company-admin-job-posting-detail' job.id %}">
+                                      <i class="fa fa-pen"></i>
+                                  </a>
+                              </div>
+                          
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <button 
+                                      class="btn btn-outline-danger mt-2 btn-sm btn-delete"  
+                                      data-bs-toggle="modal" 
+                                      data-bs-target="#deleteJobModal"
+                                      data-bs-whatever="@mdo"
+                                      data-id="{{job.id}}"
+                                      data-name="{{job.title}}"
+                                  >
+                                      <i class="fa fa-trash"></i> 
+                                  </button>
+                                  
+                                  <a class="btn btn-outline-primary mt-2 btn-sm me-2 btn-edit" href="{% url 'filter_candidates' job.id %}" data-bs-toggle="tooltip" data-bs-placement="top" title="Find Candidates">
+                                      <i class="fa fa-user"></i>
+                                  </a>
+                              </div>
+                          </td>
                           </tr>
                           {% endfor %}
                           {% else %}
