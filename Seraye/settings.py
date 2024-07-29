@@ -33,6 +33,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +58,7 @@ INSTALLED_APPS = [
     'CompanyAdmin',
     'auditlog',
     'import_export',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -62,10 +70,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'Seraye.urls'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 TEMPLATES = [
     {
