@@ -21,7 +21,7 @@ from UserManagement.forms import ( ChangePasswordForm)
 import threading
 from .resource import (handle_registration_email, handle_successfully_applied_send_email, handle_scheduled_send_email, handle_rescheduled_send_email)
 from django.db.models import Count
-
+from Interview.views import create_token
 
 social_medias = Social_Media.objects.all()
 
@@ -1224,10 +1224,21 @@ def interview_detail(request, slug):
             obj.status = 'scheduled'
             obj.save()
 
-            time = str(interview.time_schedule.strftime('%I:%M %p'))
+
+            try : 
+                 time = str(interview.time_schedule.strftime('%I:%M %p')) 
+            except : 
+                time = None    
+           
 
             stop_event = threading.Event()
+
             
+            interview_code = user.first_name + "" + user.last_name + "" + request.user.first_name if obj.type == 'video' else None
+            if interview_code: create_token(interview_code, user.id, user.first_name)
+
+
+
             background_thread = threading.Thread(target=handle_scheduled_send_email if not status else handle_rescheduled_send_email, args=(request,user.first_name,
                                                                                            user.last_name, 
                                                                                            interview.application.job.title,
@@ -1238,7 +1249,8 @@ def interview_detail(request, slug):
                                                                                            interview.type, 
                                                                                            interview.application.job.company.address,
                                                                                            interview.interviewer.phone,
-                                                                                           stop_event
+                                                                                           stop_event,
+                                                                                           interview_code
                                                                                            ), 
                                                                                            daemon=True)
             background_thread.start()

@@ -28,6 +28,9 @@
                 <li class="{% if request.path == '/interview-scheduled/' %}active{% endif %}" >
                   <a href="{% url 'interview-scheduled' %}"><i class="lni lni-briefcase me-2"></i>Scheduled Interviews</a>
               </li>
+              <li class="{% if request.path == '/interview_home/' %}active{% endif %}" >
+                <a href="{% url 'interview_home' %}"><i class="lni lni-video me-2"></i>Video Conference</a>
+            </li>
             </ul>
             <ul data-submenu-title="My Accounts">
                 <li class="{% if request.path == '/interviewer-info/' %}active{% endif %}">

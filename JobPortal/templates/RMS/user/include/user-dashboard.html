@@ -52,6 +52,9 @@
                   ><i class="lni lni-bookmark me-2"></i>Bookmark Jobs</a
                 >
               </li>
+              <li class="{% if request.path == '/interview_home/' %}active{% endif %}" >
+                <a href="{% url 'interview_home' %}"><i class="lni lni-video me-2"></i>Interviews</a>
+            </li>
             </ul>
             <ul data-submenu-title="My Accounts">
               <li class="{% if request.path == '/user-profile/' %}active{% endif %}">

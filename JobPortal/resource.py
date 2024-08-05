@@ -181,20 +181,37 @@ def handle_hired_send_email(request, first_name, last_name, job_title,company_na
             return True
         
 
-def handle_scheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event):
+def handle_scheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event,room_code=None):
     while not stop_event.is_set():
-        content = f'''
-                <p>Dear {fist_name} {last_name}, </p>
-    
-                <p>We're thrilled to inform you that your application for the {job_title} position at {company_name} has been shortlisted! Your background truly impressed us, and we're eager to learn more about how you can contribute to our team.</p>
-    
-                <p>Consider this a personal invitation to interview for the position on {date} at {time} {interview_type} interview. The interview will be held {company_location} or contact us {interviewer_phone}.</p>
-                
-                <h4>We look forward to meeting you and discussing this opportunity further!</h4>
-                
-                <p> Sincerely,</p> 
-                <p> {company_name} Team </p>
-                <p> Seraye Job Portal</p> '''
+        if interview_type == 'video':
+            content = f'''
+                    <p>Dear {fist_name} {last_name}, </p>
+        
+                    <p>We're thrilled to inform you that your application for the {job_title} position at {company_name} has been shortlisted! Your background truly impressed us, and we're eager to learn more about how you can contribute to our team.</p>
+        
+                    <p>Consider this a personal invitation to interview for the position on {date} at {time} {interview_type} interview. The interview will be held online at your dashboard or contact us {interviewer_phone}.</p>
+                    <h3>Your Interview Room Name:<code> {room_code} </code></h3>
+                    
+                    
+                    <h4>We look forward to meeting you and discussing this opportunity further!</h4>
+                    
+                    <p> Sincerely,</p> 
+                    <p> {company_name} Team </p>
+                    <p> Seraye Job Portal</p> '''
+        else:
+            content = f'''
+                    <p>Dear {fist_name} {last_name}, </p>
+        
+                    <p>We're thrilled to inform you that your application for the {job_title} position at {company_name} has been shortlisted! Your background truly impressed us, and we're eager to learn more about how you can contribute to our team.</p>
+        
+                    <p>Consider this a personal invitation to interview for the position on {date} at {time} {interview_type} interview. The interview will be held {company_location} or contact us {interviewer_phone}.</p>
+                    
+                    <h4>We look forward to meeting you and discussing this opportunity further!</h4>
+                    
+                    <p> Sincerely,</p> 
+                    <p> {company_name} Team </p>
+                    <p> Seraye Job Portal</p> '''
+
         
         subject = f'Application Update: {job_title} at {company_name}!'
         from_email = 'mikiyasmebrate2656@gmail.com'
@@ -206,7 +223,7 @@ def handle_scheduled_send_email(request, fist_name, last_name, job_title,company
         if msg.send():
             return True
 
-def handle_rescheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event):
+def handle_rescheduled_send_email(request, fist_name, last_name, job_title,company_name,user_email,date,time,interview_type,company_location,interviewer_phone,stop_event,room_code=None):
     while not stop_event.is_set():
         content = f'''
                 <p>Dear {fist_name} {last_name}, </p>
@@ -215,7 +232,8 @@ def handle_rescheduled_send_email(request, fist_name, last_name, job_title,compa
     
                 <p>We would like to reschedule your interview for {date} at {time}. The interview will still be held {interview_type}, {company_location} or contact us {interviewer_phone}.</p>
                 
-                <h4>We look forward to meeting you soon!</h4>
+                <h3>Your Interview Room Name:<code> {room_code} </code></h3>
+                    
                 
                 <p> Sincerely,</p> 
                 <p> {company_name} Team </p>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 shadow card p-5 text-center">
+            <img src="https://cdn.iconscout.com/icon/free/png-256/free-chat-2130787-1794829.png?f=webp&w=256" class="img-fluid mx-auto d-block " style="width: 100px;" alt="">
+            <h2>Welcome to Sraye Video Chat</h2>
+            <p class="text-muted">A video interview platform!</p>
+            <form id="form">
+                <div class="d-grid">
+                    <label for="room_name">Enter Room Name </label>
+                    <input class="form-control mb-3" id="room_name" name="room_name" type="text">
+                    <button class="btn btn-primary" >Join Room</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let form = document.getElementById("form")
+
+
+        const handleSubmit = async(e)=>{
+            e.preventDefault()
+            let room_name = e.target.room_name.value
+            let response = await fetch(`/interview/get_token?channel=${room_name}`)
+
+            let data = await response.json()
+
+            let uid = data.uid
+            let token = data.token
+            let name = data.name
+
+
+            sessionStorage.setItem('UID' , uid)
+            sessionStorage.setItem('Token' , token)
+            sessionStorage.setItem('RoomName' , room_name)
+            sessionStorage.setItem('Name' , name)
+
+            window.open("/interview", "_self")
+        }
+
+        form.addEventListener('submit', handleSubmit)
+    </script>
+</body>
+
+</html>
