@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
+    "192.168.2.3"
     # ...
 ]
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'auditlog',
     'import_export',
     'debug_toolbar',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://192.168.2.3",  
 ]
 
 ROOT_URLCONF = 'Seraye.urls'

@@ -20,6 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     
     {% include 'include/head.html' %}
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet"/>
   </head>
 
   <body>
@@ -231,6 +232,11 @@
                                 >
                                 {{form.about}}
                               </div>
+                              <div class="text-end">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#optimizerModal" id="optimize" class="btn btn-sm btn-primary">
+                                    Optimize using AI
+                                </button>
+                              </div>
                             </div>
 
                         
@@ -273,6 +279,34 @@
         </div>
       </div>
     </div>
+
+   
+<div class="modal fade" id="optimizerModal" tabindex="-1" aria-labelledby="optimizerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="optimizerModalLabel">Your optimized bio!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="spinner" class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <div id="info" class="alert alert-info" role="alert">
+          Copy the above text and edit as your desire!!! 
+        </div> 
+        <p id="optimizedBio"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Apply Change</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.17.0/dist/index.min.js"></script>
     {% include 'include/footer.html' %}
     <script>
       new MultiSelectTag("id_skill", {
@@ -284,7 +318,43 @@
         },
       });
     </script>
-    {% include 'include/footer.html' %}
     {% include 'include/footerjs.html' %}
+    <script>
+      $(document).ready(function() {
+        console.log('ppppppppp'); // First console log
+    
+        $('#optimize').on('click', function() {
+          console.log('llllllllllll'); // Second console log
+    
+          $.ajax({
+            url: "{% url 'optimizer' %}", // Assuming the url doesn't require quotes
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}'
+            },
+            // Adjust data format based on your view's needs
+            data: {
+              text: $('#id_about').val(),
+            },
+            beforeSend: function () {
+              $('#spinner').show()
+              $('#info').hide()
+            },
+            complete: function () {
+              $('#spinner').hide()
+              $('#info').show()
+            },
+            success: function(response) { 
+              $('#optimizedBio').text(response.res)
+            },
+            error: function(error) {
+              console.log("AJAX request error");
+              console.error("Error:", error); // Use console.error for error messages
+            }
+          });
+        });
+      });
+    </script>
+    
   </body>
 </html>

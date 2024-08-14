@@ -66,4 +66,10 @@ urlpatterns = [
     path('validate_skill/<str:id>/', views.validate_skill, name="validate_skill"),
 
 
+    path('optimizer/', views.optimizer, name="optimizer"),
+
+
+
+
+
 ]

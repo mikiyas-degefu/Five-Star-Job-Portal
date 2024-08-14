@@ -15,7 +15,7 @@ def getToken(request) :
     expirationTimeInSeconds = 3600 * 24
     currentTimeStamp = time.time()
     privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
-    role =  1 
+    role =  1
     token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
     return JsonResponse({'token':token , 'uid':uid , 'name':name} , safe=False)
 
@@ -29,7 +29,7 @@ def create_token(channel_name, uid, first_name) :
     expirationTimeInSeconds = 3600 * 24
     currentTimeStamp = time.time()
     privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
-    role =  1 
+    role =  1
     token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
     return True
 

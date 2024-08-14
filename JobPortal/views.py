@@ -23,6 +23,10 @@ from .resource import (handle_registration_email, handle_successfully_applied_se
 from django.db.models import Count
 from Interview.views import create_token
 
+import google.generativeai as genai
+import os
+
+
 social_medias = Social_Media.objects.all()
 
 
@@ -1554,3 +1558,30 @@ def validate_skill(request , id):
     
     return render(request , 'RMS/user/question.html', context)
 
+
+
+
+
+
+
+
+from django.http import JsonResponse
+
+import json
+def optimizer(request):
+    if request.method == 'POST':
+        text = request.POST['text']
+        genai.configure(api_key="AIzaSyCFt14-JlxROYUP9YhTJ2PZK1RGQwcli10")
+    
+        model = genai.GenerativeModel('gemini-1.5-flash')
+
+        response = model.generate_content(
+               f"Optimize this text as a bio of portfolio  {text} \n and just give me the optimized text no explanation" ,
+               generation_config=genai.types.GenerationConfig(
+                   # Only one candidate for now.
+                   candidate_count=1,
+                   temperature=2.0,
+               ),
+            )
+        print(response.text)
+        return JsonResponse({"res": response.text}, safe=False)
