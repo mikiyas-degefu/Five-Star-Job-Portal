@@ -78,6 +78,8 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.2.3",  
+    "http://169.254.100.85",
+    "http://192.168.4.115"
 ]
 
 ROOT_URLCONF = 'Seraye.urls'

@@ -32,9 +32,9 @@ let joinAndDisplayLocalStream = async () => {
 
    let player =  `
                    <div class="col-md  card border" id="user-container-${UID}">
-                               <p> ${name} </p>
-                               <div style="height: 600px; width: 100%;" class=""embed-responsive-item p-3" id="user-${UID}"></div>
                               
+                               <p> ${name} </p>
+                               <div style="height: 600px; width: 100%;" class=""embed-responsive-item p-3" id="user-${UID}"></div>     
                     </div>
    `
    document.getElementById('video_streams').insertAdjacentHTML('beforeend' , player)
