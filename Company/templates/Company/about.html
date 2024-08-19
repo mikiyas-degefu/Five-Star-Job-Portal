@@ -85,11 +85,7 @@
                     </h2>
 
                     <p class="text-muted">
-                      Start working with Seraye that can provide everything you
-                      need to generate awareness, drive traffic, connect. Dummy
-                      text is text that is used in the publishing industry or by
-                      web designers to occupy the space which will later be
-                      filled with 'real' content.
+                      Seraye Job Portal System is a dynamic startup founded with a passion for revolutionizing the job search experience for individuals entering the workforce. Established by a team of dedicated professionals, our platform aims to bridge the gap between job seekers and employers in a user-friendly and efficient manner.
                     </p>
 
                     <div class="row mt-4 pt-2">
@@ -97,8 +93,8 @@
                         <ul
                           class="list-unstyled about-list text-muted mb-0 mb-md-3"
                         >
-                          <li>Digital Marketing Solutions</li>
-                          <li>Our Talented & Experienced Marketing Agency</li>
+                          <li>Digital Portal System</li>
+                          <li>AI optimized cv for applicants</li>
                           <li>Creative Design</li>
                           <li>New jobs Innovation</li>
                         </ul>
@@ -139,7 +135,7 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="counter-box mt-3">
                     <div class="counters text-center">
-                      <h5 class="counter mb-0"><span id="number">0</span>+</h5>
+                      <h5 class="counter mb-0"><span id="number">{{jobs}}</span>+</h5>
                       <h6 class="fs-16 mt-3">Available Jobs</h6>
                     </div>
                   </div>
@@ -148,7 +144,7 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="counter-box mt-3">
                     <div class="counters text-center">
-                      <h5 class="counter mb-0"><span id="number2">0</span>+</h5>
+                      <h5 class="counter mb-0"><span id="number2">{{candidate}}</span>+</h5>
                       <h6 class="fs-16 mt-3">Applications</h6>
                     </div>
                   </div>
@@ -157,8 +153,8 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="counter-box mt-3">
                     <div class="counters text-center">
-                      <h5 class="counter mb-0"><span id="number3">0</span>+</h5>
-                      <h6 class="fs-16 mt-3">Positive Feedback</h6>
+                      <h5 class="counter mb-0"><span id="number3">{{company}}</span>+</h5>
+                      <h6 class="fs-16 mt-3">Companies</h6>
                     </div>
                   </div>
                 </div>
@@ -166,8 +162,8 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="counter-box mt-3">
                     <div class="counters text-center">
-                      <h5 class="counter mb-0"><span id="number4">0</span>+</h5>
-                      <h6 class="fs-16 mt-3">Members</h6>
+                      <h5 class="counter mb-0"><span id="number4">{{users}}</span>+</h5>
+                      <h6 class="fs-16 mt-3">Total users</h6>
                     </div>
                   </div>
                 </div>
@@ -370,7 +366,7 @@
   <script>
     $(document).ready(function() {
       var $numberElement = $('#number');
-      var targetNumber = 10000;
+      var targetNumber = {{jobs}};
       var duration = 2000; // 5 seconds
 
       $numberElement.animate({
@@ -389,7 +385,7 @@
     
     $(document).ready(function() {
       var $numberElement = $('#number2');
-      var targetNumber = 7500;
+      var targetNumber = {{candidate}};
       var duration = 2000; // 5 seconds
 
       $numberElement.animate({
@@ -408,7 +404,7 @@
     
     $(document).ready(function() {
       var $numberElement = $('#number3');
-      var targetNumber = 8850;
+      var targetNumber = {{company}};
       var duration = 2000; // 5 seconds
 
       $numberElement.animate({
@@ -427,7 +423,7 @@
     
     $(document).ready(function() {
       var $numberElement = $('#number4');
-      var targetNumber = 9875;
+      var targetNumber = {{users}};
       var duration = 2000; // 5 seconds
 
       $numberElement.animate({

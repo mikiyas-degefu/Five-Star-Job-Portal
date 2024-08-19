@@ -153,12 +153,13 @@ def company_user(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save(commit=False)
-            form.is_admin = True
-            form.save()
+            obj = form.save(commit=False)
+            obj.is_admin = True
+            obj.save()
             messages.success(request, '&#128515 Hello User, Successfully Updated')
         else:
             messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
+        return redirect('company_user')    
     
 
     
@@ -232,13 +233,13 @@ def candidate_user(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save(commit=False)
-            form.is_candidate = True
-            form.save()
-            messages.success(request, '&#128515 Hello User, Successfully Updated')
+            obj = form.save(commit=False)
+            obj.is_admin = True
+            obj.save()
+            messages.success(request, '&#128515 Hello User, Successfully Created')
         else:
-            messages.error(request, '&#128532 Hello User , An error occurred while updating Company')
-    
+            messages.error(request, '&#128532 Hello User , An error occurred while creating user')
+        return redirect('candidate_user')
 
     
     context = {
