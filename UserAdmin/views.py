@@ -310,13 +310,14 @@ def job_posting(request):
             salary_range_final  = obj.salary_range_final
             type = obj.type
             date_closed = obj.date_closed
+            company = obj.company.name
             skills = obj.skills.all()
             skill_names = [str(skill) for skill in skills]
             skills = ', '.join(skill_names)
 
             if obj.job_status:
                 stop_event = threading.Event()
-                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,request.user.company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
+                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
                 background_thread.start()
                 stop_event.set()
             messages.success(request, '&#128515 Hello User, Job Successfully Updated')
@@ -370,6 +371,7 @@ def job_detail(request, id):
             location = obj.location 
             salary_range_start = obj.salary_range_start
             salary_range_final  = obj.salary_range_final
+            company = obj.company.name
             type = obj.type
             date_closed = obj.date_closed
             skills = obj.skills.all()
@@ -378,7 +380,7 @@ def job_detail(request, id):
 
             if obj.job_status:
                 stop_event = threading.Event()
-                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,request.user.company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
+                background_thread = threading.Thread(target=handle_telegram_post, args=(request,slug,company, title, sector, vacancies, type, experience, description, skills, location, date_closed, salary_range_start, salary_range_final, stop_event), daemon=True)
                 background_thread.start()
                 stop_event.set()
             messages.success(request, '&#128515 Hello User, Successfully Updated')
@@ -940,7 +942,7 @@ def update_question(request):
     try:
         question = Question.objects.get(id = id)
         question.text = text
-        question.anser = answer
+        question.answer = answer
         question.for_skill = for_skill
         question.save()
         response = {'success' : True}

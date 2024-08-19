@@ -536,9 +536,7 @@ def user_profile(request):
         user_skill = None 
 
 
-    
-    print(user_skill)
-    
+
     try: 
         notification_candidate = Candidate.objects.get(user=request.user)
         notification_ser_skills = notification_candidate.skill.all()
@@ -584,7 +582,7 @@ def user_resume(request):
 
             for skill in form_personal_info.cleaned_data['skill']:
                 try:
-                    UserSkill.objects.get(candidate = obj, skill = skill)
+                    UserSkill.objects.get(candidate = request.user, skill = skill)
                 except:
                     if skill.validable:
                         UserSkill.objects.create(candidate = obj, skill = skill)
